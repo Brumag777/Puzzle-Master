@@ -2,14 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// gcc main.c -o main -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
-
-// Extras
-/*
-1. Se o comando é inválido é escrito "Comando inválido"
-2. Existe um comando chamado "h" (de help) que lista os comandos do jogo
-*/
-
 typedef struct infoJogo {
     int linhas;
     int colunas;
