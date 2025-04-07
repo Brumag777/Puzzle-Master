@@ -16,18 +16,25 @@ typedef struct infoJogo {
     int colunas;
     char **Tabuleiro;
     char **TabuleiroInicial;
+    char Jogo [32];
 } IJ;
 
 int iniciaJogo (IJ *InfoJogo) {
-    FILE *jogo; // Ficheiro do jogo
+    FILE *Jogo = NULL; // Ficheiro do jogo
 
     // Abre o ficheiro do jogo
-    jogo = fopen ("jogo1.txt", "r");
-    if (jogo == NULL) return 1;
+    while (Jogo == NULL) {
+        printf ("Nome do ficheiro: ");
+        if (scanf ("%s", InfoJogo -> Jogo) != 1) return 1;
+        printf ("\n");
+
+        Jogo = fopen (InfoJogo -> Jogo, "r");
+        if (Jogo == NULL) printf ("Ficheiro inválido\n\n");
+    }
 
     // Lê a quantidade de linhas e de colunas do tabuleiro
-    if (fscanf (jogo, "%d %d", &InfoJogo -> linhas, &InfoJogo -> colunas) != 2) return 1;
-    fgetc (jogo); // Descarta o '\n' após a primeira linha
+    if (fscanf (Jogo, "%d %d", &InfoJogo -> linhas, &InfoJogo -> colunas) != 2) return 1;
+    fgetc (Jogo); // Descarta o '\n' após a primeira linha
 
     // Aloca memória para os tabuleiros
     InfoJogo -> Tabuleiro = malloc (InfoJogo -> linhas * sizeof (char *)); // Tabuleiro do jogo
@@ -38,12 +45,12 @@ int iniciaJogo (IJ *InfoJogo) {
         InfoJogo -> Tabuleiro [i] = malloc ((InfoJogo -> colunas + 2) * sizeof (char));
         InfoJogo -> TabuleiroInicial [i] = malloc ((InfoJogo -> colunas + 2) * sizeof (char));
 
-        if (fgets (InfoJogo -> Tabuleiro [i], InfoJogo -> colunas + 2, jogo) == NULL) return 1;
+        if (fgets (InfoJogo -> Tabuleiro [i], InfoJogo -> colunas + 2, Jogo) == NULL) return 1;
         strcpy (InfoJogo -> TabuleiroInicial [i], InfoJogo -> Tabuleiro [i]);
     }
 
     // Fecha o ficheiro do jogo
-    fclose (jogo);
+    fclose (Jogo);
 
     return 0;
 }
@@ -57,42 +64,46 @@ int coordenadaValida (int l, char c, int linhas, int colunas) {
     return 1;
 }
 
-void gravaJogo () {
-    printf ("\nGravou o jogo :)\n\n");
-}
+void gravaJogo () {}
 
-void leJogo () {
-    printf ("\nLeu o jogo :)\n\n");
-}
+void leJogo () {}
 
-void verificaJogo () {
-    printf ("\nVerificou o jogo :)\n\n");
-}
+void verificaJogo () {}
 
-void ajudaJogo () {
-    printf ("\nAjudou o jogo :)\n\n");
-}
+void ajudaJogo () {}
 
-void AjudaJogo () {
-    printf ("\nAjudou muito o jogo :)\n\n");
-}
+void AjudaJogo () {}
 
-void ResolveJogo () {
-    printf ("\nResolveu o jogo :)\n\n");
-}
+void ResolveJogo () {}
 
-void desfazJogada () {
-    printf ("\nDesfez a jogada :)\n\n");
-}
+void desfazJogada () {}
 
-void mudaCasaParaMaiuscula (int l, char c, IJ *InfoJogo) {
-    printf ("\n");
+int mudaCasaParaMaiuscula (IJ *InfoJogo) {
+    int l;
+    char c;
+    if (scanf (" %c%d", &c, &l) != 2) return 1;
+    
+    if (!coordenadaValida (l, c, InfoJogo -> linhas, InfoJogo -> colunas)) {
+        printf ("\nCoordenada Inválida\n");
+        return 1;
+    }
+
     if (InfoJogo -> Tabuleiro [l - 1][c - 'a'] != '#') InfoJogo -> Tabuleiro [l - 1][c - 'a'] -= 'a' - 'A';
+    return 0;
 }
 
-void mudaCasaParaVazio (int l, char c, IJ *InfoJogo) {
-    printf ("\n");
+int mudaCasaParaVazio (IJ *InfoJogo) {
+    int l;
+    char c;
+    if (scanf (" %c%d", &c, &l) != 2) return 1;
+    
+    if (!coordenadaValida (l, c, InfoJogo -> linhas, InfoJogo -> colunas)) {
+        printf ("\nCoordenada Inválida\n");
+        return 1;
+    }
+
     InfoJogo -> Tabuleiro [l - 1][c - 'a'] = '#';
+    return 0;
 }
 
 // Lista todos os comandos do jogo
@@ -124,8 +135,6 @@ int main () {
     if (iniciaJogo (&InfoJogo)) return 1;
 
     // Corre o jogo
-    int l;
-    char c;
     char s [32] = "";
     while (strcmp (s, "s")) {
         vizualizaTabuleiro (InfoJogo);
@@ -139,18 +148,11 @@ int main () {
         else if (strcmp (s, "A") == 0) AjudaJogo ();
         else if (strcmp (s, "R") == 0) ResolveJogo ();
         else if (strcmp (s, "d") == 0) desfazJogada ();
-        else if (strcmp (s, "b") == 0) {
-            if (scanf (" %c%d", &c, &l) != 2) return 1;
-            if (coordenadaValida (l, c, InfoJogo.linhas, InfoJogo.colunas)) mudaCasaParaMaiuscula (l, c, &InfoJogo);
-            else printf ("\nCoordenada inválida\n\n");
-        }
-        else if (strcmp (s, "r") == 0) {
-            if (scanf (" %c%d", &c, &l) != 2) return 1;
-            if (coordenadaValida (l, c, InfoJogo.linhas, InfoJogo.colunas)) mudaCasaParaVazio (l, c, &InfoJogo);
-            else printf ("\nCoordenada inválida\n\n");
-        }
+        else if (strcmp (s, "b") == 0) mudaCasaParaMaiuscula (&InfoJogo);
+        else if (strcmp (s, "r") == 0) mudaCasaParaVazio (&InfoJogo);
         else if (strcmp (s, "h") == 0) listaComandos ();
-        else if (strcmp (s, "s")) printf ("\nComando inválido\n\n");
+        else if (strcmp (s, "s")) printf ("\nComando inválido\n");
+        printf ("\n");
     }
 
     // Libera a memória alocada
