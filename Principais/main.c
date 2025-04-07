@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 
 // gcc main.c -o main -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
 
@@ -15,10 +14,22 @@ typedef struct infoJogo {
     int linhas;
     int colunas;
     char **Tabuleiro;
-    char **TabuleiroInicial;
+    char **TabuleiroAnterior;
     char Jogo [32];
 } IJ;
 
+// Concatena três strings
+void ConcatenaStrings (char *s1, char *s2, char *s3) {
+    int i, t = strlen (s1);
+
+    for (i = 0; s2 [i]; i++) s1 [t + i] = s2 [i];
+    t += i;
+
+    for (i = 0; s3 [i]; i++) s1 [t + i] = s3 [i];
+    s1 [t + i] = 0;
+}
+
+// Inicia o jogo
 int iniciaJogo (IJ *InfoJogo) {
     FILE *Jogo = NULL; // Ficheiro do jogo
 
@@ -28,7 +39,10 @@ int iniciaJogo (IJ *InfoJogo) {
         if (scanf ("%s", InfoJogo -> Jogo) != 1) return 1;
         printf ("\n");
 
-        Jogo = fopen (InfoJogo -> Jogo, "r");
+        char s [32] = "Jogos/";
+        ConcatenaStrings (s, InfoJogo -> Jogo, ".txt");
+
+        Jogo = fopen (s, "r");
         if (Jogo == NULL) printf ("Ficheiro inválido\n\n");
     }
 
@@ -38,15 +52,15 @@ int iniciaJogo (IJ *InfoJogo) {
 
     // Aloca memória para os tabuleiros
     InfoJogo -> Tabuleiro = malloc (InfoJogo -> linhas * sizeof (char *)); // Tabuleiro do jogo
-    InfoJogo -> TabuleiroInicial = malloc (InfoJogo -> linhas * sizeof (char *)); // Tabuleiro inicial do jogo
+    InfoJogo -> TabuleiroAnterior = malloc (InfoJogo -> linhas * sizeof (char *)); // Tabuleiro inicial do jogo
 
     // Lê o tabuleiro do jogo
     for (int i = 0; i < InfoJogo -> linhas; i++) {
         InfoJogo -> Tabuleiro [i] = malloc ((InfoJogo -> colunas + 2) * sizeof (char));
-        InfoJogo -> TabuleiroInicial [i] = malloc ((InfoJogo -> colunas + 2) * sizeof (char));
+        InfoJogo -> TabuleiroAnterior [i] = malloc ((InfoJogo -> colunas + 2) * sizeof (char));
 
         if (fgets (InfoJogo -> Tabuleiro [i], InfoJogo -> colunas + 2, Jogo) == NULL) return 1;
-        strcpy (InfoJogo -> TabuleiroInicial [i], InfoJogo -> Tabuleiro [i]);
+        strcpy (InfoJogo -> TabuleiroAnterior [i], InfoJogo -> Tabuleiro [i]);
     }
 
     // Fecha o ficheiro do jogo
@@ -135,33 +149,33 @@ int main () {
     if (iniciaJogo (&InfoJogo)) return 1;
 
     // Corre o jogo
-    char s [32] = "";
-    while (strcmp (s, "s")) {
+    char c;
+    while (c != 's') {
         vizualizaTabuleiro (InfoJogo);
 
-        if (scanf ("%s", s) != 1) return 1;
+        if (scanf (" %c", &c) != 1) return 1;
 
-        if (strcmp (s, "g") == 0) gravaJogo ();
-        else if (strcmp (s, "l") == 0) leJogo ();
-        else if (strcmp (s, "v") == 0) verificaJogo ();
-        else if (strcmp (s, "a") == 0) ajudaJogo ();
-        else if (strcmp (s, "A") == 0) AjudaJogo ();
-        else if (strcmp (s, "R") == 0) ResolveJogo ();
-        else if (strcmp (s, "d") == 0) desfazJogada ();
-        else if (strcmp (s, "b") == 0) mudaCasaParaMaiuscula (&InfoJogo);
-        else if (strcmp (s, "r") == 0) mudaCasaParaVazio (&InfoJogo);
-        else if (strcmp (s, "h") == 0) listaComandos ();
-        else if (strcmp (s, "s")) printf ("\nComando inválido\n");
+        if (c == 'g') gravaJogo ();
+        else if (c == 'l') leJogo ();
+        else if (c == 'v') verificaJogo ();
+        else if (c == 'a') ajudaJogo ();
+        else if (c == 'A') AjudaJogo ();
+        else if (c == 'R') ResolveJogo ();
+        else if (c == 'd') desfazJogada ();
+        else if (c == 'b') mudaCasaParaMaiuscula (&InfoJogo);
+        else if (c == 'r') mudaCasaParaVazio (&InfoJogo);
+        else if (c == 'h') listaComandos ();
+        else if (c != 's') printf ("\nComando inválido\n");
         printf ("\n");
     }
 
     // Libera a memória alocada
     for (int i = 0; i < InfoJogo.linhas; i++) {
         free (InfoJogo.Tabuleiro[i]);
-        free (InfoJogo.TabuleiroInicial[i]);
+        free (InfoJogo.TabuleiroAnterior[i]);
     }
     free (InfoJogo.Tabuleiro);
-    free (InfoJogo.TabuleiroInicial);
+    free (InfoJogo.TabuleiroAnterior);
 
     return 0;
 }
