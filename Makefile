@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer 
 
 # Nome dos ficheiros
 GAME_SRC = Principais/main.c
-TEST_SRC = Testes/Tmain.c Principais/main.c
+TEST_SRC = Testes/testes.c Principais/main.c
 
 EXEC = Jogo
 TEST_EXEC = Testes/Testes
