@@ -33,8 +33,9 @@ int iniciaJogo (IJ *InfoJogo) {
 
         char s [32] = "Jogos/";
         ConcatenaStrings (s, InfoJogo -> Jogo, ".txt");
+        strcpy (InfoJogo -> Jogo, s);
 
-        Jogo = fopen (s, "r");
+        Jogo = fopen (InfoJogo -> Jogo, "r");
         if (Jogo == NULL) printf ("Ficheiro inválido\n\n");
     }
 
@@ -61,7 +62,7 @@ int iniciaJogo (IJ *InfoJogo) {
     return 0;
 }
 
-// Verifica se uma string representa uma coordenada válida
+// Verifica se uma dada coordenada é válida
 int coordenadaValida (int l, char c, int linhas, int colunas) {
     if (c < 'a' || c > 'a' + colunas - 1) return 0;
 
@@ -125,7 +126,7 @@ void listaComandos () {
     printf ("R: Resolve o jogo\n");
     printf ("d: Desfaz a última jogada\n");
     printf ("s: Termina o jogo\n");
-    printf ("h: Lista todos os comandos do jogo\n\n");
+    printf ("h: Lista todos os comandos do jogo\n");
 }
 
 // Projeta o tabuleiro no seu estado atual
@@ -158,7 +159,7 @@ int main () {
         else if (c == 'r') mudaCasaParaVazio (&InfoJogo);
         else if (c == 'h') listaComandos ();
         else if (c != 's') printf ("\nComando inválido\n");
-        printf ("\n");
+        if (c != 's') printf ("\n");
     }
 
     // Libera a memória alocada
