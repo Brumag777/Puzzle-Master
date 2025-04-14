@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include "puzzle.h"
 
-// Comandos
-
 bool gravar (char cmd, char *arg, ESTADO *e) {
     if (cmd == 'g') {
 
@@ -165,7 +163,7 @@ bool auxLer (ESTADO *e, char *arg) {
         return false;
     }
 
-    libertarTabuleiro (e -> info);
+    resetaTabuleiro (e -> info);
 
     if (fscanf(Jogo, "%d %d", &e -> info -> linhas, &e -> info -> colunas) != 2) { // é necessário verificar os fscanfs?
         fclose(Jogo);
@@ -192,67 +190,4 @@ bool auxLer (ESTADO *e, char *arg) {
     fprintf (stderr, "Ficheiro lido com sucesso\n");
     
     return true;
-}
-
-
-
-
-
-// Funcoes complementares
-
-int coordenadaValida (int l, char c, int linhas, int colunas) {
-    if (c < 'a' || c > 'a' + colunas - 1 || l <= 0 || l > linhas) return 0;
-    return 1;
-}
-
-
-
-void visualizarTabuleiro (IJ *InfoJogo) {
-    putchar ('\n');
-    for (int i = 0; i < InfoJogo -> linhas; i++) printf ("%s", InfoJogo -> Tabuleiro [i]);
-    printf ("\n\n");
-}
-
-
-
-int tabuleiroValido (IJ *InfoJogo) {
-    // Verifica que há informação sobre o jogo e o tabuleiro não é vazio
-    if (InfoJogo == NULL || InfoJogo -> Tabuleiro == NULL) return 0;
-
-    char c;
-
-    for (int i = 0; i < InfoJogo -> linhas; i++) {
-
-        for (int j = 0; j < InfoJogo -> colunas; j++) {
-
-            c = InfoJogo -> Tabuleiro [i][j];
-
-            // Verifica se os caracteres no tabuleiro são válidos
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '#')) {
-                fprintf(stderr, "Erro: caractere inválido no tabuleiro (na coordenada %c%d)\n\n", j + 1 + 'a', i + 1);
-                return 0;
-            }
-        }
-    }
-
-    return 1; 
-}
-
-
-
-void libertarTabuleiro (IJ *InfoJogo) {
-    if (InfoJogo -> Tabuleiro != NULL) {
-        for (int i = 0; i < InfoJogo -> linhas; i++) 
-            free (InfoJogo -> Tabuleiro [i]);
-        free (InfoJogo -> Tabuleiro);
-    }
-}
-
-
-
-void iniciarTabuleiro(ESTADO *e) {
-    e -> info = malloc (sizeof (IJ));
-    e -> info -> Tabuleiro = NULL;
-    e -> info -> linhas = 0;
-    e -> info -> colunas = 0;
 }

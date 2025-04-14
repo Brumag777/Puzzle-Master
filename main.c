@@ -34,7 +34,7 @@ int main () {
     }
 
     if (estado.info != NULL) {
-        libertarTabuleiro (estado.info);
+        resetaTabuleiro (estado.info);
         free (estado.info);
     }
 

@@ -5,10 +5,18 @@
 
 
 
+typedef struct tabuleiros {
+    char ***Tabuleiros;
+    int sp;
+} Tabuleiros;
+
+
+
 typedef struct infoJogo {
     int linhas;
     int colunas;
     char **Tabuleiro;
+    Tabuleiros *TAnteriores;
 } IJ;
 
 
@@ -27,7 +35,7 @@ typedef bool (*COMANDO) (char cmd, char *arg, ESTADO *e);
 int coordenadaValida (int l, char c, int linhas, int colunas);
 void visualizarTabuleiro (IJ *InfoJogo);
 int tabuleiroValido(IJ *InfoJogo);
-void libertarTabuleiro (IJ *InfoJogo);
+void resetaTabuleiro (IJ *InfoJogo);
 void iniciarTabuleiro (ESTADO *e);
 
 
