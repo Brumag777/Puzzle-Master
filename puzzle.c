@@ -6,8 +6,6 @@
 // Comandos
 
 bool gravar (char cmd, char *arg, ESTADO *e) {
-    (void) e;  // Ignora o parâmetro e para evitar o warning de "unused parameter"
-
     if (cmd == 'g') {
 
         if (arg == NULL) {
@@ -25,10 +23,10 @@ bool gravar (char cmd, char *arg, ESTADO *e) {
         IJ *info = e -> info;
         fprintf (f, "%d %d\n", info -> linhas, info -> colunas);
         for (int i = 0; i < info -> linhas; i++)
-            fprintf(f, "%s", info->Tabuleiro[i]); // já inclui '\n'
+            fprintf(f, "%s", info -> Tabuleiro [i]); // já inclui '\n'
 
-        fclose(f);
-        printf("Jogo gravado em '%s'\n", arg);
+        fclose (f);
+        printf ("Jogo gravado em '%s'\n", arg);
         putchar ('\n');
         return true;
     }

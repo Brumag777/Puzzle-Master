@@ -17,7 +17,6 @@ Testes: LDFLAGS += -lgcov
 Testes:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TEST_EXEC) $(TEST_SRC)
 	./$(TEST_EXEC)
-	# Ajuste para gerar relatórios de cobertura dos arquivos que desejar
 	gcov Principais/main.c
 	gcov Principais/puzzle.c
 

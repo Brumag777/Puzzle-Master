@@ -9,7 +9,6 @@ typedef struct infoJogo {
     int linhas;
     int colunas;
     char **Tabuleiro;
-    char Jogo [32];
 } IJ;
 
 
@@ -29,7 +28,7 @@ int coordenadaValida (int l, char c, int linhas, int colunas);
 void visualizarTabuleiro (IJ *InfoJogo);
 int tabuleiroValido(IJ *InfoJogo);
 void libertarTabuleiro (IJ *InfoJogo);
-void iniciarTabuleiro(ESTADO *e);
+void iniciarTabuleiro (ESTADO *e);
 
 
 
@@ -42,4 +41,4 @@ bool listarComandos (char cmd, char *arg, ESTADO *e);
 
 
 
-bool auxLer(ESTADO *e, char *arg);
+bool auxLer (ESTADO *e, char *arg);
