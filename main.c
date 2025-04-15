@@ -4,7 +4,10 @@
 #include "puzzle.h"
 
 int main () {
-    COMANDO comandos [] = {sair, ler, gravar, mudarParaMaiuscula, mudarParaVazia, listarComandos, NULL};
+    //                     s     l    g       b                   r               h               d               V
+    COMANDO comandos [] = {sair, ler, gravar, mudarParaMaiuscula, mudarParaVazia, listarComandos, desfazerJogada, vizualizarStack, 
+    //                     v                       
+                           verifica, NULL};
 
     ESTADO estado;
     estado.looping = true;
@@ -12,6 +15,7 @@ int main () {
     iniciarTabuleiro (&estado);
 
     while (estado.looping) {
+        printf ("> ");
         char line [LINE_SIZE] = {0};
         
         if (fgets (line, LINE_SIZE, stdin) != NULL) 
@@ -28,15 +32,12 @@ int main () {
 
         else {
             bool ret = false;
-            for (int I = 0; !ret && comandos[I] != NULL; I++)
-                ret = comandos[I] (cmd, (num_args == 2) ? arg : NULL, &estado);
+            for (int I = 0; !ret && comandos [I] != NULL; I++)
+                ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
         }
     }
 
-    if (estado.info != NULL) {
-        resetaTabuleiro (estado.info);
-        free (estado.info);
-    }
+    if (estado.info != NULL) libertaTabuleiro (estado.info);
 
     return 0;
 }
