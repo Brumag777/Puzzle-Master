@@ -192,7 +192,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e) {
                 "a: Ajuda mudando todas as casas que se pode inferir no estado atual do tabuleiro\n"
                 "A: Invoca o comando 'a' enquanto o jogo sofre alterações\n"
                 "R: Resolve o jogo\n"
-                "d: Desfaz a última jogada\n"
+                "d <natural>: Desfaz a última jogada\n"
                 "s: Termina o jogo\n"
                 "h: Lista todos os comandos do jogo\n");
                 putchar ('\n');
@@ -205,24 +205,63 @@ bool listarComandos (char cmd, char *arg, ESTADO *e) {
 
 
 
-// Desfaz a última jogada
+// Desfaz a últimas jogadas
 bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
     if (cmd == 'd') {
 
-        // Verifica se não foi recebido um argumento
-        if (arg != NULL) {
-            fprintf (stderr, "Erro: o comando d não precisa de um argumento\n\n");
+        // Verifica se foi recebido um argumento (número natural)
+        if (arg == NULL) {
+            fprintf (stderr, "Erro: o comando d precisa de um argumento (número natural)\n\n");
             return false;
         }
 
-        // Verifica se há jogadas anteriores para desfazer a última
-        if (e -> info -> hTabuleiros -> sp < 2) {
-            fprintf (stderr, "Erro: não há jogadas anteriores\n\n");
+        // Define o tabuleiro para o qual o jogo vai retornar
+        int q = atoi (arg);
+
+        // Verifica se o argumento é um número natural
+        if (q < 1) {
+            fprintf (stderr, "Erro: o argumento deve ser um número natural\n\n");
             return false;
         }
 
-        // Atualiza o tabuleiro para o anterior
+        // Verifica se o argumento não é igual ao tabuleiro atual
+        if (q == e -> info -> hTabuleiros -> sp) {
+            fprintf (stderr, "Erro: não há nada a atualizar\n\n");
+            return false;
+        }
+
+        // Verifica se o tabuleiro desejado existe
+        if (q > e -> info -> hTabuleiros -> sp) {
+            fprintf (stderr, "Erro: ainda não existe o tabuleiro %d\n\n", q);
+            return false;
+        }
+
+        // Certificação de que o jogador deseja desfazer a(s) última(s) jogada(s)
+        fprintf (stderr, "Tem a certeza de que deseja retornar ao %dº tabuleiro?\n> ", q);
+        char c [LINE_SIZE];
+        while (1) {
+
+            if (scanf ("%s", c) != 1) return false;
+
+            if (strcmp (c, "sim") && strcmp (c, "Sim") && strcmp (c, "s") && strcmp (c, "S")) {
+
+                if (strcmp (c, "não") && strcmp (c, "Não") && strcmp (c, "n") && strcmp (c, "N"))
+                    fprintf (stderr, "Resposta inválida: deve ser 'sim' ou 'não'. Responda novamente.\n> ");
+
+                else {
+                    putchar ('\n');
+                    return true;
+                }
+            }
+            else break;
+        }
+
+        // Desfaz as últimas jogadas até ao tabuleiro anterior ao desejado
+        while (e -> info -> hTabuleiros -> sp > q + 1)
+            popStack (e -> info -> hTabuleiros, e -> info -> linhas);
+
+        // Atualiza o tabuleiro para o desejado
         for (int i = 0; i < e -> info -> linhas; i++)
             strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
 

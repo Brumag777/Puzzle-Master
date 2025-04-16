@@ -19,10 +19,16 @@ int main () {
 
 
 
+    // Variável para evitar repetições do '>' quanto é invocado o comando 'd'
+    int v = 1;
+
+
+
     // Mantém o jogo a correr até ser usado o comando 's'
     while (estado.looping) {
 
-        printf ("> ");
+        if (v) printf ("> ");
+        v = 1;
 
         char line [LINE_SIZE] = {0};
         
@@ -46,14 +52,16 @@ int main () {
         // Verifica se o número de argumentos é válido (0 ou 1)
         if (num_args > 2)
             fprintf (stderr, "Erro: comando %c foi invocado com argumentos extra: %s\n\n", cmd, resto);
-
+            
 
 
         // Verifica se algum dos comandos foi invocado
         else {
             bool ret = false;
-            for (int I = 0; !ret && comandos [I] != NULL; I++)
+            for (int I = 0; !ret && comandos [I] != NULL; I++) {
                 ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
+                if (I == 6 && ret) v = 0;
+            }
         }
     }
 
