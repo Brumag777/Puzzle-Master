@@ -118,9 +118,6 @@ bool vizualizarStack (char cmd, char *arg, ESTADO *e);
 // Verifica se existem infrações no tabuleiro
 bool verifica (char cmd, char *arg, ESTADO *e);
 
-// Verifica se há um caminho ortogonal entre quaisquer duas casas brancas no tabuleiro
-bool ortog (char cmd, char *arg, ESTADO *e);
-
 
 
 
