@@ -4,7 +4,7 @@
 #include "puzzle.h"
 
 // Imprime os últimos q elementos do histórico de tabuleiros
-void vizualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q) {
+void visualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q) {
 
     if (q == 1) printf ("\nO último tabuleiro é: \n\n");
     else printf ("\nOs últimos %d tabuleiros são: \n\n", q);

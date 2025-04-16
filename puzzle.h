@@ -113,7 +113,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e);
 bool desfazerJogada (char cmd, char *arg, ESTADO *e);
 
 // Imprime os últimos tabuleiros armazenados no histórico
-bool vizualizarStack (char cmd, char *arg, ESTADO *e);
+bool visualizarStack (char cmd, char *arg, ESTADO *e);
 
 // Verifica se existem infrações no tabuleiro
 bool verifica (char cmd, char *arg, ESTADO *e);
@@ -125,7 +125,7 @@ bool verifica (char cmd, char *arg, ESTADO *e);
 // Funções relativas ao histórico de tabuleiros - Stack.c
 
 // Imprime os últimos q tabuleiros armazenados no histórico
-void vizualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q);
+void visualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q);
 
 // Inicializa o histórico
 void inicializaStack (Hist h);

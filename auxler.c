@@ -11,7 +11,7 @@ bool auxLer (ESTADO *e, char *arg) {
 
     // Verifica se o ficheiro foi lido com sucesso
     if (Jogo == NULL) {
-        fprintf (stderr, "Erro: Ficheiro inválido\n");
+        fprintf (stderr, "\nErro: Ficheiro inválido\n\n");
         return false;
     }
 
@@ -44,7 +44,7 @@ bool auxLer (ESTADO *e, char *arg) {
 
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (e -> info)) {
-        fprintf (stderr, "Erro: Tabuleiro inválido\n");
+        fprintf (stderr, "\nErro: Tabuleiro inválido\n\n");
         return false;
     }
 
@@ -55,7 +55,7 @@ bool auxLer (ESTADO *e, char *arg) {
     visualizarTabuleiro (e -> info);
 
     // Avisa do sucesso da leitura
-    fprintf (stderr, "Ficheiro lido com sucesso\n\n");
+    fprintf (stderr, "\nFicheiro lido com sucesso\n\n");
     
     return true;
 }

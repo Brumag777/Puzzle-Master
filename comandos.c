@@ -10,7 +10,7 @@ bool gravar (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (nome do ficheiro)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando g precisa de um argumento\n\n");
+            fprintf (stderr, "\nErro: O comando g precisa de um argumento (nome do ficheiro)\n\n");
             return false;
         }
 
@@ -19,7 +19,7 @@ bool gravar (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se o ficheiro foi aberto corretamente
         if (f == NULL) {
-            fprintf (stderr, "Erro ao abrir o ficheiro para escrita\n\n");
+            fprintf (stderr, "\nErro: Não foi possível abrir o ficheiro\n\n");
             return false;
         }
 
@@ -31,7 +31,7 @@ bool gravar (char cmd, char *arg, ESTADO *e) {
 
         // Fecha o ficheiro
         fclose (f);
-        printf ("Jogo gravado em '%s'\n\n", arg);
+        printf ("\nJogo gravado em '%s'\n\n", arg);
 
         return true;
     }
@@ -48,7 +48,7 @@ bool ler (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (nome do ficheiro)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando l precisa de um argumento\n\n");
+            fprintf (stderr, "\nErro: O comando l precisa de um argumento (nome do ficheiro)\n\n");
             return false;
         }
 
@@ -66,8 +66,13 @@ bool ler (char cmd, char *arg, ESTADO *e) {
 // Termina o jogo
 bool sair (char cmd, char *arg, ESTADO *e) {
 
-    // Verifica se não foi recebido um argumento
-    if (arg == NULL && cmd == 's') {
+    if (cmd == 's') {
+
+        // Verifica se não foi recebido um argumento
+        if (arg != NULL) {
+            fprintf (stderr, "\nErro: O comando s não precisa de um argumento\n\n");
+            return false;
+        }
 
         // Define o looping como falso de modo a terminar o ciclo na main
         e -> looping = false;
@@ -86,7 +91,7 @@ bool mudarParaMaiuscula (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (coordenada)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando b precisa de um argumento (coordenada)\n\n");
+            fprintf (stderr, "\nErro: O comando b precisa de um argumento (coordenada)\n\n");
             return false;
         }
 
@@ -96,13 +101,13 @@ bool mudarParaMaiuscula (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se a coordenada recebida é válida (isto é, está dentro do tabuleiro)
         if (!coordenadaValida (l, c, e -> info -> linhas, e -> info -> colunas)) {
-            fprintf (stderr, "Erro: a coordenada é inválida\n\n");
+            fprintf (stderr, "\nErro: A coordenada é inválida\n\n");
             return false;
         }
 
         // Verifica se a coordenada recebida é uma letra minúscula
         if (!eMinuscula (e -> info -> Tabuleiro [l - 1][c - 'a'])) {
-            fprintf (stderr, "Erro: a casa %c%d não contém uma letra minúscula.\n\n", c, l);
+            fprintf (stderr, "\nErro: A casa %c%d não contém uma letra minúscula.\n\n", c, l);
             return false;
         }
 
@@ -130,7 +135,7 @@ bool mudarParaVazia (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (coordenada)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando r precisa de um argumento (coordenada)\n\n");
+            fprintf (stderr, "\nErro: O comando r precisa de um argumento (coordenada)\n\n");
             return false;
         }
 
@@ -140,13 +145,19 @@ bool mudarParaVazia (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se a coordenada recebida é válida (isto é, está dentro do tabuleiro)
         if (!coordenadaValida (l, c, e -> info -> linhas, e -> info -> colunas)) {
-            fprintf (stderr, "Erro: a coordenada é inválida\n\n");
+            fprintf (stderr, "\nErro: A coordenada é inválida\n\n");
             return false;
         }
 
         // Verifica se a coordenada recebida não está vazia
         if (e -> info -> Tabuleiro [l - 1][c - 'a'] == '#') {
-            fprintf (stderr, "Erro: a coordenada %c%d já é vazia\n\n", c, l);
+            fprintf (stderr, "\nErro: A casa %c%d já é vazia\n\n", c, l);
+            return false;
+        }
+
+        // Verifica se a coordenada recebida não está pintada de branco
+        if (eMaiuscula (e -> info -> Tabuleiro [l - 1][c - 'a'])) {
+            fprintf (stderr, "\nErro: A casa %c%d está pintada de branco\n\n", c, l);
             return false;
         }
 
@@ -177,7 +188,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se não foi recebido um argumento
         if (arg != NULL) {
-            fprintf (stderr, "Erro: o comando h não precisa de um argumento\n\n");
+            fprintf (stderr, "\nErro: O comando h não precisa de um argumento\n\n");
             return false;
         }
 
@@ -194,8 +205,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e) {
                 "R: Resolve o jogo\n"
                 "d <natural>: Desfaz a última jogada\n"
                 "s: Termina o jogo\n"
-                "h: Lista todos os comandos do jogo\n");
-                putchar ('\n');
+                "h: Lista todos os comandos do jogo\n\n");
 
         return true;
     }
@@ -212,7 +222,7 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (número natural)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando d precisa de um argumento (número natural)\n\n");
+            fprintf (stderr, "\nErro: O comando d precisa de um argumento (número natural)\n\n");
             return false;
         }
 
@@ -221,24 +231,24 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se o argumento é um número natural
         if (q < 1) {
-            fprintf (stderr, "Erro: o argumento deve ser um número natural\n\n");
+            fprintf (stderr, "\nErro: O argumento deve ser um número natural\n\n");
             return false;
         }
 
         // Verifica se o argumento não é igual ao tabuleiro atual
         if (q == e -> info -> hTabuleiros -> sp) {
-            fprintf (stderr, "Erro: não há nada a atualizar\n\n");
+            fprintf (stderr, "\nErro: Não há nada a atualizar\n\n");
             return false;
         }
 
         // Verifica se o tabuleiro desejado existe
         if (q > e -> info -> hTabuleiros -> sp) {
-            fprintf (stderr, "Erro: ainda não existe o tabuleiro %d\n\n", q);
+            fprintf (stderr, "\nErro: Ainda não existe esse tabuleiro (o último é o %dº)\n\n", e -> info -> hTabuleiros -> sp);
             return false;
         }
 
         // Certificação de que o jogador deseja desfazer a(s) última(s) jogada(s)
-        fprintf (stderr, "Tem a certeza de que deseja retornar ao %dº tabuleiro?\n> ", q);
+        fprintf (stderr, "\nTem a certeza de que deseja retornar ao %dº tabuleiro?\n> ", q);
         char c [LINE_SIZE];
         while (1) {
 
@@ -280,13 +290,13 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
 
 // Imprime os últimos tabuleiros armazenados no histórico
-bool vizualizarStack (char cmd, char *arg, ESTADO *e) {
+bool visualizarStack (char cmd, char *arg, ESTADO *e) {
 
     if (cmd == 'V') {
 
         // Verifica se foi recebido um argumento (número natural)
         if (arg == NULL) {
-            fprintf (stderr, "Erro: o comando V precisa de um argumento (número natural)\n\n");
+            fprintf (stderr, "\nErro: O comando V precisa de um argumento (número natural)\n\n");
             return false;
         }
 
@@ -295,18 +305,18 @@ bool vizualizarStack (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se o argumento é um número natural
         if (q < 1) {
-            fprintf (stderr, "Erro: o argumento deve ser um número natural\n\n");
+            fprintf (stderr, "\nErro: O argumento deve ser um número natural\n\n");
             return false;
         }
 
         // Verifica se a quantidade de tabuleiros a imprimir é menor ou igual à quantidade de tabuleiros guardados no histórico
         if (q > e -> info -> hTabuleiros -> sp) {
-            fprintf (stderr, "Erro: o argumento é maior que o número de jogadas (%d)\n\n", e -> info -> hTabuleiros -> sp);
+            fprintf (stderr, "\nErro: O argumento é maior que o número de jogadas (%d)\n\n", e -> info -> hTabuleiros -> sp);
             return false;
         }
 
         // Imprime os últimos q tabuleiros armazenados no histórico
-        vizualizaUltimosTabuleiros (e -> info -> hTabuleiros, e -> info -> linhas, e -> info -> colunas, q);
+        visualizaUltimosTabuleiros (e -> info -> hTabuleiros, e -> info -> linhas, e -> info -> colunas, q);
 
         return true;
     }
@@ -323,7 +333,7 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se não foi recebido um argumento
         if (arg != NULL) {
-            fprintf (stderr, "Erro: o comando v não precisa de um argumento\n\n");
+            fprintf (stderr, "\nErro: O comando v não precisa de um argumento\n\n");
             return false;
         }
 
@@ -365,20 +375,20 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se o tabuleiro possui pelo menos uma letra
         if (l == -1) {
-            fprintf (stderr, "Erro: o tabuleiro não possui nenhuma letra\n\n");
+            fprintf (stderr, "\nInfração: O tabuleiro não possui nenhuma letra\n\n");
             return false;
         }
 
         // Pinta todas as casa (não vazias) de branco
         for (int i = l; i < e -> info -> linhas; i++)
-            for (int j = c; j < e -> info -> colunas; j++)
+            for (int j = 0; j < e -> info -> colunas; j++)
                 if (eMinuscula (e -> info -> Tabuleiro [i][j])) e -> info -> Tabuleiro [i][j] -= 'a' - 'A';
 
         // Verifica os caminhos
         int flag = 1;
 
         for (int i = l; i < e -> info -> linhas; i++) {
-            for (int j = c + 1; flag && j < e -> info -> colunas; j++)
+            for (int j = 0; flag && j < e -> info -> colunas; j++)
                 if (eMaiuscula (e -> info -> Tabuleiro [i][j]) && !verificaCaminho (e -> info, i, j, l, c)) {
                     flag = 0;
                     fprintf (stderr, "Infração: Não existe um caminho ortogonal entre todas as letras\n");

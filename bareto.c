@@ -80,18 +80,18 @@ int verificaCaminho (char Tabuleiro [5][5], int l1, int c1, int l2, int c2, int 
 // Função principal
 int main () {
 
-    char Tabuleiro [5][5] = {{'E', '#', 'A', 'D', 'C'},
-                             {'D', 'C', '#', 'E', '#'},
-                             {'B', '#', 'D', 'C', 'E'},
-                             {'C', 'D', 'E', '#', 'B'},
-                             {'A', '#', 'C', 'B', '#'}};
+    char Tabuleiro [5][5] = {{'#', 'A', 'A', 'D', 'C'},
+                             {'D', '#', 'A', 'E', 'A'},
+                             {'#', 'A', 'D', 'C', 'E'},
+                             {'C', 'D', 'E', 'A', 'B'},
+                             {'A', 'A', 'C', 'B', 'A'}};
 
     imprimeTabuleiro (Tabuleiro);
     putchar ('\n');
 
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
-            printf ("%d ", verificaCaminho (Tabuleiro, 0, 0, i, j, 5, 5));
+            printf ("%d ", verificaCaminho (Tabuleiro, 0, 1, i, j, 5, 5));
         }
         putchar ('\n');
     }
