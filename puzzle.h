@@ -79,6 +79,9 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna);
 // Verifica se as casas adjacentes às casas vazias são brancas
 int verificaHashtag (IJ *InfoJogo, int linha, int coluna);
 
+// Verifica se existe um caminho desde uma casa branca a outra
+int verificaCaminho (IJ *IJ, int l1, int c1, int l2, int c2);
+
 // Função auxiliar ao comando 'l'
 bool auxLer (ESTADO *e, char *arg);
 
@@ -114,6 +117,9 @@ bool vizualizarStack (char cmd, char *arg, ESTADO *e);
 
 // Verifica se existem infrações no tabuleiro
 bool verifica (char cmd, char *arg, ESTADO *e);
+
+// Verifica se há um caminho ortogonal entre quaisquer duas casas brancas no tabuleiro
+bool ortog (char cmd, char *arg, ESTADO *e);
 
 
 

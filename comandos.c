@@ -352,10 +352,108 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
                 }
             }
 
+        // Procura a primeira maiúscula (se existir)
+        int l = -1, c = -1;
+
+        for (int i = 0; i < e -> info -> linhas; i++) {
+            for (int j = 0; j < e -> info -> colunas; j++)
+                if (l == -1 && e -> info -> Tabuleiro [i][j] != '#') {
+                    l = i;
+                    c = j;
+                }
+        }
+
+        // Verifica se o tabuleiro possui pelo menos uma letra
+        if (l == -1) {
+            fprintf (stderr, "Erro: o tabuleiro não possui nenhuma letra\n\n");
+            return false;
+        }
+
+        // Pinta todas as casa (não vazias) de branco
+        for (int i = l; i < e -> info -> linhas; i++)
+            for (int j = c; j < e -> info -> colunas; j++)
+                if (eMinuscula (e -> info -> Tabuleiro [i][j])) e -> info -> Tabuleiro [i][j] -= 'a' - 'A';
+
+        // Verifica os caminhos
+        int flag = 1;
+
+        for (int i = l; i < e -> info -> linhas; i++) {
+            for (int j = c + 1; flag && j < e -> info -> colunas; j++)
+                if (eMaiuscula (e -> info -> Tabuleiro [i][j]) && !verificaCaminho (e -> info, i, j, l, c)) {
+                    flag = 0;
+                    fprintf (stderr, "Infração: Não existe um caminho ortogonal entre todas as letras\n");
+                }
+        }
+
+        // Copia o tabuleiro original
+        for (int i = 0; i < e -> info -> linhas; i++)
+            strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 1][i]);
+
         // Avisa casa não houve nenhuma infração, isto é, se o tabuleiro é válido
-        if (r) printf ("Não há nenhuma infração\n");
+        if (r && flag) printf ("Não há nenhuma infração\n");
 
         putchar ('\n');
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Verifica se há um caminho ortogonal entre quaisquer duas casas brancas no tabuleiro
+bool ortog (char cmd, char *arg, ESTADO *e) {
+
+    if (cmd == 'o') {
+
+
+        // Verifica se não foi recebido um argumento
+        if (arg != NULL) {
+            fprintf (stderr, "Erro: o comando v não precisa de um argumento\n\n");
+            return false;
+        }
+
+        putchar ('\n');
+
+        // Procura a primeira maiúscula (se existir)
+        int l = -1, c = -1;
+
+        for (int i = 0; i < e -> info -> linhas; i++) {
+            for (int j = 0; j < e -> info -> colunas; j++)
+                if (l == -1 && e -> info -> Tabuleiro [i][j] != '#') {
+                    l = i;
+                    c = j;
+                }
+        }
+
+        // Verifica se o tabuleiro possui pelo menos uma letra
+        if (l == -1) {
+            fprintf (stderr, "Erro: o tabuleiro não possui nenhuma letra\n\n");
+            return false;
+        }
+
+        // Pinta todas as casa (não vazias) de branco
+        for (int i = l; i < e -> info -> linhas; i++)
+            for (int j = c; j < e -> info -> colunas; j++)
+                if (eMinuscula (e -> info -> Tabuleiro [i][j])) e -> info -> Tabuleiro [i][j] -= 'a' - 'A';
+
+        // Verifica os caminhos
+        int flag = 1;
+
+        for (int i = l; i < e -> info -> linhas; i++) {
+            for (int j = c + 1; flag && j < e -> info -> colunas; j++)
+                if (eMaiuscula (e -> info -> Tabuleiro [i][j]) && !verificaCaminho (e -> info, i, j, l, c)) {
+                    flag = 0;
+                    fprintf (stderr, "Infração: não existe um caminho ortogonal entre todas as letras\n\n");
+                }
+        }
+
+        if (flag) fprintf (stderr, "Existe um caminho ortogonal entre todas as letras\n\n");
+
+        // Copia o tabuleiro original
+        for (int i = 0; i < e -> info -> linhas; i++)
+            strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 1][i]);
 
         return true;
     }

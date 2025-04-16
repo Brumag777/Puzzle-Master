@@ -248,3 +248,53 @@ void libertaTabuleiro (IJ *InfoJogo) {
     // Liberta a informação sobre o jogo
     free (InfoJogo);
 }
+
+
+
+// Verifica se existe um caminho desde uma casa branca a outra
+int verificaCaminho (IJ *IJ, int l1, int c1, int l2, int c2) {
+
+    if ((l1 - l2) * (l1 - l2) + (c1 - c2) * (c1 - c2) == 1) return 1;
+
+    // Verifica a casa acima
+    if (coordenadaValida (l1, c1 + 'a', IJ -> linhas, IJ -> colunas) && eMaiuscula (IJ -> Tabuleiro [l1 - 1][c1])) {
+        IJ -> Tabuleiro [l1][c1] += 'a' - 'A';
+        if (verificaCaminho (IJ, l1 - 1, c1, l2, c2)) {
+            IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+            return 1;
+        }
+        IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+    }
+
+    // Verifica a casa abaixo
+    if (coordenadaValida (l1 + 2, c1 + 'a', IJ -> linhas, IJ -> colunas) && eMaiuscula (IJ -> Tabuleiro [l1 + 1][c1])) {
+        IJ -> Tabuleiro [l1][c1] += 'a' - 'A';
+        if (verificaCaminho (IJ, l1 + 1, c1, l2, c2)) {
+            IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+            return 1;
+        }
+        IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+    }
+
+    // Verifica a casa à esquerda
+    if (coordenadaValida (l1 + 1, c1 + 'a' - 1, IJ -> linhas, IJ -> colunas) && eMaiuscula (IJ -> Tabuleiro [l1][c1 - 1])) {
+        IJ -> Tabuleiro [l1][c1] += 'a' - 'A';
+        if (verificaCaminho (IJ, l1, c1 - 1, l2, c2)) {
+            IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+            return 1;
+        }
+        IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+    }
+
+    // Verifica a casa à direita
+    if (coordenadaValida (l1 + 1, c1 + 'a' + 1, IJ -> linhas, IJ -> colunas) && eMaiuscula (IJ -> Tabuleiro [l1][c1 + 1])) {
+        IJ -> Tabuleiro [l1][c1] += 'a' - 'A';
+        if (verificaCaminho (IJ, l1, c1 + 1, l2, c2)) {
+            IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+            return 1;
+        }
+        IJ -> Tabuleiro [l1][c1] -= 'a' - 'A';
+    }
+
+    return 0;
+}
