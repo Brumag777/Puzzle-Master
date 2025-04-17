@@ -79,11 +79,8 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna);
 // Verifica se as casas adjacentes às casas vazias são brancas
 int verificaHashtag (IJ *InfoJogo, int linha, int coluna);
 
-// Verifica se existe um caminho desde uma casa branca a outra
-int verificaCaminho (IJ *IJ, int l1, int c1, int l2, int c2);
-
-// Função auxiliar ao comando 'l'
-bool auxLer (ESTADO *e, char *arg);
+// Calcula quantas letras estão ligadas à letra da posição dada
+int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
 
 
 
@@ -138,3 +135,67 @@ void popStack (Hist h, int linhas);
 
 // Liberta a memória alocada para o histórico
 void libertaStack (Hist h, int linhas);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Função auxiliar ao comando 'l'
+bool auxLer (ESTADO *e, char *arg);

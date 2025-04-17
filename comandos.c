@@ -362,42 +362,33 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
                 }
             }
 
-        // Procura a primeira maiúscula (se existir)
-        int l = -1, c = -1;
 
-        for (int i = 0; i < e -> info -> linhas; i++) {
+
+        // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
+        int aux [e -> info -> linhas][e -> info -> colunas], nLetras = 0, flag = 1, l, c;
+
+        // No tabuleiro auxiliar, '0' representa as casas vazias e '1' representa as letras (as casas restantes)
+        for (int i = 0; i < e -> info -> linhas; i++)
             for (int j = 0; j < e -> info -> colunas; j++)
-                if (l == -1 && e -> info -> Tabuleiro [i][j] != '#') {
+                if (e -> info -> Tabuleiro [i][j] == '#') aux [i][j] = 0;
+                else {
                     l = i;
                     c = j;
+                    aux [i][j] = 1;
+                    nLetras++;
                 }
-        }
 
         // Verifica se o tabuleiro possui pelo menos uma letra
-        if (l == -1) {
+        if (nLetras == 0) {
             fprintf (stderr, "\nInfração: O tabuleiro não possui nenhuma letra\n\n");
             return false;
         }
 
-        // Pinta todas as casa (não vazias) de branco
-        for (int i = l; i < e -> info -> linhas; i++)
-            for (int j = 0; j < e -> info -> colunas; j++)
-                if (eMinuscula (e -> info -> Tabuleiro [i][j])) e -> info -> Tabuleiro [i][j] -= 'a' - 'A';
-
-        // Verifica os caminhos
-        int flag = 1;
-
-        for (int i = l; i < e -> info -> linhas; i++) {
-            for (int j = 0; flag && j < e -> info -> colunas; j++)
-                if (eMaiuscula (e -> info -> Tabuleiro [i][j]) && !verificaCaminho (e -> info, i, j, l, c)) {
-                    flag = 0;
-                    fprintf (stderr, "Infração: Não existe um caminho ortogonal entre todas as letras\n");
-                }
+        // Verifica se existe um caminho ortogonal entre todas as letras
+        if (nLetras != contaLetrasLigadas (e -> info -> linhas, e -> info -> colunas, aux, l, c)) {
+            flag = 0;
+            fprintf (stderr, "Infração: Não existe um caminho ortogonal entre todas as letras\n");
         }
-
-        // Copia o tabuleiro original
-        for (int i = 0; i < e -> info -> linhas; i++)
-            strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 1][i]);
 
         // Avisa casa não houve nenhuma infração, isto é, se o tabuleiro é válido
         if (r && flag) printf ("Não há nenhuma infração\n");
