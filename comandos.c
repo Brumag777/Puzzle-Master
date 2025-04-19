@@ -346,20 +346,26 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
         for (int i = 0; i < e -> info -> linhas; i++)
 
             // Percorre cada linha do tabuleiro para procurar infrações
-            for (int j = 0; j < e -> info -> colunas; j++)
+            for (int j = 0; j < e -> info -> colunas; j++) {
                 
                 // Verifica se houve infrações relativas a casas brancas
-                if (eMaiuscula (e -> info -> Tabuleiro [i][j]))
+                if (eMaiuscula (e -> info -> Tabuleiro [i][j])) {
                     if (!verificaLinhas (e -> info, e -> info -> Tabuleiro [i][j], i, j) ||
                         !verificaColunas (e -> info, e -> info -> Tabuleiro [i][j], i, j)) validade = 0;
+                }
+
+                // Verifica se houve infrações relativas a casas vazias
+                else if (e -> info -> Tabuleiro [i][j] == '#')
+                    if (!verificaCasaVazia (e -> info, i, j)) validade = 0;
+            }
 
 
 
         // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
-        int aux [e -> info -> linhas][e -> info -> colunas], nLetras = 0, l, c;
+        int aux [e -> info -> linhas][e -> info -> colunas], nLetras, l, c;
 
         // No tabuleiro auxiliar, '0' representa as casas vazias e '1' representa as letras (as casas restantes)
-        for (int i = 0; i < e -> info -> linhas; i++)
+        for (int i = nLetras = 0; i < e -> info -> linhas; i++)
             for (int j = 0; j < e -> info -> colunas; j++)
                 if (e -> info -> Tabuleiro [i][j] == '#') aux [i][j] = 0;
                 else {
@@ -407,7 +413,51 @@ bool ajuda (char cmd, char *arg, ESTADO *e) {
             return true;
         }
 
-        (void) e;
+        // Realiza as alterações necessárias
+        if (ajudaAux (e) == 0) {
+            fprintf (stderr, "\nNão há nada a alterar.\n\n");
+            return true;
+        }
+
+        // Atualiza o histórico de tabuleiros
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+
+        // Imprime o tabuleiro resultante
+        visualizarTabuleiro (e -> info);
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
+bool ajudaRep (char cmd, char *arg, ESTADO *e) {
+
+    if (cmd == 'A') {
+
+        // Verifica se não foi recebido um argumento
+        if (arg != NULL) {
+            fprintf (stderr, "\nErro: O comando A não precisa de um argumento.\n\n");
+            return true;
+        }
+
+        // Realiza as alterações necessárias
+        if (ajudaAux (e) == 0) {
+            fprintf (stderr, "\nNão há nada a alterar.\n\n");
+            return true;
+        }
+
+        // Repete o processo
+        while (ajudaAux (e));
+
+        // Atualiza o histórico de tabuleiros
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+
+        // Imprime o tabuleiro resultante
+        visualizarTabuleiro (e -> info);
 
         return true;
     }

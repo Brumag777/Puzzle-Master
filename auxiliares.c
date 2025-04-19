@@ -97,7 +97,7 @@ int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
 
 
 
-
+// Verifica se as colunas não possuem casas brancas repetidas
 int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
 
     // Inteiro representante da validade da coluna
@@ -108,6 +108,31 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
 
         if (InfoJogo -> Tabuleiro [i][coluna] == c) {
             printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            validade = 0;
+        }
+
+    return validade;
+}
+
+
+
+// Verifica se as casas adjacentes às casas vazias não são vazias
+int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
+
+    // Inteiro representante da validade da casa
+    int validade = 1;
+
+    // Verifica a casa à direita
+    if (coordenadaValida (linha + 1, coluna + 'a' + 1, InfoJogo -> linhas, InfoJogo -> colunas))
+        if (InfoJogo -> Tabuleiro [linha][coluna + 1] == '#') {
+            fprintf (stderr, "Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            validade = 0;
+        }
+
+    // Verifica a casa abaixo
+    if (coordenadaValida (linha + 2, coluna + 'a', InfoJogo -> linhas, InfoJogo -> colunas))
+        if (InfoJogo -> Tabuleiro [linha + 1][coluna] == '#') {
+            fprintf (stderr, "Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 
@@ -168,4 +193,164 @@ int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas]
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l - 1, c) +
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c + 1) +
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c - 1);
+}
+
+
+
+// Pinta as casas à volta das casas vazias de branco
+int pintaCasas (IJ *InfoJogo, int linha, int coluna) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Verifica a casa acima
+    if (coordenadaValida (linha, coluna + 'a', InfoJogo -> linhas, InfoJogo -> colunas))
+        if (eMinuscula (InfoJogo -> Tabuleiro [linha - 1][coluna])) {
+            InfoJogo -> Tabuleiro [linha - 1][coluna] += 'A' - 'a';
+            flag = 1;
+        }
+
+    // Verifica a casa abaixo
+    if (coordenadaValida (linha + 2, coluna + 'a', InfoJogo -> linhas, InfoJogo -> colunas))
+        if (eMinuscula (InfoJogo -> Tabuleiro [linha + 1][coluna])) {
+            InfoJogo -> Tabuleiro [linha + 1][coluna] += 'A' - 'a';
+            flag = 1;
+        }
+
+    // Verifica a casa à esquerda
+    if (coordenadaValida (linha + 1, coluna + 'a' - 1, InfoJogo -> linhas, InfoJogo -> colunas))
+        if (eMinuscula (InfoJogo -> Tabuleiro [linha][coluna - 1])) {
+            InfoJogo -> Tabuleiro [linha][coluna - 1] += 'A' - 'a';
+            flag = 1;
+        }
+
+    // Verifica a casa à direita
+    if (coordenadaValida (linha + 1, coluna + 'a' + 1, InfoJogo -> linhas, InfoJogo -> colunas))
+        if (eMinuscula (InfoJogo -> Tabuleiro [linha][coluna + 1])) {
+            InfoJogo -> Tabuleiro [linha][coluna + 1] += 'A' - 'a';
+            flag = 1;
+        }
+
+    return flag;
+}
+
+
+
+// Risca as casas que deviam ser vazias
+int riscaCasas (IJ *InfoJogo, int linha, int coluna) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Percorre a linha
+    if (percorreLinha (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
+
+    // Percorre a coluna
+    if (percorreColuna (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
+
+    return flag;
+}
+
+
+
+// Testa as possibilidades de uma casa minúscula
+int testaPossibilidadesCasa (IJ *InfoJogo, int linha, int coluna) {
+
+    // Risca a casa de modo a realizar o teste
+    char C = InfoJogo -> Tabuleiro [linha][coluna];
+    InfoJogo -> Tabuleiro [linha][coluna] = '#';
+
+    // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
+    int aux [InfoJogo -> linhas][InfoJogo -> colunas], nLetras, l, c;
+
+    // No tabuleiro auxiliar, '0' representa as casas vazias e '1' representa as letras (as casas restantes)
+    for (int i = nLetras = 0; i < InfoJogo -> linhas; i++)
+        for (int j = 0; j < InfoJogo -> colunas; j++)
+            if (InfoJogo -> Tabuleiro [i][j] == '#') aux [i][j] = 0;
+            else {
+                l = i;
+                c = j;
+                aux [i][j] = 1;
+                nLetras++;
+            }
+
+    // Verifica se o tabuleiro possui pelo menos uma letra
+    if (nLetras == 0) return 0;
+
+    // Verifica se existe um caminho ortogonal entre todas as letras
+    if (nLetras != contaLetrasLigadas (InfoJogo -> linhas, InfoJogo -> colunas, aux, l, c)) {
+        InfoJogo -> Tabuleiro [linha][coluna] = C + 'A' - 'a';
+        return 1;
+    }
+    else InfoJogo -> Tabuleiro [linha][coluna] = C;
+    return 0;
+}
+
+
+
+// Percorre a linha para riscar casas que deviam ser vazias
+int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Altera o 'c' para minúscula
+    c += 'a' - 'A';
+
+    for (int j = 0; j < InfoJogo -> colunas; j++)
+        if (InfoJogo -> Tabuleiro [linha][j] == c && j != coluna) {
+            InfoJogo -> Tabuleiro [linha][j] = '#';
+            flag = 1;
+        }
+
+    return flag;
+}
+
+
+
+// Percorre a coluna para riscar casas que deviam ser vazias
+int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Altera o 'c' para minúscula
+    c += 'a' - 'A';
+
+    for (int i = 0; i < InfoJogo -> linhas; i++)
+        if (InfoJogo -> Tabuleiro [i][coluna] == c && i != linha) {
+            InfoJogo -> Tabuleiro [i][coluna] = '#';
+            flag = 1;
+        }
+
+    return flag;
+}
+
+
+
+// Função auxiliar do comando 'a' (ajuda)
+int ajudaAux (ESTADO *e) {
+
+    // Indicador de alterações
+    int flag = 0;
+    
+    // Percorre o tabuleiro para riscar casas que deviam ser vazias
+    for (int i = 0; i < e -> info -> linhas; i++)
+        for (int j = 0; j < e -> info -> colunas; j++)
+            if (eMaiuscula (e -> info -> Tabuleiro [i][j])) 
+                if (riscaCasas (e -> info, i, j)) flag = 1;
+    
+    // Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
+    for (int i = 0; i < e -> info -> linhas; i++)
+        for (int j = 0; j < e -> info -> colunas; j++)
+            if (e -> info -> Tabuleiro [i][j] == '#') 
+                if (pintaCasas (e -> info, i, j)) flag = 1;
+
+    // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias
+    for (int i = 0; i < e -> info -> linhas; i++)
+        for (int j = 0; j < e -> info -> colunas; j++)
+            if (eMinuscula (e -> info -> Tabuleiro [i][j])) 
+                if (testaPossibilidadesCasa (e -> info, i, j)) flag = 1;
+
+    return flag;
 }

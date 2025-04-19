@@ -76,11 +76,29 @@ int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna);
 // Verifica se as colunas não possuem casas brancas repetidas
 int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna);
 
-// Verifica se as casas adjacentes às casas vazias são brancas
-int verificaHashtag (IJ *InfoJogo, int linha, int coluna);
+// Verifica se as casas adjacentes às casas vazias não são vazias
+int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna);
 
 // Calcula quantas letras estão ligadas à letra da posição dada
 int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
+
+// Pinta as casas à volta das casas vazias de branco
+int pintaCasas (IJ *InfoJogo, int linha, int coluna);
+
+// Risca as casas que deviam ser vazias
+int riscaCasas (IJ *InfoJogo, int linha, int coluna);
+
+// Testa as possibilidades de uma casa minúscula
+int testaPossibilidadesCasa (IJ *InfoJogo, int linha, int coluna);
+
+// Percorre a linha para riscar casas que deviam ser vazias
+int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna);
+
+// Percorre a coluna para riscar casas que deviam ser vazias
+int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna);
+
+// Função auxiliar do comando 'a' (ajuda)
+int ajudaAux (ESTADO *e);
 
 
 
@@ -117,6 +135,9 @@ bool verifica (char cmd, char *arg, ESTADO *e);
 
 // Ajuda o jogador realizando jogadas 'obrigatórias' na posição
 bool ajuda (char cmd, char *arg, ESTADO *e);
+
+// Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
+bool ajudaRep (char cmd, char *arg, ESTADO *e);
 
 
 

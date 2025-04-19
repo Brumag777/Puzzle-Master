@@ -6,9 +6,9 @@
 // Função principal
 int main () {
 
-    // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v
+    // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v, a, A
     COMANDO comandos [] = {sair, ler, gravar, mudarParaMaiuscula, mudarParaVazia, listarComandos, desfazerJogada, visualizarStack,           
-                           verifica, ajuda, NULL};
+                           verifica, ajuda, ajudaRep, NULL};
 
 
 
@@ -64,8 +64,6 @@ int main () {
                 ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
                 if (I == 6 && ret) v = 0;
             }
-
-            if (comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido. Use o comando 'h' para saber mais.\n\n");
         }
     }
 
