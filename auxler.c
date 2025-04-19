@@ -11,8 +11,8 @@ bool auxLer (ESTADO *e, char *arg) {
 
     // Verifica se o ficheiro foi lido com sucesso
     if (Jogo == NULL) {
-        fprintf (stderr, "\nErro: Ficheiro inválido\n\n");
-        return false;
+        fprintf (stderr, "\nErro: Ficheiro inválido.\n\n");
+        return true;
     }
 
     // Liberta a memória do tabuleiro relativo ao ficheiro anterior
@@ -24,7 +24,7 @@ bool auxLer (ESTADO *e, char *arg) {
     // Lê as linhas e as colunas do ficheiro
     if (fscanf (Jogo, "%d %d", &e -> info -> linhas, &e -> info -> colunas) != 2) {
         fclose (Jogo);
-        return false;
+        return true;
     }
 
     // Ignora o '\n' da primeira linha
@@ -36,7 +36,7 @@ bool auxLer (ESTADO *e, char *arg) {
     // Aloca memória para cada linha do tabuleiro novo e preenche o mesmo com a informação do ficheiro
     for (int i = 0; i < e -> info -> linhas; i++) {
         e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
-        if (fgets (e -> info -> Tabuleiro [i], e -> info -> colunas + 2, Jogo) == NULL) return false;
+        if (fgets (e -> info -> Tabuleiro [i], e -> info -> colunas + 2, Jogo) == NULL) return true;
     }
 
     // Fecha o ficheiro
@@ -44,8 +44,8 @@ bool auxLer (ESTADO *e, char *arg) {
 
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (e -> info)) {
-        fprintf (stderr, "\nErro: Tabuleiro inválido\n\n");
-        return false;
+        fprintf (stderr, "\nErro: Tabuleiro inválido.\n\n");
+        return true;
     }
 
     // Adiciona o tabuleiro novo ao histórico de tabuleiros
@@ -55,7 +55,7 @@ bool auxLer (ESTADO *e, char *arg) {
     visualizarTabuleiro (e -> info);
 
     // Avisa do sucesso da leitura
-    fprintf (stderr, "\nFicheiro lido com sucesso\n\n");
+    fprintf (stderr, "\nTabuleiro lido com sucesso.\n\n");
     
     return true;
 }

@@ -8,7 +8,7 @@ int main () {
 
     // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v
     COMANDO comandos [] = {sair, ler, gravar, mudarParaMaiuscula, mudarParaVazia, listarComandos, desfazerJogada, visualizarStack,           
-                           verifica, NULL};
+                           verifica, ajuda, NULL};
 
 
 
@@ -51,17 +51,21 @@ int main () {
 
         // Verifica se o número de argumentos é válido (0 ou 1)
         if (num_args > 2)
-            fprintf (stderr, "Erro: comando %c foi invocado com argumentos extra: %s\n\n", cmd, resto);
+            fprintf (stderr, "\nErro: Comando %c foi invocado com argumentos extra: %s.\n\n", cmd, resto);
             
 
 
         // Verifica se algum dos comandos foi invocado
         else {
             bool ret = false;
-            for (int I = 0; !ret && comandos [I] != NULL; I++) {
+            int I;
+
+            for (I = 0; !ret && comandos [I] != NULL; I++) {
                 ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
                 if (I == 6 && ret) v = 0;
             }
+
+            if (comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido. Use o comando 'h' para saber mais.\n\n");
         }
     }
 

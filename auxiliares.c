@@ -67,7 +67,7 @@ int tabuleiroValido (IJ *InfoJogo) {
             c = InfoJogo -> Tabuleiro [i][j];
 
             if (!(eMinuscula (c) || eMaiuscula (c) || c == '#')) {
-                fprintf (stderr, "Erro: caractere inválido no tabuleiro (na coordenada %c%d)\n\n", j + 1 + 'a', i + 1);
+                fprintf (stderr, "Erro: caractere inválido no tabuleiro (na coordenada %c%d).\n\n", j + 1 + 'a', i + 1);
                 return 0;
             }
         }
@@ -81,18 +81,18 @@ int tabuleiroValido (IJ *InfoJogo) {
 // Verifica se as linhas não possuem casas brancas repetidas
 int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
 
-    // Inteiro representante da validade do tabuleiro
-    int r = 1;
+    // Inteiro representante da validade da linha
+    int validade = 1;
     
     // Percorre o resto da linha para procurar infrações
     for (int j = coluna + 1; j < InfoJogo -> colunas; j++)
 
         if (InfoJogo -> Tabuleiro [linha][j] == c) {
-            printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c')\n", c, linha + 1, coluna + 'a', j + 'a');
-            r = 0;
+            printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            validade = 0;
         }
 
-    return r;
+    return validade;
 }
 
 
@@ -100,53 +100,18 @@ int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
 
 int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
 
-    // Inteiro representante da validade do tabuleiro
-    int r = 1;
+    // Inteiro representante da validade da coluna
+    int validade = 1;
     
     // Percorre o resto da coluna para procurar infrações
     for (int i = linha + 1; i < InfoJogo -> linhas; i++)
 
         if (InfoJogo -> Tabuleiro [i][coluna] == c) {
-            printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d)\n", c, coluna + 'a', linha + 1, i + 1);
-            r = 0;
+            printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            validade = 0;
         }
 
-    return r;
-}
-
-
-
-// Verifica se as casas adjacentes às casas vazias são brancas
-int verificaHashtag (IJ *InfoJogo, int linha, int coluna) {
-
-    // Inteiro representante da validade do tabuleiro
-    int r = 1;
-
-    // Verifica se a casa em cima (se pertencer ao tabuleiro) é vazia
-    if (linha && !eMaiuscula (InfoJogo -> Tabuleiro [linha - 1][coluna])) {
-        printf ("Infração: A casa %c%d não está pintada de branco\n", coluna + 'a', linha);
-        r = 0;
-    }
-
-    // Verifica se a casa em baixo (se pertencer ao tabuleiro) é vazia
-    if (linha + 1 < InfoJogo -> linhas && !eMaiuscula (InfoJogo -> Tabuleiro [linha + 1][coluna])) {
-        printf ("Infração: A casa %c%d não está pintada de branco\n", coluna + 'a', linha + 2);
-        r = 0;
-    }
-
-    // Verifica se a casa à esquerda (se pertencer ao tabuleiro) é vazia
-    if (coluna && !eMaiuscula (InfoJogo -> Tabuleiro [linha][coluna - 1])) {
-        printf ("Infração: A casa %c%d não está pintada de branco\n", coluna + 'a' - 1, linha + 1);
-        r = 0;
-    }
-
-    // Verifica se a casa à direita (se pertencer ao tabuleiro) é vazia
-    if (coluna + 1 < InfoJogo -> colunas && !eMaiuscula (InfoJogo -> Tabuleiro [linha][coluna + 1])) {
-        printf ("Infração: A casa %c%d não está pintada de branco\n", coluna + 'a' + 1, linha + 1);
-        r = 0;
-    }
-
-    return r;
+    return validade;
 }
 
 

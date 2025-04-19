@@ -115,6 +115,9 @@ bool visualizarStack (char cmd, char *arg, ESTADO *e);
 // Verifica se existem infrações no tabuleiro
 bool verifica (char cmd, char *arg, ESTADO *e);
 
+// Ajuda o jogador realizando jogadas 'obrigatórias' na posição
+bool ajuda (char cmd, char *arg, ESTADO *e);
+
 
 
 
