@@ -29,7 +29,7 @@ int main () {
 
 
         // Recebe o input
-        if (fgets (line, LINE_SIZE, stdin) != NULL) 
+        if (fgets (line, LINE_SIZE, stdin) != NULL)
             assert (line [strlen (line) - 1] == '\n');
         else estado.looping = false;
 
