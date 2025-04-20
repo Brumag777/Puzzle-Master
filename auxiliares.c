@@ -125,14 +125,14 @@ int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
     // Verifica a casa à direita
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, InfoJogo -> linhas, InfoJogo -> colunas))
         if (InfoJogo -> Tabuleiro [linha][coluna + 1] == '#') {
-            fprintf (stderr, "Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
     // Verifica a casa abaixo
     if (coordenadaValida (linha + 2, coluna + 'a', InfoJogo -> linhas, InfoJogo -> colunas))
         if (InfoJogo -> Tabuleiro [linha + 1][coluna] == '#') {
-            fprintf (stderr, "Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 

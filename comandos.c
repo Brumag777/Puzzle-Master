@@ -247,26 +247,6 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
             return true;
         }
 
-        // Certificação de que o jogador deseja desfazer a(s) última(s) jogada(s)
-        fprintf (stderr, "\nTem a certeza de que deseja retornar ao %dº tabuleiro?\n> ", q);
-        char c [LINE_SIZE];
-        while (1) {
-
-            if (scanf ("%s", c) != 1) return true;
-
-            if (strcmp (c, "sim") && strcmp (c, "Sim") && strcmp (c, "s") && strcmp (c, "S")) {
-
-                if (strcmp (c, "não") && strcmp (c, "Não") && strcmp (c, "n") && strcmp (c, "N"))
-                    fprintf (stderr, "Resposta inválida: deve ser 'sim' ou 'não'. Responda novamente.\n> ");
-
-                else {
-                    putchar ('\n');
-                    return true;
-                }
-            }
-            else break;
-        }
-
         // Desfaz as últimas jogadas até ao tabuleiro anterior ao desejado
         while (e -> info -> hTabuleiros -> sp > q + 1)
             popStack (e -> info -> hTabuleiros, e -> info -> linhas);
@@ -377,14 +357,14 @@ bool verifica (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se o tabuleiro possui pelo menos uma letra
         if (nLetras == 0) {
-            fprintf (stderr, "\nInfração: O tabuleiro não possui nenhuma letra.\n\n");
+            printf ("Infração: O tabuleiro não possui nenhuma letra.\n\n");
             return true;
         }
 
         // Verifica se existe um caminho ortogonal entre todas as letras
         if (nLetras != contaLetrasLigadas (e -> info -> linhas, e -> info -> colunas, aux, l, c)) {
             validade = 0;
-            fprintf (stderr, "Infração: Não existe um caminho ortogonal entre todas as letras.\n");
+            printf ("Infração: Não existe um caminho ortogonal entre todas as letras.\n");
         }
 
 
@@ -415,7 +395,7 @@ bool ajuda (char cmd, char *arg, ESTADO *e) {
 
         // Realiza as alterações necessárias
         if (ajudaAux (e) == 0) {
-            fprintf (stderr, "\nNão há nada a alterar.\n\n");
+            printf ("\nNão há nada a alterar.\n\n");
             return true;
         }
 
@@ -446,7 +426,7 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e) {
 
         // Realiza as alterações necessárias
         if (ajudaAux (e) == 0) {
-            fprintf (stderr, "\nNão há nada a alterar.\n\n");
+            printf ("\nNão há nada a alterar.\n\n");
             return true;
         }
 

@@ -19,16 +19,10 @@ int main () {
 
 
 
-    // Variável para evitar repetições do '>' quanto é invocado o comando 'd'
-    int v = 1;
-
-
-
     // Mantém o jogo a correr até ser usado o comando 's'
     while (estado.looping) {
-
-        if (v) printf ("> ");
-        v = 1;
+        
+        printf ("> ");
 
         char line [LINE_SIZE] = {0};
         
@@ -60,12 +54,13 @@ int main () {
             bool ret = false;
             int I;
 
-            for (I = 0; !ret && comandos [I] != NULL; I++) {
+            for (I = 0; !ret && comandos [I] != NULL; I++)
                 ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
-                if (I == 6 && ret) v = 0;
-            }
+
+            if (cmd != 'A' && comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
         }
     }
+
 
 
 
