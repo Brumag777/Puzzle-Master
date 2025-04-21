@@ -20,14 +20,18 @@ void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
         if (i + 1 < 10) printf ("%d   ", i + 1);
         else if (i + 1 < 100) printf ("%d  ", i + 1);
         else printf ("%d ", i + 1);
+        if (h -> linhas [i] > 9) putchar (' ');
         for (int j = 0; j < h -> colunas [i]; j++) printf ("%c ", 'a' + j);
         printf ("\n    ");
+        if (h -> linhas [i] > 9) putchar (' ');
         for (int j = 0; j < h -> colunas [i]; j++) printf ("- ");
         putchar ('\n');
 
         // Para percorrer cada linha dos tabuleiros
         for (int j = 0; j < h -> linhas [i]; j++) {
-            printf ("%d | ", j + 1);
+
+            if (j < 9 && h -> linhas [i] > 9) printf ("%2d | ", j + 1);
+            else printf ("%d | ", j + 1);
 
             // Para percorrer cada coluna das linhas dos tabuleiros
             for (int k = 0; k < h -> colunas [i]; k++)

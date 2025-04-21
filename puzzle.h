@@ -54,13 +54,13 @@ int coordenadaValida (int l, char c, int linhas, int colunas);
 int tabuleiroValido(IJ *InfoJogo);
 
 // Verifica se as linhas não possuem casas brancas repetidas
-int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna);
+int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna, int flag);
 
 // Verifica se as colunas não possuem casas brancas repetidas
-int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna);
+int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna, int flag);
 
 // Verifica se as casas adjacentes às casas vazias não são vazias
-int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna);
+int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna, int flag);
 
 // Calcula quantas letras estão ligadas à letra da posição dada
 int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
@@ -119,6 +119,9 @@ bool ajuda (char cmd, char *arg, ESTADO *e);
 // Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
 bool ajudaRep (char cmd, char *arg, ESTADO *e);
 
+// Resolve o jogo automaticamente
+bool resolveJogo (char cmd, char *arg, ESTADO *e);
+
 
 
 
@@ -158,6 +161,9 @@ int logicaAjuda (char *arg, ESTADO *e);
 // Função que realiza a lógica do comando 'A' (ajudaRep)
 int logicaAjudaRep (char *arg, ESTADO *e);
 
+// Função que realiza a lógico do comando 'R'
+int logicaResolveJogo (char *arg, ESTADO *e);
+
 
 
 
@@ -168,13 +174,16 @@ int logicaAjudaRep (char *arg, ESTADO *e);
 int desfazUmaJogada (ESTADO *e);
 
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-int verificaInfracoes (IJ *I);
+int verificaInfracoes (IJ *I, int flag);
 
 // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
 int verificaCaminhoOrtogonal (IJ *I);
 
 // Realiza alterações necessárias na posição atual
 int ajudaUmaVez (IJ *I);
+
+// Resolve o jogo (se possível)
+int resolve (IJ *I);
 
 
 

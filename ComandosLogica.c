@@ -255,7 +255,7 @@ int logicaVerifica (char *arg, ESTADO *e) {
     int validade = 1;
 
     // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-    if (!verificaInfracoes (e -> info)) validade = 0;
+    if (!verificaInfracoes (e -> info, 1)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
     if (!verificaCaminhoOrtogonal (e -> info)) validade = 0;
@@ -309,4 +309,23 @@ int logicaAjudaRep (char *arg, ESTADO *e) {
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
+}
+
+
+
+// Função que realiza a lógico do comando 'R'
+int logicaResolveJogo (char *arg, ESTADO *e) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Resolve o jogo (se possível)
+    if (resolve (e -> info)) {
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
+        visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
+        return 0;
+    }
+
+    // Não é possível resolver o jogo
+    return 2;
 }

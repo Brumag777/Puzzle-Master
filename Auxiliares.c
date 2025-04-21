@@ -95,7 +95,7 @@ int tabuleiroValido (IJ *InfoJogo) {
 
 
 // Verifica se as linhas não possuem casas brancas repetidas
-int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
+int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna, int flag) {
 
     // Inteiro representante da validade da linha
     int validade = 1;
@@ -104,7 +104,7 @@ int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
     for (int j = coluna + 1; j < InfoJogo -> colunas; j++)
 
         if (InfoJogo -> Tabuleiro [linha][j] == c) {
-            printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            if (flag) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -114,7 +114,7 @@ int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna) {
 
 
 // Verifica se as colunas não possuem casas brancas repetidas
-int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
+int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna, int flag) {
 
     // Inteiro representante da validade da coluna
     int validade = 1;
@@ -123,7 +123,7 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
     for (int i = linha + 1; i < InfoJogo -> linhas; i++)
 
         if (InfoJogo -> Tabuleiro [i][coluna] == c) {
-            printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            if (flag) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -133,7 +133,7 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna) {
 
 
 // Verifica se as casas adjacentes às casas vazias não são vazias
-int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
+int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna, int flag) {
 
     // Inteiro representante da validade da casa
     int validade = 1;
@@ -141,14 +141,14 @@ int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
     // Verifica a casa à direita
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, InfoJogo -> linhas, InfoJogo -> colunas))
         if (InfoJogo -> Tabuleiro [linha][coluna + 1] == '#') {
-            printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
     // Verifica a casa abaixo
     if (coordenadaValida (linha + 2, coluna + 'a', InfoJogo -> linhas, InfoJogo -> colunas))
         if (InfoJogo -> Tabuleiro [linha + 1][coluna] == '#') {
-            printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 

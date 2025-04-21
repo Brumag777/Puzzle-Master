@@ -40,7 +40,7 @@ int desfazUmaJogada (ESTADO *e) {
 
 
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-int verificaInfracoes (IJ *I) {
+int verificaInfracoes (IJ *I, int flag) {
 
     // Inteiro representante da validade do tabuleiro
     int validade = 1;
@@ -53,13 +53,13 @@ int verificaInfracoes (IJ *I) {
                 
             // Verifica se houve infrações relativas a casas brancas
             if (eMaiuscula (I -> Tabuleiro [i][j])) {
-                if (!verificaLinhas (I, I -> Tabuleiro [i][j], i, j) ||
-                    !verificaColunas (I, I -> Tabuleiro [i][j], i, j)) validade = 0;
+                if (!verificaLinhas (I, I -> Tabuleiro [i][j], i, j, flag) ||
+                    !verificaColunas (I, I -> Tabuleiro [i][j], i, j, flag)) validade = 0;
             }
 
             // Verifica se houve infrações relativas a casas vazias
             else if (I -> Tabuleiro [i][j] == '#')
-                if (!verificaCasaVazia (I, i, j)) validade = 0;
+                if (!verificaCasaVazia (I, i, j, flag)) validade = 0;
         }
 
     return validade;
@@ -118,4 +118,59 @@ int ajudaUmaVez (IJ *I) {
                 if (testaPossibilidadesCasa (I, i, j)) flag = 1;
 
     return flag;
+}
+
+
+
+// Resolve o jogo (se possível)
+int resolve (IJ *I) {
+
+    // Realiza todas as jogadas necessárias na posição
+    while (ajudaUmaVez (I));
+
+
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+
+    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+    if (!verificaInfracoes (I, 0)) validade = 0;
+
+    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+    if (!verificaCaminhoOrtogonal (I)) validade = 0;
+
+    // Verifica se o tabuleiro é válido
+    if (validade == 0) {
+        for (int i = 0; i < I -> linhas; i++)
+            strcpy (I -> Tabuleiro [i], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][i]);
+        return 0;
+    }
+
+
+
+    // Percorre o tabuleiro para mudar as letras minúsculas restantes
+    for (int i = 0; i < I -> linhas; i++)
+        for (int j = 0; j < I -> colunas; j++)
+            if (eMinuscula (I -> Tabuleiro [i][j])) {
+
+                // Testa o caso da casa ser pintada de branco
+                I -> Tabuleiro [i][j] += 'A' - 'a';
+                if (resolve (I)) return 1;
+                for (int k = 0; k < I -> linhas; k++)
+                    strcpy (I -> Tabuleiro [k], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][k]);
+
+                // Testa o caso da casa ser riscada
+                I -> Tabuleiro [i][j] = '#';
+                if (resolve (I)) return 1;
+                for (int k = 0; k < I -> linhas; k++)
+                    strcpy (I -> Tabuleiro [k], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][k]);
+
+                // É impossível resolver o jogo
+                return 0;
+            }
+
+
+
+    // Não há minúsculas e o tabuleiro é válido, logo o jogo está resolvido
+    return 1;
 }

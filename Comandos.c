@@ -255,10 +255,32 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e) {
         int n = logicaAjudaRep (arg, e);
 
         // Avisa se foi dado um argumento
-        if (n == 1) fprintf (stderr, "\nErro: O comando a não precisa de um argumento.\n\n");
+        if (n == 1) fprintf (stderr, "\nErro: O comando A não precisa de um argumento.\n\n");
 
         // Avisa se não há nada a alterar
         if (n == 2) printf ("\nNão há nada a alterar.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Resolve o jogo automaticamente
+bool resolveJogo (char cmd, char *arg, ESTADO *e) {
+
+    if (cmd == 'R') {
+
+        // Realiza a lógica do comando 'R'
+        int n = logicaResolveJogo (arg, e);
+
+        // Avisa se foi dado um argumento
+        if (n == 1) fprintf (stderr, "\nErro: O comando R não precisa de um argumento.\n\n");
+
+        // Avisa se não é possível resolver o jogo
+        else if (n == 2) fprintf (stderr, "\nAviso: Não é possível resolver o jogo atual.\n\n");
 
         return true;
     }
