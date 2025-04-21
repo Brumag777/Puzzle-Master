@@ -37,7 +37,7 @@ bool ler (char cmd, char *arg, ESTADO *e) {
         int n = logicaLer (arg, e);
 
         // Se a leitura occoreu corretamente, imprime o tabuleiro novo e avisa do sucesso da leitura
-        if (n == 0) fprintf (stderr, "\nTabuleiro lido com sucesso.\n\n");
+        if (n == 0) fprintf (stderr, "Tabuleiro lido com sucesso.\n\n");
 
         // Avisa se não foi dado um argumento
         else if (n == 1) fprintf (stderr, "\nErro: O comando l precisa de um argumento (nome do ficheiro).\n\n");

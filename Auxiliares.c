@@ -73,23 +73,22 @@ int tabuleiroValido (IJ *InfoJogo) {
     // Verifica se o tabuleiro não é nulo
     if (InfoJogo == NULL || InfoJogo -> Tabuleiro == NULL) return 0;
 
-    char c;
-
     // Verifica se todas as casas do tabuleiro possuem caracteres válidos
     for (int i = 0; i < InfoJogo -> linhas; i++) {
 
         for (int j = 0; j < InfoJogo -> colunas; j++) {
 
-            c = InfoJogo -> Tabuleiro [i][j];
+            char c = InfoJogo -> Tabuleiro [i][j];
 
-            if (!(eMinuscula (c) || eMaiuscula (c) || c == '#')) {
-                fprintf (stderr, "Erro: caractere inválido no tabuleiro (na coordenada %c%d).\n\n", j + 1 + 'a', i + 1);
-                return 0;
-            }
+            if (!(eMinuscula (c) || eMaiuscula (c) || c == '#')) return 0;
         }
+
+        int t = strlen (InfoJogo -> Tabuleiro [i]);
+
+        if (t - 2 == InfoJogo -> colunas) return 0;
     }
 
-    return 1; 
+    return 1;
 }
 
 
