@@ -4,16 +4,22 @@
 #include "puzzle.h"
 
 // Imprime os últimos q elementos do histórico de tabuleiros
-void visualizaUltimosTabuleiros (Hist h, int q) {
+void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
 
-    if (q == 1) printf ("\nO último tabuleiro é: \n\n");
-    else printf ("\nOs últimos %d tabuleiros são: \n\n", q);
+    if (flag) {
+        if (q == 1) printf ("\nO último tabuleiro é: \n");
+        else printf ("\nOs últimos %d tabuleiros são: \n", q);
+    }
+    
+    putchar ('\n');
 
     // Para percorrer cada um dos tabuleiros
     for (int i = h -> sp - q; i < h -> sp; i++) {
 
         // Para imprimir a estrutura do tabuleiro
-        printf ("%d   ", i + 1);
+        if (i + 1 < 10) printf ("%d   ", i + 1);
+        else if (i + 1 < 100) printf ("%d  ", i + 1);
+        else printf ("%d ", i + 1);
         for (int j = 0; j < h -> colunas [i]; j++) printf ("%c ", 'a' + j);
         printf ("\n    ");
         for (int j = 0; j < h -> colunas [i]; j++) printf ("- ");

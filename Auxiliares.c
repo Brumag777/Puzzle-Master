@@ -67,33 +67,6 @@ int coordenadaValida (int l, char c, int linhas, int colunas) {
 
 
 
-// Imprime o tabuleiro atual do jogo
-void visualizarTabuleiro (IJ *InfoJogo) {
-
-    int i, j;
-
-    // Imprime a estrutura do tabuleiro
-    printf ("\n%d   ", InfoJogo -> hTabuleiros -> sp);
-    for (j = 0; j < InfoJogo -> colunas; j++)
-        printf ("%c ", 'a' + j);
-    printf ("\n    ");
-    for (j = 0; j < InfoJogo -> colunas; j++)
-        printf ("- ");
-    putchar ('\n');
-
-    // Imprime o tabuleiro, percorrendo cada linha do mesmo
-    for (i = 0; i < InfoJogo -> linhas; i++) {
-        printf ("%d | ", i + 1);
-        for (j = 0; j < InfoJogo -> colunas; j++)
-            printf ("%c ", InfoJogo -> Tabuleiro [i][j]);
-        putchar ('\n');
-    }
-
-    putchar ('\n');
-}
-
-
-
 // Verifica se um tabuleiro é válido
 int tabuleiroValido (IJ *InfoJogo) {
 

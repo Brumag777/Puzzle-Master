@@ -32,7 +32,7 @@ int desfazUmaJogada (ESTADO *e) {
     popStack (e -> info -> hTabuleiros);
 
     // Imprime o tabuleiro atualizado
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
 }

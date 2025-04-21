@@ -50,9 +50,6 @@ int eMinuscula (char c);
 // Verifica se uma coordenada é válida (isto é, está dentro do tabuleiro)
 int coordenadaValida (int l, char c, int linhas, int colunas);
 
-// Imprime o tabuleiro atual do jogo
-void visualizarTabuleiro (IJ *InfoJogo);
-
 // Verifica se um tabuleiro é válido
 int tabuleiroValido(IJ *InfoJogo);
 
@@ -186,7 +183,7 @@ int ajudaUmaVez (IJ *I);
 // Funções relativas ao histórico de tabuleiros - Stack.c
 
 // Imprime os últimos q tabuleiros armazenados no histórico
-void visualizaUltimosTabuleiros (Hist h, int q);
+void visualizaUltimosTabuleiros (Hist h, int q, int flag);
 
 // Inicializa o histórico
 void inicializaStack (Hist h);

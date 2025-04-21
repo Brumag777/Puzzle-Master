@@ -76,7 +76,7 @@ int logicaLer (char *nomeFicheiro, ESTADO *e) {
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro atualizado
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
     
     return 0;
 }
@@ -123,7 +123,7 @@ int logicaPintarCasa (char *coordenada, ESTADO *e) {
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro atualizado
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
 }
@@ -156,7 +156,7 @@ int logicaRiscarCasa (char *coordenada, ESTADO *e) {
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro resultante
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
 }
@@ -236,7 +236,7 @@ int logicaVizualizarHistorico (char *nTab, ESTADO *e) {
     if (q > e -> info -> hTabuleiros -> sp) return 3;
 
     // Imprime os últimos q tabuleiros armazenados no histórico
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, q);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, q, 1);
 
     return 0;
 }
@@ -283,7 +283,7 @@ int logicaAjuda (char *arg, ESTADO *e) {
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro resultante
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
 }
@@ -306,7 +306,7 @@ int logicaAjudaRep (char *arg, ESTADO *e) {
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro resultante
-    visualizarTabuleiro (e -> info);
+    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     return 0;
 }
