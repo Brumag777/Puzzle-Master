@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
 
-GAME_SRC    = main.c auxiliares.c comandos.c Stack.c auxler.c
+GAME_SRC    = Main.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
 TEST_SRC    = Testes/testes.c \
               Principais/main.c \
               Principais/puzzle.c

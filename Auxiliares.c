@@ -3,6 +3,49 @@
 #include <stdlib.h>
 #include "puzzle.h"
 
+// Inicializa os tabuleiros
+void iniciarTabuleiro (ESTADO *e, int flag) {
+
+    // Inicializa o tabuleiro principal
+    if (flag) e -> info = malloc (sizeof (IJ));
+    e -> info -> Tabuleiro = NULL;
+    e -> info -> linhas = 0;
+    e -> info -> colunas = 0;
+
+    // Inicializa o histórico de tabuleiros
+    if (flag) {
+        e -> info -> hTabuleiros = malloc (sizeof (HIST));
+        inicializaStack (e -> info -> hTabuleiros);
+    }
+}
+
+
+
+// Liberta a memória alocada para os tabuleiros
+void libertaTabuleiro (IJ *InfoJogo, int flag) {
+
+    // Verifica se existe informação sobre o jogo
+    if (InfoJogo == NULL) return;
+
+    if (InfoJogo -> Tabuleiro != NULL) {
+
+        // Liberta a memória alocada para cada linha do tabuleiro principal
+        for (int i = 0; i < InfoJogo -> linhas; i++) 
+            free (InfoJogo -> Tabuleiro [i]);
+
+        // Liberta a memória alocada para o tabuleiro principal
+        free (InfoJogo -> Tabuleiro);
+    }
+
+    // Liberta a memória alocada para o histórico de tabuleiros
+    if (flag) libertaStack (InfoJogo -> hTabuleiros);
+
+    // Liberta a informação sobre o jogo
+    if (flag) free (InfoJogo);
+}
+
+
+
 // Verifica se um caractere é uma letra maiúscula
 int eMaiuscula (char c) {
     return c >= 'A' && c <= 'Z';
@@ -137,49 +180,6 @@ int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
         }
 
     return validade;
-}
-
-
-
-// Inicializa os tabuleiros
-void iniciarTabuleiro (ESTADO *e, int flag) {
-
-    // Inicializa o tabuleiro principal
-    if (flag) e -> info = malloc (sizeof (IJ));
-    e -> info -> Tabuleiro = NULL;
-    e -> info -> linhas = 0;
-    e -> info -> colunas = 0;
-
-    // Inicializa o histórico de tabuleiros
-    if (flag) {
-        e -> info -> hTabuleiros = malloc (sizeof (HIST));
-        inicializaStack (e -> info -> hTabuleiros);
-    }
-}
-
-
-
-// Liberta a memória alocada para os tabuleiros
-void libertaTabuleiro (IJ *InfoJogo, int flag) {
-
-    // Verifica se existe informação sobre o jogo
-    if (InfoJogo == NULL) return;
-
-    if (InfoJogo -> Tabuleiro != NULL) {
-
-        // Liberta a memória alocada para cada linha do tabuleiro principal
-        for (int i = 0; i < InfoJogo -> linhas; i++) 
-            free (InfoJogo -> Tabuleiro [i]);
-
-        // Liberta a memória alocada para o tabuleiro principal
-        free (InfoJogo -> Tabuleiro);
-    }
-
-    // Liberta a memória alocada para o histórico de tabuleiros
-    if (flag) libertaStack (InfoJogo -> hTabuleiros);
-
-    // Liberta a informação sobre o jogo
-    if (flag) free (InfoJogo);
 }
 
 
@@ -324,35 +324,6 @@ int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna) {
             InfoJogo -> Tabuleiro [i][coluna] = '#';
             flag = 1;
         }
-
-    return flag;
-}
-
-
-
-// Função auxiliar do comando 'a' (ajuda)
-int ajudaAux (ESTADO *e) {
-
-    // Indicador de alterações
-    int flag = 0;
-    
-    // Percorre o tabuleiro para riscar casas que deviam ser vazias
-    for (int i = 0; i < e -> info -> linhas; i++)
-        for (int j = 0; j < e -> info -> colunas; j++)
-            if (eMaiuscula (e -> info -> Tabuleiro [i][j])) 
-                if (riscaCasas (e -> info, i, j)) flag = 1;
-    
-    // Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-    for (int i = 0; i < e -> info -> linhas; i++)
-        for (int j = 0; j < e -> info -> colunas; j++)
-            if (e -> info -> Tabuleiro [i][j] == '#') 
-                if (pintaCasas (e -> info, i, j)) flag = 1;
-
-    // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias
-    for (int i = 0; i < e -> info -> linhas; i++)
-        for (int j = 0; j < e -> info -> colunas; j++)
-            if (eMinuscula (e -> info -> Tabuleiro [i][j])) 
-                if (testaPossibilidadesCasa (e -> info, i, j)) flag = 1;
 
     return flag;
 }

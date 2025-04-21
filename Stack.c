@@ -9,40 +9,26 @@ void visualizaUltimosTabuleiros (Hist h, int q) {
     if (q == 1) printf ("\nO último tabuleiro é: \n\n");
     else printf ("\nOs últimos %d tabuleiros são: \n\n", q);
 
-
-
     // Para percorrer cada um dos tabuleiros
     for (int i = h -> sp - q; i < h -> sp; i++) {
 
-
-        
         // Para imprimir a estrutura do tabuleiro
         printf ("%d   ", i + 1);
-        
         for (int j = 0; j < h -> colunas [i]; j++) printf ("%c ", 'a' + j);
-
         printf ("\n    ");
-
         for (int j = 0; j < h -> colunas [i]; j++) printf ("- ");
         putchar ('\n');
 
-
-
         // Para percorrer cada linha dos tabuleiros
         for (int j = 0; j < h -> linhas [i]; j++) {
-            
             printf ("%d | ", j + 1);
-
-
 
             // Para percorrer cada coluna das linhas dos tabuleiros
             for (int k = 0; k < h -> colunas [i]; k++)
-
                 printf ("%c ", h -> TAnteriores [i][j][k]);
 
             putchar ('\n');
         }
-
         putchar ('\n');
     }
 }

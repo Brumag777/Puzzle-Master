@@ -3,10 +3,6 @@
 
 #define LINE_SIZE 1024
 
-
-
-
-
 // Histórico de tabuleiros do jogo
 typedef struct hist {
     int sp;              // Quantos tabuleiros são considerados (os primeiros sp)
@@ -16,10 +12,6 @@ typedef struct hist {
     int *colunas;        // Quantidade de colunas dos tabuleiros
 } HIST, *Hist;
 
-
-
-
-
 // Informação principal sobre o jogo
 typedef struct infoJogo {
     int linhas;       // Quantidade de linhas do tabuleiro
@@ -28,19 +20,11 @@ typedef struct infoJogo {
     Hist hTabuleiros; // Histórico de tabuleiros do jogo
 } IJ;
 
-
-
-
-
 // Estado do jogo
 typedef struct estado {
     bool looping; // Se o jogo deve ou não continuar a correr
     IJ *info;     // Informação principal sobre o jogo
 } ESTADO;
-
-
-
-
 
 // Função dos comandos do jogo
 typedef bool (*COMANDO) (char cmd, char *arg, ESTADO *e);
@@ -49,7 +33,13 @@ typedef bool (*COMANDO) (char cmd, char *arg, ESTADO *e);
 
 
 
-// Funções auxiliares - auxiliares.c
+// Funções auxiliares - Auxiliares.c
+
+// Liberta a memória alocada para os tabuleiros - a flag indica se é ou não para libertar também o histórico de tabuleiros
+void libertaTabuleiro (IJ *InfoJogo, int flag);
+
+// Inicializa os tabuleiros - a flag indica se é ou não para alocar memórica também para o histórico de tabuleiros
+void iniciarTabuleiro (ESTADO *e, int flag);
 
 // Verifica se um caractere é uma letra maiúscula
 int eMaiuscula (char c);
@@ -65,12 +55,6 @@ void visualizarTabuleiro (IJ *InfoJogo);
 
 // Verifica se um tabuleiro é válido
 int tabuleiroValido(IJ *InfoJogo);
-
-// Liberta a memória alocada para os tabuleiros - a flag indica se é ou não para libertar também o histórico de tabuleiros
-void libertaTabuleiro (IJ *InfoJogo, int flag);
-
-// Inicializa os tabuleiros - a flag indica se é ou não para alocar memórica também para o histórico de tabuleiros
-void iniciarTabuleiro (ESTADO *e, int flag);
 
 // Verifica se as linhas não possuem casas brancas repetidas
 int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna);
@@ -99,14 +83,11 @@ int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna);
 // Percorre a coluna para riscar casas que deviam ser vazias
 int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna);
 
-// Função auxiliar do comando 'a' (ajuda)
-int ajudaAux (ESTADO *e);
 
 
 
 
-
-// Comandos do jogo - comandos.c
+// Comandos do jogo - Comandos.c
 
 // Grava o jogo num ficheiro
 bool gravar (char cmd, char *arg, ESTADO *e);
@@ -118,10 +99,10 @@ bool ler (char cmd, char *arg, ESTADO *e);
 bool sair (char cmd, char *arg, ESTADO *e);
 
 // Pinta uma casa de branco
-bool mudarParaMaiuscula (char cmd, char *arg, ESTADO *e);
+bool pintarCasa (char cmd, char *arg, ESTADO *e);
 
 // Muda uma casa para vazia
-bool mudarParaVazia (char cmd, char *arg, ESTADO *e);
+bool riscarCasa (char cmd, char *arg, ESTADO *e);
 
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char *arg, ESTADO *e);
@@ -130,7 +111,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e);
 bool desfazerJogada (char cmd, char *arg, ESTADO *e);
 
 // Imprime os últimos tabuleiros armazenados no histórico
-bool visualizarStack (char cmd, char *arg, ESTADO *e);
+bool visualizarHistorico (char cmd, char *arg, ESTADO *e);
 
 // Verifica se existem infrações no tabuleiro
 bool verifica (char cmd, char *arg, ESTADO *e);
@@ -140,6 +121,63 @@ bool ajuda (char cmd, char *arg, ESTADO *e);
 
 // Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
 bool ajudaRep (char cmd, char *arg, ESTADO *e);
+
+
+
+
+
+// Lógica dos comandos do jogo - ComandosLogica.c
+
+// Função que realiza a lógica do comando 'g' (gravar)
+int logicaGravar (char *nomeFicheiro, ESTADO *e);
+
+// Função que realiza a lógica do comando 'l' (ler)
+int logicaLer (char *nomeFicheiro, ESTADO *e);
+
+// Função que realiza a lógica do comando 's' (sair)
+int logicaSair (char *arg, ESTADO *e);
+
+// Função que realiza a lógica do comando 'b' (pintarCasa)
+int logicaPintarCasa (char *coordenada, ESTADO *e);
+
+// Função que realiza a lógica do comando 'r' (riscarCasa)
+int logicaRiscarCasa (char *coordenada, ESTADO *e);
+
+// Função que realiza a lógia do comando 'h' (listarComandos)
+int logicaListarComando (char *arg, ESTADO *e);
+
+// Função que realiza a lógica do comando 'd' (desfazerJogada)
+int logicaDesfazerJogada (char *nTab, ESTADO *e);
+
+// Função que realiza a lógica do comando 'V' (vizualizarHistorico)
+int logicaVizualizarHistorico (char *nTab, ESTADO *e);
+
+// Função que realiza a lógica do comando 'v' (verifica)
+int logicaVerifica (char *arg, ESTADO *e);
+
+// Função que realiza a lógica do comando 'a' (ajuda)
+int logicaAjuda (char *arg, ESTADO *e);
+
+// Função que realiza a lógica do comando 'A' (ajudaRep)
+int logicaAjudaRep (char *arg, ESTADO *e);
+
+
+
+
+
+// Auxiliares à lógica dos comandos - ComandosLogicaAuxiliares.c
+
+// Desfaz a última jogada do jogo
+int desfazUmaJogada (ESTADO *e);
+
+// Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+int verificaInfracoes (IJ *I);
+
+// Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+int verificaCaminhoOrtogonal (IJ *I);
+
+// Realiza alterações necessárias na posição atual
+int ajudaUmaVez (IJ *I);
 
 
 
@@ -161,67 +199,3 @@ void popStack (Hist h);
 
 // Liberta a memória alocada para o histórico
 void libertaStack (Hist h);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Função auxiliar ao comando 'l'
-bool auxLer (ESTADO *e, char *arg);
