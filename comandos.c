@@ -115,7 +115,7 @@ bool mudarParaMaiuscula (char cmd, char *arg, ESTADO *e) {
         e -> info -> Tabuleiro [l - 1][c - 'a'] -= 'a' - 'A';
 
         // Adiciona o tabuleiro resultante ao histórico de tabuleiros
-        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
         // Imprime o tabuleiro resultante
         visualizarTabuleiro (e -> info);
@@ -165,7 +165,7 @@ bool mudarParaVazia (char cmd, char *arg, ESTADO *e) {
         e -> info -> Tabuleiro [l - 1][c - 'a'] = '#';
 
         // Adiciona o tabuleiro resultante ao histórico de tabuleiros
-        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
         // Imprime o tabuleiro resultante
         visualizarTabuleiro (e -> info);
@@ -203,6 +203,7 @@ bool listarComandos (char cmd, char *arg, ESTADO *e) {
                 "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
                 "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
                 "R: Resolve o jogo (se for possível).\n"
+                "d: Desfaz a última jogada.\n"
                 "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
                 "s: Termina o jogo.\n"
                 "h: Lista todos os comandos do jogo.\n\n");
@@ -222,7 +223,32 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
         // Verifica se foi recebido um argumento (número natural)
         if (arg == NULL) {
-            fprintf (stderr, "\nErro: O comando d precisa de um argumento (número natural).\n\n");
+
+            if (e -> info -> hTabuleiros -> sp == 1) {
+                    fprintf (stderr, "\nErro: Ainda não existe um tabuleiro anterior.\n\n");
+                    return true;
+                }
+
+            libertaTabuleiro (e -> info, 0);
+
+            iniciarTabuleiro (e, 0);
+
+            e -> info -> linhas = e -> info -> hTabuleiros -> linhas [e -> info -> hTabuleiros -> sp - 2];
+            e -> info -> colunas = e -> info -> hTabuleiros -> colunas [e -> info -> hTabuleiros -> sp - 2];
+
+            // Aloca memória para o tabuleiro novo
+            e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+
+            // Aloca memória para cada linha do tabuleiro novo e preenche o mesmo com a informação do novo
+            for (int i = 0; i < e -> info -> linhas; i++) {
+                e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
+                strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
+            }
+
+            popStack (e -> info -> hTabuleiros);
+
+            visualizarTabuleiro (e -> info);
+
             return true;
         }
 
@@ -249,14 +275,26 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
         // Desfaz as últimas jogadas até ao tabuleiro anterior ao desejado
         while (e -> info -> hTabuleiros -> sp > q + 1)
-            popStack (e -> info -> hTabuleiros, e -> info -> linhas);
+            popStack (e -> info -> hTabuleiros);
 
-        // Atualiza o tabuleiro para o desejado
-        for (int i = 0; i < e -> info -> linhas; i++)
+        libertaTabuleiro (e -> info, 0);
+
+        iniciarTabuleiro (e, 0);
+
+        e -> info -> linhas = e -> info -> hTabuleiros -> linhas [e -> info -> hTabuleiros -> sp - 2];
+        e -> info -> colunas = e -> info -> hTabuleiros -> colunas [e -> info -> hTabuleiros -> sp - 2];
+
+        // Aloca memória para o tabuleiro novo
+        e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+
+        // Aloca memória para cada linha do tabuleiro novo e preenche o mesmo com a informação do novo
+        for (int i = 0; i < e -> info -> linhas; i++) {
+            e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
             strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
+        }
 
         // Remove o último tabuleiro do histórico
-        popStack (e -> info -> hTabuleiros, e -> info -> linhas);
+        popStack (e -> info -> hTabuleiros);
 
         // Imprime o tabuleiro resultante (anterior)
         visualizarTabuleiro (e -> info);
@@ -296,7 +334,7 @@ bool visualizarStack (char cmd, char *arg, ESTADO *e) {
         }
 
         // Imprime os últimos q tabuleiros armazenados no histórico
-        visualizaUltimosTabuleiros (e -> info -> hTabuleiros, e -> info -> linhas, e -> info -> colunas, q);
+        visualizaUltimosTabuleiros (e -> info -> hTabuleiros, q);
 
         return true;
     }
@@ -400,7 +438,7 @@ bool ajuda (char cmd, char *arg, ESTADO *e) {
         }
 
         // Atualiza o histórico de tabuleiros
-        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
         // Imprime o tabuleiro resultante
         visualizarTabuleiro (e -> info);
@@ -434,7 +472,7 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e) {
         while (ajudaAux (e));
 
         // Atualiza o histórico de tabuleiros
-        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
         // Imprime o tabuleiro resultante
         visualizarTabuleiro (e -> info);

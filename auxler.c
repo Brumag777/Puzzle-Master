@@ -16,10 +16,10 @@ bool auxLer (ESTADO *e, char *arg) {
     }
 
     // Liberta a memória do tabuleiro relativo ao ficheiro anterior
-    libertaTabuleiro (e -> info);
+    libertaTabuleiro (e -> info, 0);
 
     // Inicializa o tabuleiro novo
-    iniciarTabuleiro (e);
+    iniciarTabuleiro (e, 0);
 
     // Lê as linhas e as colunas do ficheiro
     if (fscanf (Jogo, "%d %d", &e -> info -> linhas, &e -> info -> colunas) != 2) {
@@ -49,7 +49,7 @@ bool auxLer (ESTADO *e, char *arg) {
     }
 
     // Adiciona o tabuleiro novo ao histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas);
+    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
 
     // Imprime o tabuleiro novo
     visualizarTabuleiro (e -> info);

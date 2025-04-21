@@ -15,7 +15,7 @@ int main () {
     // Inicializa o estado do jogo
     ESTADO estado;
     estado.looping = true;
-    iniciarTabuleiro (&estado);
+    iniciarTabuleiro (&estado, 1);
 
 
 
@@ -65,7 +65,7 @@ int main () {
 
 
     // Liberta a memória alocada
-    if (estado.info != NULL) libertaTabuleiro (estado.info);
+    if (estado.info != NULL) libertaTabuleiro (estado.info, 1);
 
     return 0;
 }

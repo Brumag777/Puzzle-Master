@@ -4,7 +4,7 @@
 #include "puzzle.h"
 
 // Imprime os últimos q elementos do histórico de tabuleiros
-void visualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q) {
+void visualizaUltimosTabuleiros (Hist h, int q) {
 
     if (q == 1) printf ("\nO último tabuleiro é: \n\n");
     else printf ("\nOs últimos %d tabuleiros são: \n\n", q);
@@ -19,24 +19,24 @@ void visualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q) {
         // Para imprimir a estrutura do tabuleiro
         printf ("%d   ", i + 1);
         
-        for (int j = 0; j < colunas; j++) printf ("%c ", 'a' + j);
+        for (int j = 0; j < h -> colunas [i]; j++) printf ("%c ", 'a' + j);
 
         printf ("\n    ");
 
-        for (int j = 0; j < colunas; j++) printf ("- ");
+        for (int j = 0; j < h -> colunas [i]; j++) printf ("- ");
         putchar ('\n');
 
 
 
         // Para percorrer cada linha dos tabuleiros
-        for (int j = 0; j < linhas; j++) {
+        for (int j = 0; j < h -> linhas [i]; j++) {
             
             printf ("%d | ", j + 1);
 
 
 
             // Para percorrer cada coluna das linhas dos tabuleiros
-            for (int k = 0; k < colunas; k++)
+            for (int k = 0; k < h -> colunas [i]; k++)
 
                 printf ("%c ", h -> TAnteriores [i][j][k]);
 
@@ -59,22 +59,36 @@ void inicializaStack (Hist h) {
 
     // Aloca memória para o elemento singular da capacidade (isto é, para um tabuleiro)
     h -> TAnteriores = malloc (sizeof (char **));
+
+    // Aloca memória para os arrays relativos às dimensões dos tabuleiros
+    h -> linhas = malloc (sizeof (int));
+    h -> colunas = malloc (sizeof (int));
 }
 
 
 
 // Adiciona um tabuleiro ao histórico
-void pushStack (Hist h, char **novoTabuleiro, int linhas) {
+void pushStack (Hist h, char **novoTabuleiro, int linhas, int colunas) {
 
     // Duplica a capacidade do histórico caso o limite tenha sido alcançado
     if (h -> sp == h -> cap) {
         h -> cap *= 2;
 
         // Realoca memória de modo a duplicar a capacidade no heap (memória dinâmica)
-        char ***aux = realloc (h -> TAnteriores, h -> cap * (sizeof (char **)));
+        char ***aux1 = realloc (h -> TAnteriores, h -> cap * (sizeof (char **)));
+        int *aux2 = realloc (h -> linhas, h -> cap * (sizeof (int)));
+        int *aux3 = realloc (h -> colunas, h -> cap * (sizeof (int)));
 
-        h -> TAnteriores = aux;
+        h -> TAnteriores = aux1;
+        h -> linhas = aux2;
+        h -> colunas = aux3;
     }
+
+
+
+    // Adiciona as dimensões do novo tabuleiro
+    h -> linhas [h -> sp] = linhas;
+    h -> colunas [h -> sp] = colunas;
 
 
 
@@ -94,7 +108,7 @@ void pushStack (Hist h, char **novoTabuleiro, int linhas) {
 
 
 // Remove um tabuleiro do histórico
-void popStack (Hist h, int linhas) {
+void popStack (Hist h) {
 
     // Verifica se sp é diferente de 0 (positivo)
     if (h -> sp) {
@@ -105,7 +119,7 @@ void popStack (Hist h, int linhas) {
         // Liberta a memória do tabuleiro removido
         if (h -> TAnteriores [h -> sp] != NULL) {
             // Liberta memória de cada linha do tabuleiro
-            for (int i = 0; i < linhas; i++)
+            for (int i = 0; i < h -> linhas [h -> sp]; i++)
                 if (h -> TAnteriores [h -> sp][i] != NULL)
                     free (h -> TAnteriores [h -> sp][i]);
             free (h -> TAnteriores [h -> sp]);
@@ -116,7 +130,7 @@ void popStack (Hist h, int linhas) {
 
 
 // Liberta a memória alocada para o histórico
-void libertaStack (Hist h, int linhas) {
+void libertaStack (Hist h) {
 
     if (h != NULL) {
 
@@ -127,7 +141,7 @@ void libertaStack (Hist h, int linhas) {
                 if (h -> TAnteriores [i] != NULL) {
 
                     // Percorre cada linha dos tabuleiros
-                    for (int j = 0; j < linhas; j++)
+                    for (int j = 0; j < h -> linhas [i]; j++)
                         if (h -> TAnteriores [i][j] != NULL)
                             free (h -> TAnteriores [i][j]);
 
@@ -135,6 +149,11 @@ void libertaStack (Hist h, int linhas) {
                 }
             free (h -> TAnteriores);
         }
+
+        if (h -> linhas != NULL) free (h -> linhas);
+
+        if (h -> colunas != NULL) free (h -> colunas);
+
         free (h);
     }
 }

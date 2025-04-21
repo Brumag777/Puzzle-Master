@@ -12,6 +12,8 @@ typedef struct hist {
     int sp;              // Quantos tabuleiros são considerados (os primeiros sp)
     int cap;             // Capacidade do struct (possui capacidade para cap tabuleiros)
     char ***TAnteriores; // Array de tabuleiros que armazena os tabuleiros anteriores às jogadas (para o comando d)
+    int *linhas;         // Quantidade de linhas dos tabuleiros
+    int *colunas;        // Quantidade de colunas dos tabuleiros
 } HIST, *Hist;
 
 
@@ -64,11 +66,11 @@ void visualizarTabuleiro (IJ *InfoJogo);
 // Verifica se um tabuleiro é válido
 int tabuleiroValido(IJ *InfoJogo);
 
-// Liberta a memória alocada para os tabuleiros
-void libertaTabuleiro (IJ *InfoJogo);
+// Liberta a memória alocada para os tabuleiros - a flag indica se é ou não para libertar também o histórico de tabuleiros
+void libertaTabuleiro (IJ *InfoJogo, int flag);
 
-// Inicializa os tabuleiros
-void iniciarTabuleiro (ESTADO *e);
+// Inicializa os tabuleiros - a flag indica se é ou não para alocar memórica também para o histórico de tabuleiros
+void iniciarTabuleiro (ESTADO *e, int flag);
 
 // Verifica se as linhas não possuem casas brancas repetidas
 int verificaLinhas (IJ *InfoJogo, char c, int linha, int coluna);
@@ -146,19 +148,19 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e);
 // Funções relativas ao histórico de tabuleiros - Stack.c
 
 // Imprime os últimos q tabuleiros armazenados no histórico
-void visualizaUltimosTabuleiros (Hist h, int linhas, int colunas, int q);
+void visualizaUltimosTabuleiros (Hist h, int q);
 
 // Inicializa o histórico
 void inicializaStack (Hist h);
 
 // Adiciona um tabuleiro ao histórico
-void pushStack (Hist h, char **novoTabuleiro, int linhas);
+void pushStack (Hist h, char **novoTabuleiro, int linhas, int colunas);
 
 // Remove um tabuleiro do histórico
-void popStack (Hist h, int linhas);
+void popStack (Hist h);
 
 // Liberta a memória alocada para o histórico
-void libertaStack (Hist h, int linhas);
+void libertaStack (Hist h);
 
 
 

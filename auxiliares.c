@@ -142,23 +142,25 @@ int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna) {
 
 
 // Inicializa os tabuleiros
-void iniciarTabuleiro (ESTADO *e) {
+void iniciarTabuleiro (ESTADO *e, int flag) {
 
     // Inicializa o tabuleiro principal
-    e -> info = malloc (sizeof (IJ));
+    if (flag) e -> info = malloc (sizeof (IJ));
     e -> info -> Tabuleiro = NULL;
     e -> info -> linhas = 0;
     e -> info -> colunas = 0;
 
     // Inicializa o histórico de tabuleiros
-    e -> info -> hTabuleiros = malloc (sizeof (HIST));
-    inicializaStack (e -> info -> hTabuleiros);
+    if (flag) {
+        e -> info -> hTabuleiros = malloc (sizeof (HIST));
+        inicializaStack (e -> info -> hTabuleiros);
+    }
 }
 
 
 
 // Liberta a memória alocada para os tabuleiros
-void libertaTabuleiro (IJ *InfoJogo) {
+void libertaTabuleiro (IJ *InfoJogo, int flag) {
 
     // Verifica se existe informação sobre o jogo
     if (InfoJogo == NULL) return;
@@ -174,10 +176,10 @@ void libertaTabuleiro (IJ *InfoJogo) {
     }
 
     // Liberta a memória alocada para o histórico de tabuleiros
-    libertaStack (InfoJogo -> hTabuleiros, InfoJogo -> linhas);
+    if (flag) libertaStack (InfoJogo -> hTabuleiros);
 
     // Liberta a informação sobre o jogo
-    free (InfoJogo);
+    if (flag) free (InfoJogo);
 }
 
 
