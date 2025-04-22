@@ -125,6 +125,9 @@ int logicaPintarCasa (char *coordenada, ESTADO *e) {
     // Imprime o tabuleiro atualizado
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
+    // Se o jogo estiver terminado, indica se o jogador ganhou
+    testeJogo (e -> info);
+
     return 0;
 }
 
@@ -158,34 +161,8 @@ int logicaRiscarCasa (char *coordenada, ESTADO *e) {
     // Imprime o tabuleiro resultante
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
-    return 0;
-}
-
-
-
-// Função que realiza a lógia do comando 'h' (listarComandos)
-int logicaListarComando (char *arg, ESTADO *e) {
-
-    // Verifica se não foi recebido um argumento
-    if (arg != NULL) return 1;
-
-    // Imprime os comandos do jogo
-    printf ("\nOs comandos do jogo são:\n"
-            "g <ficheiro>: Grava o tabuleiro num ficheiro.\n"
-            "l <ficheiro>: Lê um tabuleiro de um ficheiro.\n"
-            "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
-            "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
-            "v: Verifica se existem infrações na posição atual.\n"
-            "V <natural>: Permite ver os tabuleiros anteriores.\n"
-            "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
-            "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
-            "R: Resolve o jogo (se for possível).\n"
-            "d: Desfaz a última jogada.\n"
-            "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
-            "s: Termina o jogo.\n"
-            "h: Lista todos os comandos do jogo.\n");
-    printf ("As coordenadas devem estar compreendidas entre a1 e %c%d \n", e -> info -> colunas + 'a' - 1, e -> info -> linhas);
-    printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", e -> info -> hTabuleiros -> sp);
+    // Se o jogo estiver terminado, indica se o jogador ganhou
+    testeJogo (e -> info);
 
     return 0;
 }
@@ -285,6 +262,9 @@ int logicaAjuda (char *arg, ESTADO *e) {
     // Imprime o tabuleiro resultante
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
+    // Se o jogo estiver terminado, indica se o jogador ganhou
+    testeJogo (e -> info);
+
     return 0;
 }
 
@@ -308,6 +288,9 @@ int logicaAjudaRep (char *arg, ESTADO *e) {
     // Imprime o tabuleiro resultante
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
+    // Se o jogo estiver terminado, indica se o jogador ganhou
+    testeJogo (e -> info);
+
     return 0;
 }
 
@@ -328,4 +311,36 @@ int logicaResolveJogo (char *arg, ESTADO *e) {
 
     // Não é possível resolver o jogo
     return 2;
+}
+
+
+
+// Função que realiza a lógia do comando 'h' (listarComandos)
+int logicaListarComando (char *arg, ESTADO *e) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Imprime os comandos do jogo
+    printf ("\nOs comandos do jogo são:\n"
+            "g <ficheiro>: Grava o tabuleiro num ficheiro.\n"
+            "l <ficheiro>: Lê um tabuleiro de um ficheiro.\n"
+            "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
+            "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
+            "v: Verifica se existem infrações na posição atual.\n"
+            "V <natural>: Permite ver os tabuleiros anteriores.\n"
+            "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
+            "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
+            "R: Resolve o jogo (se for possível).\n"
+            "d: Desfaz a última jogada.\n"
+            "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
+            "s: Termina o jogo.\n"
+            "h: Lista todos os comandos do jogo.\n");
+    if (e -> info -> hTabuleiros -> sp) {
+        printf ("As coordenadas devem estar compreendidas entre a1 e %c%d \n", e -> info -> colunas + 'a' - 1, e -> info -> linhas);
+        printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", e -> info -> hTabuleiros -> sp);
+    }
+    else printf ("Leia um ficheiro para usar os comandos.\n\n");
+
+    return 0;
 }

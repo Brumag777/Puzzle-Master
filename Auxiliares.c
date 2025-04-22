@@ -299,3 +299,35 @@ int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna) {
 
     return flag;
 }
+
+
+
+// Testa se o jogador já ganhou o jogo
+int testeJogo (IJ *I) {
+
+    // Percorre o tabuleiro para procurar minúsculas
+    for (int i = 0; i < I -> linhas; i++)
+        for (int j = 0; j < I -> colunas; j++)
+            if (eMinuscula (I -> Tabuleiro [i][j])) return 0;
+
+    putchar ('\n');
+
+    // Testa se um tabuleiro terminado é válido
+    int validade = 1;
+
+    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+    if (!verificaInfracoes (I, 1)) validade = 0;
+
+    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+    if (!verificaCaminhoOrtogonal (I)) validade = 0;
+
+    // Se não existem infrações, o jogador ganhou
+    if (validade) {
+        printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
+        return 1;
+    }
+
+    putchar ('\n');
+
+    return 0;
+}

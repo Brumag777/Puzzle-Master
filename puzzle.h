@@ -80,6 +80,9 @@ int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna);
 // Percorre a coluna para riscar casas que deviam ser vazias
 int percorreColuna (IJ *InfoJogo, char c, int linha, int coluna);
 
+// Testa se o jogador já ganhou o jogo
+int testeJogo (IJ *I);
+
 
 
 

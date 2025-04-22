@@ -63,7 +63,6 @@ int main () {
 
 
 
-
     // Liberta a memória alocada
     if (estado.info != NULL) libertaTabuleiro (estado.info, 1);
 
