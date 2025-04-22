@@ -188,11 +188,11 @@ bool visualizarHistorico (char cmd, char *arg, ESTADO *e) {
         // Realiza a lógica do comando 'V'
         int n = logicaVizualizarHistorico (arg, e);
 
-        // Avisa se não foi dado um argumento
-        if (n == 1) fprintf (stderr, "\nErro: O comando V precisa de um argumento (número natural).\n\n");
-
         // Avisa se o argumento não é um número natural
-        else if (n == 2) fprintf (stderr, "\nErro: O argumento deve ser um número natural.\n\n");
+        if (n == 1) fprintf (stderr, "\nErro: O argumento deve ser um número natural.\n\n");
+
+        // Avisa se não existem tabuleiros para imprimir
+        else if (n == 2) fprintf (stderr, "\nErro: Não existem tabuleiros para imprimir.\n\n");
 
         // Avisa se não existem tabuleiros suficientes para imprimir
         else if (n == 3) fprintf (stderr, "\nErro: O argumento é maior que o número de jogadas (%d).\n\n", e -> info -> hTabuleiros -> sp);
@@ -233,7 +233,7 @@ bool ajuda (char cmd, char *arg, ESTADO *e) {
         int n = logicaAjuda (arg, e);
 
         // Avisa se foi dado um argumento
-        if (n == 1) fprintf (stderr, "\nErro: O comando a não precisa de um argumento.\n\n");
+        if (n == 1) fprintf (stderr, "\nErro: O argumento é inválido.\n\n");
 
         // Avisa se não há nada a alterar
         if (n == 2) printf ("\nNão há nada a alterar.\n\n");

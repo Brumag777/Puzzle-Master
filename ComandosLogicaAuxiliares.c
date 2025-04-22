@@ -100,22 +100,13 @@ int ajudaUmaVez (IJ *I) {
     int flag = 0;
 
     // Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
-    for (int i = 0; i < I -> linhas; i++)
-        for (int j = 0; j < I -> colunas; j++)
-            if (eMaiuscula (I -> Tabuleiro [i][j])) 
-                if (riscaCasas (I, i, j)) flag = 1;
-    
+    if (riscaCasas (I)) flag = 1;
+
     // Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-    for (int i = 0; i < I -> linhas; i++)
-        for (int j = 0; j < I -> colunas; j++)
-            if (I -> Tabuleiro [i][j] == '#') 
-                if (pintaCasas (I, i, j)) flag = 1;
+    if (pintaCasas (I)) flag = 1;
 
     // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
-    for (int i = 0; i < I -> linhas; i++)
-        for (int j = 0; j < I -> colunas; j++)
-            if (eMinuscula (I -> Tabuleiro [i][j])) 
-                if (testaPossibilidadesCasa (I, i, j)) flag = 1;
+    if (testaPossibilidadesCasa (I)) flag = 1;
 
     return flag;
 }

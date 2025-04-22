@@ -156,23 +156,41 @@ int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna, int flag) {
 
 
 
-// Calcula quantas letras estão ligadas à letra da posição dada
-int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c) {
-    
-    if (l < 0 || l >= linhas || c < 0 || c >= colunas || Tabuleiro [l][c] == 0) return 0;
+// Risca as casas que deviam ser vazias
+int riscaCasasAux (IJ *InfoJogo, int linha, int coluna) {
 
-    Tabuleiro [l][c] = 0;
+    // Indicador de alterações
+    int flag = 0;
 
-    return 1 + contaLetrasLigadas (linhas, colunas, Tabuleiro, l + 1, c) +
-               contaLetrasLigadas (linhas, colunas, Tabuleiro, l - 1, c) +
-               contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c + 1) +
-               contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c - 1);
+    // Percorre a linha
+    if (percorreLinha (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
+
+    // Percorre a coluna
+    if (percorreColuna (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
+
+    return flag;
+}
+
+
+
+// Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
+int riscaCasas (IJ *I) {
+
+    // Indica se houve alterações
+    int flag = 0;
+
+    for (int i = 0; i < I -> linhas; i++)
+        for (int j = 0; j < I -> colunas; j++)
+            if (eMaiuscula (I -> Tabuleiro [i][j]))
+                if (riscaCasasAux (I, i, j)) flag = 1;
+
+    return flag;
 }
 
 
 
 // Pinta as casas à volta das casas vazias de branco
-int pintaCasas (IJ *InfoJogo, int linha, int coluna) {
+int pintaCasasAux (IJ *InfoJogo, int linha, int coluna) {
 
     // Indicador de alterações
     int flag = 0;
@@ -210,17 +228,16 @@ int pintaCasas (IJ *InfoJogo, int linha, int coluna) {
 
 
 
-// Risca as casas que deviam ser vazias
-int riscaCasas (IJ *InfoJogo, int linha, int coluna) {
+// Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
+int pintaCasas (IJ *I) {
 
-    // Indicador de alterações
+    // Indica se houve alterações
     int flag = 0;
 
-    // Percorre a linha
-    if (percorreLinha (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
-
-    // Percorre a coluna
-    if (percorreColuna (InfoJogo, InfoJogo -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
+    for (int i = 0; i < I -> linhas; i++)
+        for (int j = 0; j < I -> colunas; j++)
+            if (I -> Tabuleiro [i][j] == '#') 
+                if (pintaCasasAux (I, i, j)) flag = 1;
 
     return flag;
 }
@@ -228,7 +245,7 @@ int riscaCasas (IJ *InfoJogo, int linha, int coluna) {
 
 
 // Testa as possibilidades de uma casa minúscula
-int testaPossibilidadesCasa (IJ *InfoJogo, int linha, int coluna) {
+int testaPossibilidadesCasaAux (IJ *InfoJogo, int linha, int coluna) {
 
     // Risca a casa de modo a realizar o teste
     char C = InfoJogo -> Tabuleiro [linha][coluna];
@@ -258,6 +275,37 @@ int testaPossibilidadesCasa (IJ *InfoJogo, int linha, int coluna) {
     }
     else InfoJogo -> Tabuleiro [linha][coluna] = C;
     return 0;
+}
+
+
+
+// Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
+int testaPossibilidadesCasa (IJ *I) {
+
+    // Indica se houve alterações
+    int flag = 0;
+
+    for (int i = 0; i < I -> linhas; i++)
+        for (int j = 0; j < I -> colunas; j++)
+            if (eMinuscula (I -> Tabuleiro [i][j])) 
+                if (testaPossibilidadesCasaAux (I, i, j)) flag = 1;
+
+    return flag;
+}
+
+
+
+// Calcula quantas letras estão ligadas à letra da posição dada
+int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c) {
+    
+    if (l < 0 || l >= linhas || c < 0 || c >= colunas || Tabuleiro [l][c] == 0) return 0;
+
+    Tabuleiro [l][c] = 0;
+
+    return 1 + contaLetrasLigadas (linhas, colunas, Tabuleiro, l + 1, c) +
+               contaLetrasLigadas (linhas, colunas, Tabuleiro, l - 1, c) +
+               contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c + 1) +
+               contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c - 1);
 }
 
 

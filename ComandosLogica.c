@@ -200,14 +200,17 @@ int logicaDesfazerJogada (char *nTab, ESTADO *e) {
 // Função que realiza a lógica do comando 'V' (vizualizarHistorico)
 int logicaVizualizarHistorico (char *nTab, ESTADO *e) {
 
-    // Verifica se foi recebido um argumento
-    if (nTab == NULL) return 1;
-
     // Define a quantidade de tabuleiros a imprimir
-    int q = atoi (nTab);
+    int q;
+
+    if (nTab == NULL) q = 1;
+    else q = atoi (nTab);
 
     // Verifica se o argumento é um número natural
-    if (q < 1) return 2;
+    if (q < 1) return 1;
+
+    // Verifica se existem tabuleiros para imprimir
+    if (e -> info -> hTabuleiros -> sp == 0) return 2;
 
     // Verifica se existem tabuleiros suficientes para imprimir
     if (q > e -> info -> hTabuleiros -> sp) return 3;
@@ -250,11 +253,35 @@ int logicaVerifica (char *arg, ESTADO *e) {
 // Função que realiza a lógica do comando 'a' (ajuda)
 int logicaAjuda (char *arg, ESTADO *e) {
 
+    // Indica se o argumento é NULL
+    int eNulo = 1;
+
     // Verifica se não foi recebido um argumento
-    if (arg != NULL) return 1;
-    
-    // Realiza as alterações necessárias
-    if (ajudaUmaVez (e -> info) == 0) return 2;
+    if (arg == NULL) {
+        if (ajudaUmaVez (e -> info) == 0) return 2;
+        else eNulo = 0;
+    }
+
+    if (eNulo) {
+
+        // Verifica se o argumento é 'b'
+        if (strcmp (arg, "b") == 0) {
+            if (pintaCasas (e -> info) == 0) return 2;
+        }
+
+        // Verifica se o argumento é 'r'
+        else if (strcmp (arg, "r") == 0) {
+            if (riscaCasas (e -> info) == 0) return 2;
+        }
+
+        // Verifica se o argumento é 'o'
+        else if (strcmp (arg, "o") == 0) {
+            if (testaPossibilidadesCasa (e -> info) == 0) return 2;
+        }
+
+        // O argumento é inválido
+        else return 1;
+    }
 
     // Atualiza o histórico de tabuleiros
     pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
@@ -328,14 +355,18 @@ int logicaListarComando (char *arg, ESTADO *e) {
             "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
             "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
             "v: Verifica se existem infrações na posição atual.\n"
+            "V: Permite ver o último tabuleiro.\n"
             "V <natural>: Permite ver os tabuleiros anteriores.\n"
             "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
+            "a b: Ajuda pintando de branco as casas à volta de casas riscadas.\n"
+            "a r: Ajuda riscando as casas na mesma linha ou coluna que casas brancas com a mesma letra.\n"
+            "a o: Ajuda pintando de branco as casas que se fossem riscadas não permitiam um caminho ortogonal entre todas as letras.\n"
             "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
             "R: Resolve o jogo (se for possível).\n"
             "d: Desfaz a última jogada.\n"
             "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
             "s: Termina o jogo.\n"
-            "h: Lista todos os comandos do jogo.\n");
+            "h: Lista todos os comandos do jogo.\n\n");
     if (e -> info -> hTabuleiros -> sp) {
         printf ("As coordenadas devem estar compreendidas entre a1 e %c%d \n", e -> info -> colunas + 'a' - 1, e -> info -> linhas);
         printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", e -> info -> hTabuleiros -> sp);

@@ -62,17 +62,26 @@ int verificaColunas (IJ *InfoJogo, char c, int linha, int coluna, int flag);
 // Verifica se as casas adjacentes às casas vazias não são vazias
 int verificaCasaVazia (IJ *InfoJogo, int linha, int coluna, int flag);
 
-// Calcula quantas letras estão ligadas à letra da posição dada
-int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
+// Risca as casas que deviam ser vazias
+int riscaCasasAux (IJ *InfoJogo, int linha, int coluna);
+
+// Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
+int riscaCasas (IJ *I);
 
 // Pinta as casas à volta das casas vazias de branco
-int pintaCasas (IJ *InfoJogo, int linha, int coluna);
+int pintaCasasAux (IJ *InfoJogo, int linha, int coluna);
 
-// Risca as casas que deviam ser vazias
-int riscaCasas (IJ *InfoJogo, int linha, int coluna);
+// Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
+int pintaCasas (IJ *I);
 
 // Testa as possibilidades de uma casa minúscula
-int testaPossibilidadesCasa (IJ *InfoJogo, int linha, int coluna);
+int testaPossibilidadesCasaAux (IJ *InfoJogo, int linha, int coluna);
+
+// Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
+int testaPossibilidadesCasa (IJ *I);
+
+// Calcula quantas letras estão ligadas à letra da posição dada
+int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
 
 // Percorre a linha para riscar casas que deviam ser vazias
 int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna);
@@ -104,9 +113,6 @@ bool pintarCasa (char cmd, char *arg, ESTADO *e);
 // Muda uma casa para vazia
 bool riscarCasa (char cmd, char *arg, ESTADO *e);
 
-// Lista os comandos do jogo
-bool listarComandos (char cmd, char *arg, ESTADO *e);
-
 // Desfaz a última jogada
 bool desfazerJogada (char cmd, char *arg, ESTADO *e);
 
@@ -124,6 +130,9 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e);
 
 // Resolve o jogo automaticamente
 bool resolveJogo (char cmd, char *arg, ESTADO *e);
+
+// Lista os comandos do jogo
+bool listarComandos (char cmd, char *arg, ESTADO *e);
 
 
 
