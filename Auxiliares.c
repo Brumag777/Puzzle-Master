@@ -274,6 +274,7 @@ int testaPossibilidadesCasaAux (IJ *InfoJogo, int linha, int coluna) {
         return 1;
     }
     else InfoJogo -> Tabuleiro [linha][coluna] = C;
+    
     return 0;
 }
 

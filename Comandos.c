@@ -195,7 +195,7 @@ bool visualizarHistorico (char cmd, char *arg, ESTADO *e) {
         else if (n == 2) fprintf (stderr, "\nErro: Não existem tabuleiros para imprimir.\n\n");
 
         // Avisa se não existem tabuleiros suficientes para imprimir
-        else if (n == 3) fprintf (stderr, "\nErro: O argumento é maior que o número de jogadas (%d).\n\n", e -> info -> hTabuleiros -> sp);
+        else if (n == 3) fprintf (stderr, "\nErro: O argumento é maior que o número de tabuleiros (%d).\n\n", e -> info -> hTabuleiros -> sp);
 
         return true;
     }

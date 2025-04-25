@@ -16,20 +16,27 @@ void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
     // Para percorrer cada um dos tabuleiros
     for (int i = h -> sp - q; i < h -> sp; i++) {
 
-        // Para imprimir a estrutura do tabuleiro
-        if (i + 1 < 10) printf ("%d   ", i + 1);
-        else if (i + 1 < 100) printf ("%d  ", i + 1);
-        else printf ("%d ", i + 1);
+        // Imprime o número do tabuleiro
+        if      (i < 9)  printf ("%d   ", i + 1);
+        else if (i < 99) printf ("%d  ", i + 1);
+        else             printf ("%d ", i + 1);
+
+        // Imprime o índice das colunas
         if (h -> linhas [i] > 9) putchar (' ');
-        for (int j = 0; j < h -> colunas [i]; j++) printf ("%c ", 'a' + j);
+        for (int j = 0; j < h -> colunas [i]; j++) 
+            printf ("%c ", 'a' + j);
         printf ("\n    ");
+
+        // Imprime os '-' em baixo dos índices das colunas
         if (h -> linhas [i] > 9) putchar (' ');
-        for (int j = 0; j < h -> colunas [i]; j++) printf ("- ");
+        for (int j = 0; j < h -> colunas [i]; j++) 
+            printf ("- ");
         putchar ('\n');
 
         // Para percorrer cada linha dos tabuleiros
         for (int j = 0; j < h -> linhas [i]; j++) {
 
+            // Imprime o índice das linhas
             if (j < 9 && h -> linhas [i] > 9) printf ("%2d | ", j + 1);
             else printf ("%d | ", j + 1);
 
