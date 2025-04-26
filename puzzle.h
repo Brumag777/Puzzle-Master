@@ -183,7 +183,7 @@ int logicaResolveJogo (char *arg, ESTADO *e);
 // Auxiliares à lógica dos comandos - ComandosLogicaAuxiliares.c
 
 // Desfaz a última jogada do jogo
-int desfazUmaJogada (ESTADO *e);
+int desfazUmaJogada (ESTADO *e); // Não foi testada
 
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
 int verificaInfracoes (IJ *I, int flag);
