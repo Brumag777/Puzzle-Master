@@ -126,7 +126,7 @@ int logicaPintarCasa (char *coordenada, ESTADO *e) {
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     // Se o jogo estiver terminado, indica se o jogador ganhou
-    testeJogo (e -> info);
+    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
 
     return 0;
 }
@@ -162,7 +162,7 @@ int logicaRiscarCasa (char *coordenada, ESTADO *e) {
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     // Se o jogo estiver terminado, indica se o jogador ganhou
-    testeJogo (e -> info);
+    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
 
     return 0;
 }
@@ -290,7 +290,7 @@ int logicaAjuda (char *arg, ESTADO *e) {
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     // Se o jogo estiver terminado, indica se o jogador ganhou
-    testeJogo (e -> info);
+    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
 
     return 0;
 }
@@ -316,7 +316,7 @@ int logicaAjudaRep (char *arg, ESTADO *e) {
     visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
 
     // Se o jogo estiver terminado, indica se o jogador ganhou
-    testeJogo (e -> info);
+    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
 
     return 0;
 }

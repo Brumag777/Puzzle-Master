@@ -6,8 +6,14 @@ TEST_SRC    = Testes/testes.c \
               Principais/main.c \
               Principais/puzzle.c
 
+TESTAUX_SRC = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
+
 EXEC        = Jogo
 TEST_EXEC   = Testes/Testes
+
+.PHONY: all Jogo Testes TAuxiliares clean
+
+all: Jogo
 
 Jogo: $(GAME_SRC)
 	$(CC) $(CFLAGS) -o $(EXEC) $(GAME_SRC)
@@ -20,8 +26,13 @@ Testes:
 	gcov Principais/main.c
 	gcov Principais/puzzle.c
 
+TAuxiliares: LDFLAGS += -lcunit
+TAuxiliares: $(TESTAUX_SRC)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTAUX_SRC)
+	./$@
+
 clean:
 	rm -f *.o *.gcda *.gcno *.gcov \
 	       Principais/*.o Principais/*.gcda Principais/*.gcno Principais/*.gcov \
 	       Testes/*.o Testes/*.gcda Testes/*.gcno Testes/*.gcov \
-	       $(EXEC) $(TEST_EXEC)
+	       $(EXEC) $(TEST_EXEC) TAuxiliares
