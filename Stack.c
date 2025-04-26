@@ -29,7 +29,7 @@ void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
 
         // Imprime os '-' em baixo dos índices das colunas
         if (h -> linhas [i] > 9) putchar (' ');
-        for (int j = 0; j < h -> colunas [i]; j++) 
+        for (int j = 0; j < h -> colunas [i]; j++)
             printf ("- ");
         putchar ('\n');
 

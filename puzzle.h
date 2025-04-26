@@ -36,10 +36,10 @@ typedef bool (*COMANDO) (char cmd, char *arg, ESTADO *e);
 // Funções auxiliares - Auxiliares.c
 
 // Liberta a memória alocada para os tabuleiros - a flag indica se é ou não para libertar também o histórico de tabuleiros
-void libertaTabuleiro (IJ *InfoJogo, int flag);
+void libertaTabuleiro (IJ *InfoJogo, int flag); // Não foi testada
 
 // Inicializa os tabuleiros - a flag indica se é ou não para alocar memórica também para o histórico de tabuleiros
-void iniciarTabuleiro (ESTADO *e, int flag);
+void iniciarTabuleiro (ESTADO *e, int flag); // Não foi testada
 
 // Verifica se um caractere é uma letra maiúscula
 int eMaiuscula (char c);

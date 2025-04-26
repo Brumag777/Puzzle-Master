@@ -320,6 +320,9 @@ int percorreLinha (IJ *InfoJogo, char c, int linha, int coluna) {
     // Altera o 'c' para minúscula
     c += 'a' - 'A';
 
+    putchar ('\n');
+    for (int i = 0; i < InfoJogo -> linhas; i++) printf ("%s\n", InfoJogo -> Tabuleiro [i]);
+
     for (int j = 0; j < InfoJogo -> colunas; j++)
         if (InfoJogo -> Tabuleiro [linha][j] == c && j != coluna) {
             InfoJogo -> Tabuleiro [linha][j] = '#';
