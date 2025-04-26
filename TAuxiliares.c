@@ -4,8 +4,6 @@
 #include "CUnit/Basic.h"
 #include "puzzle.h"
 
-// gcc TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c puzzle.h -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g -lcunit -o TAuxiliares
-
 // Testa a função 'eMaiuscula'
 void teste_eMaiuscula () {
     CU_ASSERT_EQUAL (eMaiuscula ('V'), 1);

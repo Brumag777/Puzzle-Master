@@ -23,7 +23,7 @@ void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
 
         // Imprime o índice das colunas
         if (h -> linhas [i] > 9) putchar (' ');
-        for (int j = 0; j < h -> colunas [i]; j++) 
+        for (int j = 0; j < h -> colunas [i]; j++)
             printf ("%c ", 'a' + j);
         printf ("\n    ");
 
@@ -54,6 +54,7 @@ void visualizaUltimosTabuleiros (Hist h, int q, int flag) {
 
 // Inicializa o histórico
 void inicializaStack (Hist h) {
+    
     // Não é considerado nenhum tabuleiro no início
     h -> sp = 0;
 
@@ -98,7 +99,7 @@ void pushStack (Hist h, char **novoTabuleiro, int linhas, int colunas) {
     // Aloca memória para o novo tabuleiro
     h -> TAnteriores [h -> sp] = malloc (linhas * sizeof (char *));
 
-    // Aloca memória para cada do novo tabuleiro e define estas linhas
+    // Aloca memória para cada linha do novo tabuleiro e define estas linhas
     for (int i = 0; i < linhas; i++) {
         h -> TAnteriores [h -> sp][i] = malloc ((strlen (novoTabuleiro [i]) + 1) * sizeof (char));
         strcpy (h -> TAnteriores [h -> sp][i], novoTabuleiro [i]);
