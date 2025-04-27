@@ -71,12 +71,6 @@ int logicaLer (char *nomeFicheiro, ESTADO *e) {
 
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (e -> info)) return 4;
-
-    // Adiciona o tabuleiro novo ao histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
-    // Imprime o tabuleiro atualizado
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
     
     return 0;
 }
@@ -119,15 +113,6 @@ int logicaPintarCasa (char *coordenada, ESTADO *e) {
     // Pinta a casa de branco
     e -> info -> Tabuleiro [l - 1][c - 'a'] += 'A' - 'a';
 
-    // Adiciona o tabuleiro resultante ao histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
-    // Imprime o tabuleiro atualizado
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-
-    // Se o jogo estiver terminado, indica se o jogador ganhou
-    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
-
     return 0;
 }
 
@@ -154,15 +139,6 @@ int logicaRiscarCasa (char *coordenada, ESTADO *e) {
 
     // Muda a casa para vazia
     e -> info -> Tabuleiro [l - 1][c - 'a'] = '#';
-
-    // Adiciona o tabuleiro resultante ao histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
-    // Imprime o tabuleiro resultante
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-
-    // Se o jogo estiver terminado, indica se o jogador ganhou
-    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
 
     return 0;
 }
@@ -207,18 +183,15 @@ int logicaVizualizarHistorico (char *nTab, ESTADO *e) {
     else q = atoi (nTab);
 
     // Verifica se o argumento é um número natural
-    if (q < 1) return 1;
+    if (q < 1) return -1;
 
     // Verifica se existem tabuleiros para imprimir
-    if (e -> info -> hTabuleiros -> sp == 0) return 2;
+    if (e -> info -> hTabuleiros -> sp == 0) return -2;
 
     // Verifica se existem tabuleiros suficientes para imprimir
-    if (q > e -> info -> hTabuleiros -> sp) return 3;
+    if (q > e -> info -> hTabuleiros -> sp) return -3;
 
-    // Imprime os últimos q tabuleiros armazenados no histórico
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, q, 1);
-
-    return 0;
+    return q;
 }
 
 
@@ -227,7 +200,7 @@ int logicaVizualizarHistorico (char *nTab, ESTADO *e) {
 int logicaVerifica (char *arg, ESTADO *e) {
 
     // Verifica se não foi recebido um argumento
-    if (arg != NULL) return 1;
+    if (arg != NULL) return -1;
 
     putchar ('\n');
 
@@ -238,14 +211,9 @@ int logicaVerifica (char *arg, ESTADO *e) {
     if (!verificaInfracoes (e -> info, 1)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (e -> info)) validade = 0;
+    if (!verificaCaminhoOrtogonal (e -> info, 1)) validade = 0;
 
-    // Avisa se o tabuleiro é válido
-    if (validade) printf ("Não há nenhuma infração.\n");
-
-    putchar ('\n');
-
-    return 0;
+    return validade;
 }
 
 
@@ -283,15 +251,6 @@ int logicaAjuda (char *arg, ESTADO *e) {
         else return 1;
     }
 
-    // Atualiza o histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
-    // Imprime o tabuleiro resultante
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-
-    // Se o jogo estiver terminado, indica se o jogador ganhou
-    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
-
     return 0;
 }
 
@@ -309,32 +268,19 @@ int logicaAjudaRep (char *arg, ESTADO *e) {
     // Repete o processo até não haver nada a alterar
     while (ajudaUmaVez (e -> info));
 
-    // Atualiza o histórico de tabuleiros
-    pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
-    // Imprime o tabuleiro resultante
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-
-    // Se o jogo estiver terminado, indica se o jogador ganhou
-    if (testeJogo (e -> info)) printf ("Parabéns! Conseguiste resolver o puzzle.\n\n");
-
     return 0;
 }
 
 
 
-// Função que realiza a lógico do comando 'R'
+// Função que realiza a lógica do comando 'R'
 int logicaResolveJogo (char *arg, ESTADO *e) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;
 
     // Resolve o jogo (se possível)
-    if (resolve (e -> info)) {
-        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-        visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-        return 0;
-    }
+    if (resolve (e -> info)) return 0;
 
     // Não é possível resolver o jogo
     return 2;
@@ -343,35 +289,13 @@ int logicaResolveJogo (char *arg, ESTADO *e) {
 
 
 // Função que realiza a lógia do comando 'h' (listarComandos)
-int logicaListarComando (char *arg, ESTADO *e) {
+int logicaListarComandos (char *arg, ESTADO *e) {
+
+    // Para evitar warnings
+    (void) e;
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;
-
-    // Imprime os comandos do jogo
-    printf ("\nOs comandos do jogo são:\n"
-            "g <ficheiro>: Grava o tabuleiro num ficheiro.\n"
-            "l <ficheiro>: Lê um tabuleiro de um ficheiro.\n"
-            "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
-            "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
-            "v: Verifica se existem infrações na posição atual.\n"
-            "V: Permite ver o último tabuleiro.\n"
-            "V <natural>: Permite ver os tabuleiros anteriores.\n"
-            "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
-            "a b: Ajuda pintando de branco as casas à volta de casas riscadas.\n"
-            "a r: Ajuda riscando as casas na mesma linha ou coluna que casas brancas com a mesma letra.\n"
-            "a o: Ajuda pintando de branco as casas que se fossem riscadas não permitiam um caminho ortogonal entre todas as letras.\n"
-            "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
-            "R: Resolve o jogo (se for possível).\n"
-            "d: Desfaz a última jogada.\n"
-            "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
-            "s: Termina o jogo.\n"
-            "h: Lista todos os comandos do jogo.\n\n");
-    if (e -> info -> hTabuleiros -> sp) {
-        printf ("As coordenadas devem estar compreendidas entre a1 e %c%d \n", e -> info -> colunas + 'a' - 1, e -> info -> linhas);
-        printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", e -> info -> hTabuleiros -> sp);
-    }
-    else printf ("Leia um ficheiro para usar os comandos.\n\n");
 
     return 0;
 }

@@ -155,9 +155,6 @@ int logicaPintarCasa (char *coordenada, ESTADO *e);
 // Função que realiza a lógica do comando 'r' (riscarCasa)
 int logicaRiscarCasa (char *coordenada, ESTADO *e);
 
-// Função que realiza a lógia do comando 'h' (listarComandos)
-int logicaListarComando (char *arg, ESTADO *e);
-
 // Função que realiza a lógica do comando 'd' (desfazerJogada)
 int logicaDesfazerJogada (char *nTab, ESTADO *e);
 
@@ -173,8 +170,11 @@ int logicaAjuda (char *arg, ESTADO *e);
 // Função que realiza a lógica do comando 'A' (ajudaRep)
 int logicaAjudaRep (char *arg, ESTADO *e);
 
-// Função que realiza a lógico do comando 'R'
+// Função que realiza a lógica do comando 'R'
 int logicaResolveJogo (char *arg, ESTADO *e);
+
+// Função que realiza a lógia do comando 'h' (listarComandos)
+int logicaListarComandos (char *arg, ESTADO *e);
 
 
 
@@ -189,7 +189,7 @@ int desfazUmaJogada (ESTADO *e); // Não foi testada
 int verificaInfracoes (IJ *I, int flag);
 
 // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-int verificaCaminhoOrtogonal (IJ *I);
+int verificaCaminhoOrtogonal (IJ *I, int flag);
 
 // Realiza alterações necessárias na posição atual
 int ajudaUmaVez (IJ *I);

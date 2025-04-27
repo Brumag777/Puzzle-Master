@@ -68,7 +68,7 @@ int verificaInfracoes (IJ *I, int flag) {
 
 
 // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-int verificaCaminhoOrtogonal (IJ *I) {
+int verificaCaminhoOrtogonal (IJ *I, int flag) {
 
     // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
     int aux [I -> linhas][I -> colunas], nLetras, l, c;
@@ -88,7 +88,11 @@ int verificaCaminhoOrtogonal (IJ *I) {
     if (nLetras == 0) return 1;
 
     // Verifica se o número de letras total é igual ao número de letras ligadas a uma letra do tabuleiro
-    return nLetras == contaLetrasLigadas (I -> linhas, I -> colunas, aux, l, c);
+    if (nLetras == contaLetrasLigadas (I -> linhas, I -> colunas, aux, l, c)) return 1;
+
+    if (flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
+
+    return 0;
 }
 
 
@@ -128,7 +132,7 @@ int resolve (IJ *I) {
     if (!verificaInfracoes (I, 0)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I)) validade = 0;
+    if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
 
     // Verifica se o tabuleiro é válido
     if (validade == 0) {

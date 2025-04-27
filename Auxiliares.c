@@ -368,7 +368,7 @@ int testeJogo (IJ *I) {
     if (!verificaInfracoes (I, 1)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I)) validade = 0;
+    if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
 
     // Se não existem infrações, o jogador ganhou
     if (validade) return 1;

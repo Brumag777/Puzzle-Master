@@ -52,10 +52,10 @@ void teste_verificaCaminhoOrtogonal () {
     strcpy (I -> Tabuleiro [0], "abc");
     strcpy (I -> Tabuleiro [1], "A#f");
     strcpy (I -> Tabuleiro [2], "cDC");
-    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I), 1);
+    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I, 0), 1);
 
     I -> Tabuleiro [0][0] = I -> Tabuleiro [2][0] = '#';
-    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I), 0);
+    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I, 0), 0);
 
     for (int i = 0; i < 3; i++) free (I -> Tabuleiro [i]);
     free (I -> Tabuleiro);

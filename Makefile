@@ -4,12 +4,13 @@ COV_CFLAGS = -Wall -Wextra -pedantic -O1 -fprofile-arcs -ftest-coverage -g
 
 GAME_SRC    = Main.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
 
-TESTAUX_SRC = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
-TESTCLAUX_SRC = TComandosLogicaAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
+TESTAUX_SRC       = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
+TESTCLAUX_SRC     = TComandosLogicaAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
+TESTLOGICA_SRC    = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
 
-EXEC = Jogo
+EXEC            = Jogo
 
-.PHONY: all Jogo Testes TAuxiliares TComandosLogicaAuxiliares coverage clean
+.PHONY: all Jogo Testes TAuxiliares TComandosLogicaAuxiliares TComandosLogica coverage clean
 
 all: Jogo
 
@@ -26,6 +27,11 @@ TComandosLogicaAuxiliares: $(TESTCLAUX_SRC)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTCLAUX_SRC)
 	./$@
 
+TComandosLogica: LDFLAGS += -lcunit
+TComandosLogica: $(TESTLOGICA_SRC)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTLOGICA_SRC)
+	./$@
+
 TAuxiliares-cov: LDFLAGS += -lcunit
 TAuxiliares-cov: $(TESTAUX_SRC)
 	$(CC) $(COV_CFLAGS) -o $@ $(TESTAUX_SRC) $(LDFLAGS)
@@ -34,12 +40,17 @@ TComandosLogicaAuxiliares-cov: LDFLAGS += -lcunit
 TComandosLogicaAuxiliares-cov: $(TESTCLAUX_SRC)
 	$(CC) $(COV_CFLAGS) -o $@ $(TESTCLAUX_SRC) $(LDFLAGS)
 
-coverage: TAuxiliares-cov TComandosLogicaAuxiliares-cov
+TComandosLogica-cov: LDFLAGS += -lcunit
+TComandosLogica-cov: $(TESTLOGICA_SRC)
+	$(CC) $(COV_CFLAGS) -o $@ $(TESTLOGICA_SRC) $(LDFLAGS)
+
+coverage: TAuxiliares-cov TComandosLogicaAuxiliares-cov TComandosLogica-cov
 	./TAuxiliares-cov
 	./TComandosLogicaAuxiliares-cov
-	gcov -b Auxiliares.c ComandosLogicaAuxiliares.c
+	./TComandosLogica-cov
+	gcov -b Auxiliares.c ComandosLogicaAuxiliares.c ComandosLogica.c
 
 clean:
 	rm -f *.o *.gcda *.gcno *.gcov \
-	       $(EXEC) TAuxiliares TComandosLogicaAuxiliares \
-	       TAuxiliares-cov TComandosLogicaAuxiliares-cov
+	       $(EXEC) TAuxiliares TComandosLogicaAuxiliares TComandosLogica \
+	       TAuxiliares-cov TComandosLogicaAuxiliares-cov TComandosLogica-cov
