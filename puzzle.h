@@ -131,6 +131,9 @@ bool ajudaRep (char cmd, char *arg, ESTADO *e);
 // Resolve o jogo automaticamente
 bool resolveJogo (char cmd, char *arg, ESTADO *e);
 
+// Mostra a solução do jogo (caso exista)
+bool mostrarSolucao (char cmd, char *arg, ESTADO *e);
+
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char *arg, ESTADO *e);
 
@@ -204,7 +207,7 @@ int resolve (IJ *I);
 // Funções relativas ao histórico de tabuleiros - Stack.c
 
 // Imprime os últimos q tabuleiros armazenados no histórico
-void visualizaUltimosTabuleiros (Hist h, int q, int flag);
+void visualizaUltimosTabuleiros (Hist h, int q, int flag, int eSolucao);
 
 // Inicializa o histórico
 void inicializaStack (Hist h);

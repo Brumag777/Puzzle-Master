@@ -9,11 +9,14 @@ int logicaGravar (char *nomeFicheiro, ESTADO *e) {
     // Verifica se foi recebido um argumento
     if (nomeFicheiro == NULL) return 1;
 
+    // Verifica se existe um tabuleiro para guardar
+    if (e -> info -> hTabuleiros -> sp == 0) return 2;
+
     // Abre o ficheiro a preencher
     FILE *Jogo = fopen (nomeFicheiro, "w");
 
     // Verifica se o ficheiro foi aberto corretamente
-    if (Jogo == NULL) return 2;
+    if (Jogo == NULL) return 3;
 
     // Preenche o ficheiro com a quantidade de linhas e de colunas do tabuleiro
     fprintf (Jogo, "%d %d\n", e -> info -> linhas, e -> info -> colunas);
@@ -279,11 +282,14 @@ int logicaResolveJogo (char *arg, ESTADO *e) {
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;
 
+    // Verifica se existe um jogo para resolver
+    if (e -> info -> hTabuleiros -> sp == 0) return 2;
+
     // Resolve o jogo (se possível)
     if (resolve (e -> info)) return 0;
 
     // Não é possível resolver o jogo
-    return 2;
+    return 3;
 }
 
 

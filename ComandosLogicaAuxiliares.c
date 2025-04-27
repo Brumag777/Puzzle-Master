@@ -28,12 +28,6 @@ int desfazUmaJogada (ESTADO *e) {
         strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
     }
 
-    // Remove o tabuleiro antigo do histórico de tabuleiros
-    popStack (e -> info -> hTabuleiros);
-
-    // Imprime o tabuleiro atualizado
-    visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0);
-
     return 0;
 }
 

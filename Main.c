@@ -6,9 +6,9 @@
 // Função principal
 int main () {
 
-    // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v, a, A, R
+    // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v, a, A, R, X
     COMANDO comandos [] = {sair, ler, gravar, pintarCasa, riscarCasa, listarComandos, desfazerJogada, visualizarHistorico,           
-                           verifica, ajuda, ajudaRep, resolveJogo, NULL};
+                           verifica, ajuda, ajudaRep, resolveJogo, mostrarSolucao, NULL};
 
 
 
@@ -57,7 +57,7 @@ int main () {
             for (I = 0; !ret && comandos [I] != NULL; I++)
                 ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
 
-            if (cmd != 'R' && comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
+            if (cmd != 'X' && comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
         }
     }
 
