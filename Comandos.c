@@ -232,7 +232,7 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
         }
 
         // Avisa se não há um tabuleiro anterior
-        else if (n == 1) fprintf (stderr, "\nErro: Não existem tabuleiros anteriores.\n\n");
+        else if (n == 1) fprintf (stderr, "\nErro: Não existem tabuleiros para desfazer.\n\n");
 
         // Avisa se o argumento não é um número natural
         else if (n == 2) fprintf (stderr, "\nErro: O argumento deve ser um número natural.\n\n");
@@ -242,6 +242,15 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
 
         // Avisa se não existe o tabuleiro desejado
         else if (n == 4) fprintf (stderr, "\nErro: O argumento é maior que o número de tabuleiros (%d).\n\n", e -> info -> hTabuleiros -> sp);
+
+        // Caso em que existe apenas um tabuleiro
+        else if (n == 5) {
+            // Remove o tabuleiro antigo do histórico de tabuleiros
+            popStack (e -> info -> hTabuleiros);
+
+            // Avisa que não existem mais tabuleiros
+            printf ("\nNão existem mais tabuleiros. Leia um ficheiro para iniciar um jogo.\n\n");
+        }
 
         return true;
     }

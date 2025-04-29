@@ -6,8 +6,8 @@
 // Desfaz a última jogada do jogo
 int desfazUmaJogada (ESTADO *e) {
 
-    // Verifica se existe um tabuleiro anterior
-    if (e -> info -> hTabuleiros -> sp <= 1) return 1;
+    // Verifica se existe um tabuleiro para desfazer
+    if (e -> info -> hTabuleiros -> sp == 0) return 1;
 
     // Liberta a memória alocada para o tabuleiro anterior
     libertaTabuleiro (e -> info, 0);
@@ -15,20 +15,25 @@ int desfazUmaJogada (ESTADO *e) {
     // Aloca memória para o novo tabuleiro
     iniciarTabuleiro (e, 0);
 
-    // Altera as dimensões do tabuleiro para as dimensões do tabuleiro anterior
-    e -> info -> linhas = e -> info -> hTabuleiros -> linhas [e -> info -> hTabuleiros -> sp - 2];
-    e -> info -> colunas = e -> info -> hTabuleiros -> colunas [e -> info -> hTabuleiros -> sp - 2];
+    if (e -> info -> hTabuleiros -> sp > 1) {
 
-    // Aloca memória para o tabuleiro novo
-    e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+        // Altera as dimensões do tabuleiro para as dimensões do tabuleiro anterior
+        e -> info -> linhas = e -> info -> hTabuleiros -> linhas [e -> info -> hTabuleiros -> sp - 2];
+        e -> info -> colunas = e -> info -> hTabuleiros -> colunas [e -> info -> hTabuleiros -> sp - 2];
 
-    // Aloca memória para cada linha do tabuleiro novo e preenche-as com as linhas do tabuleiro anterior
-    for (int i = 0; i < e -> info -> linhas; i++) {
-        e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
-        strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
+        // Aloca memória para o tabuleiro novo
+        e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+
+        // Aloca memória para cada linha do tabuleiro novo e preenche-as com as linhas do tabuleiro anterior
+        for (int i = 0; i < e -> info -> linhas; i++) {
+            e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
+            strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
+        }
+
+        return 0;
     }
 
-    return 0;
+    return 5;
 }
 
 
