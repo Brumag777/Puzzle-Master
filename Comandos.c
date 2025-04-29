@@ -41,9 +41,6 @@ bool ler (char cmd, char *arg, ESTADO *e) {
 
         // Caso de sucesso da função
         if (n == 0) {
-            // Adiciona o tabuleiro novo ao histórico de tabuleiros
-            pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
-
             // Imprime o tabuleiro atualizado
             visualizaUltimosTabuleiros (e -> info -> hTabuleiros, 1, 0, 0);
 
@@ -61,7 +58,7 @@ bool ler (char cmd, char *arg, ESTADO *e) {
         else if (n == 3) fprintf (stderr, "\nErro: Não foi possível ler o ficheiro.\n\n");
 
         // Avisa se o tabuleiro do ficheiro lido é inválido
-        else if (n == 4) fprintf (stderr, "\nErro: O tabuleiro é inválido.\n\n");
+        else if (n == 4) fprintf (stderr, "\nErro: Os tabuleiros não são válidos.\n\n");
 
         return true;
     }
@@ -244,7 +241,7 @@ bool desfazerJogada (char cmd, char *arg, ESTADO *e) {
         else if (n == 3) fprintf (stderr, "\nErro: Esse é o tabuleiro atual.\n\n");
 
         // Avisa se não existe o tabuleiro desejado
-        else if (n == 4) fprintf (stderr, "\nErro: O argumento é maior que o número de jogadas (%d).\n\n", e -> info -> hTabuleiros -> sp);
+        else if (n == 4) fprintf (stderr, "\nErro: O argumento é maior que o número de tabuleiros (%d).\n\n", e -> info -> hTabuleiros -> sp);
 
         return true;
     }

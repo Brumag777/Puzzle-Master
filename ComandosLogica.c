@@ -18,15 +18,25 @@ int logicaGravar (char *nomeFicheiro, ESTADO *e) {
     // Verifica se o ficheiro foi aberto corretamente
     if (Jogo == NULL) return 3;
 
-    // Preenche o ficheiro com a quantidade de linhas e de colunas do tabuleiro
-    fprintf (Jogo, "%d %d\n", e -> info -> linhas, e -> info -> colunas);
+    // Grava no ficheiro tabuleiro a tabuleiro
+    for (int i = 0; i < e -> info -> hTabuleiros -> sp; i++) {
 
-    // Preenche o ficheiro com o tabuleiro, linha a linha
-    for (int i = 0; i < e -> info -> linhas; i++)
-        fprintf (Jogo, "%s", e -> info -> Tabuleiro [i]);
+        // Preenche o ficheiro com a quantidade de linhas e de colunas do tabuleiro
+        fprintf (Jogo, "%d %d\n", e -> info -> hTabuleiros -> linhas [i], e -> info -> hTabuleiros -> colunas [i]);
+
+        // Preenche o ficheiro com o tabuleiro, linha a linha
+        for (int j = 0; j < e -> info -> hTabuleiros -> linhas [i]; j++)
+            fprintf (Jogo, "%s", e -> info -> hTabuleiros -> TAnteriores [i][j]);
+    }
 
     // Fecha o ficheiro
     fclose (Jogo);
+
+    // Liberta a memória dos tabuleiros anteriores
+    libertaTabuleiro (e -> info, 1);
+
+    // Aloca memória para os tabuleiros novos
+    iniciarTabuleiro (e, 1);
 
     return 0;
 }
@@ -45,35 +55,52 @@ int logicaLer (char *nomeFicheiro, ESTADO *e) {
     // Verifica se o ficheiro foi lido com sucesso
     if (Jogo == NULL) return 2;
 
-    // Liberta a memória alocada para o tabuleiro anterior
-    libertaTabuleiro (e -> info, 0);
+    int l, c, nTabuleiros = e -> info -> hTabuleiros -> sp, nTabuleirosLidos = 0;
 
-    // Aloca memória para o tabuleiro novo
-    iniciarTabuleiro (e, 0);
+    while (fscanf (Jogo, "%d %d", &l, &c) == 2) {
 
-    // Lê as linhas e as colunas do ficheiro
-    if (fscanf (Jogo, "%d %d", &e -> info -> linhas, &e -> info -> colunas) != 2) {
-        fclose (Jogo);
-        return 3;
-    }
+        // Liberta a memória alocada para o tabuleiro anterior
+        libertaTabuleiro (e -> info, 0);
 
-    // Ignora o '\n' da primeira linha
-    fgetc (Jogo);
+        // Aloca memória para o tabuleiro novo
+        iniciarTabuleiro (e, 0);
 
-    // Aloca memória para o tabuleiro novo
-    e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+        // Armazena o número de linhas e de colunas
+        e -> info -> linhas = l;
+        e -> info -> colunas = c;
 
-    // Aloca memória para cada linha do tabuleiro novo e preenche o mesmo com a informação do ficheiro
-    for (int i = 0; i < e -> info -> linhas; i++) {
-        e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
-        if (fgets (e -> info -> Tabuleiro [i], e -> info -> colunas + 2, Jogo) == NULL) return 3;
+        // Ignora o '\n' da primeira linha
+        fgetc (Jogo);
+
+        // Aloca memória para o tabuleiro novo
+        e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
+
+        // Aloca memória para cada linha do tabuleiro novo e preenche o mesmo com a informação do ficheiro
+        for (int i = 0; i < e -> info -> linhas; i++) {
+            e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
+            if (fgets (e -> info -> Tabuleiro [i], e -> info -> colunas + 2, Jogo) == NULL) return 3;
+        }
+
+        // Verifica se o tabuleiro é válido
+        if (!tabuleiroValido (e -> info)) {
+            while (nTabuleirosLidos > 0) {
+                popStack (e -> info -> hTabuleiros);
+                nTabuleirosLidos--;
+            }
+            return 4;
+        }
+
+        nTabuleirosLidos++;
+
+        // Adiciona o tabuleiro novo ao histórico de tabuleiros
+        pushStack (e -> info -> hTabuleiros, e -> info -> Tabuleiro, e -> info -> linhas, e -> info -> colunas);
     }
 
     // Fecha o ficheiro
-    fclose (Jogo); 
+    fclose (Jogo);
 
-    // Verifica se o tabuleiro é válido
-    if (!tabuleiroValido (e -> info)) return 4;
+    // Verifica se foi lido algum tabuleiro
+    if (e -> info -> hTabuleiros -> sp == nTabuleiros) return 3;
     
     return 0;
 }

@@ -7,7 +7,7 @@
 int desfazUmaJogada (ESTADO *e) {
 
     // Verifica se existe um tabuleiro anterior
-    if (e -> info -> hTabuleiros -> sp == 1) return 1;
+    if (e -> info -> hTabuleiros -> sp <= 1) return 1;
 
     // Liberta a memória alocada para o tabuleiro anterior
     libertaTabuleiro (e -> info, 0);
