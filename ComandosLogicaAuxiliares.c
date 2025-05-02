@@ -80,7 +80,7 @@ int leFicheiro (FILE *Jogo, Info I) {
     // Verifica se as jogadas são válidas
     if (!jogadasValidas (I)) {
         libertaTabuleiro (I);
-        libertaLJogadas (&I -> HJogadas);
+        libertaLJogadas (I);
         return 5;
     }
 

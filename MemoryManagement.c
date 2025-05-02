@@ -39,7 +39,7 @@ void libertaInfo (Info I) {
     if (I != NULL) {
         libertaTabuleiro (I);
 
-        libertaLJogadas (&I -> HJogadas);
+        libertaLJogadas (I);
 
         free (I);
     }
@@ -62,8 +62,8 @@ void libertaTabuleiro (Info I) {
 
 
 // Liberta a lista de jogadas do jogo
-void libertaLJogadas (LJogadas *J) {
-    LJogadas JAux = *J;
+void libertaLJogadas (Info I) {
+    LJogadas JAux = I -> HJogadas;
 
     while (JAux != NULL) {
         LJogadas aRemover = JAux;
@@ -72,7 +72,7 @@ void libertaLJogadas (LJogadas *J) {
         free (aRemover);
     }
 
-    *J = NULL;
+    I -> HJogadas = NULL;
 }
 
 

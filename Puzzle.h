@@ -158,7 +158,7 @@ void libertaInfo (Info I);
 void libertaTabuleiro (Info I);
 
 // Liberta a lista de jogadas do jogo
-void libertaLJogadas (LJogadas *J);
+void libertaLJogadas (Info I);
 
 // Liberta a memória alocada para um array de jogadas
 void libertaJogadas (Jogada *J, int nJogadas);
