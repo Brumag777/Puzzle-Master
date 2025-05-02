@@ -1,170 +1,131 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "puzzle.h"
+#include "Puzzle.h"
 
-// Desfaz a última jogada do jogo
-int desfazUmaJogada (ESTADO *e) {
+// Guarda a informação do jogo num ficheiro
+void guardaInfo (FILE *Jogo, Info I) {
+    // Guarda o número do tabuleiro e de jogadas
+    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
+    
+    // Guarda o número de linhas e de colunas do tabuleiro
+    fprintf (Jogo, "%d %d\n", I -> dL, I -> dC);
 
-    // Verifica se existe um tabuleiro para desfazer
-    if (e -> info -> hTabuleiros -> sp == 0) return 1;
-
-    // Liberta a memória alocada para o tabuleiro anterior
-    libertaTabuleiro (e -> info, 0);
-
-    // Aloca memória para o novo tabuleiro
-    iniciarTabuleiro (e, 0);
-
-    if (e -> info -> hTabuleiros -> sp > 1) {
-
-        // Altera as dimensões do tabuleiro para as dimensões do tabuleiro anterior
-        e -> info -> linhas = e -> info -> hTabuleiros -> linhas [e -> info -> hTabuleiros -> sp - 2];
-        e -> info -> colunas = e -> info -> hTabuleiros -> colunas [e -> info -> hTabuleiros -> sp - 2];
-
-        // Aloca memória para o tabuleiro novo
-        e -> info -> Tabuleiro = malloc (e -> info -> linhas * sizeof (char *));
-
-        // Aloca memória para cada linha do tabuleiro novo e preenche-as com as linhas do tabuleiro anterior
-        for (int i = 0; i < e -> info -> linhas; i++) {
-            e -> info -> Tabuleiro [i] = malloc ((e -> info -> colunas + 2) * sizeof (char));
-            strcpy (e -> info -> Tabuleiro [i], e -> info -> hTabuleiros -> TAnteriores [e -> info -> hTabuleiros -> sp - 2][i]);
-        }
-
-        return 0;
+    // Guarda o tabuleiro num ficheiro
+    for (int i = 0; i < I -> dL; i++) {
+        fprintf (Jogo, "%s", I -> Tabuleiro [i]);
+        fprintf (Jogo, "\n");
     }
 
-    return 5;
+    // Guarda o histórico de jogadas no ficheiro
+    guardaJogadas (Jogo, I);
 }
 
 
 
-// Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-int verificaInfracoes (IJ *I, int flag) {
+// Guarda o histórico de jogadas no ficheiro
+void guardaJogadas (FILE *Jogo, Info I) {
 
-    // Inteiro representante da validade do tabuleiro
-    int validade = 1;
+    // Armazena a lista original
+    LJogadas J = I -> HJogadas;
 
-    // Percorre o tabuleiro para procurar infrações
-    for (int i = 0; i < I -> linhas; i++)
+    // Percorre a lista
+    while (J != NULL) {
 
-        // Percorre cada linha do tabuleiro para procurar infrações
-        for (int j = 0; j < I -> colunas; j++) {
-                
-            // Verifica se houve infrações relativas a casas brancas
-            if (eMaiuscula (I -> Tabuleiro [i][j])) {
-                if (!verificaLinhas (I, I -> Tabuleiro [i][j], i, j, flag) ||
-                    !verificaColunas (I, I -> Tabuleiro [i][j], i, j, flag)) validade = 0;
-            }
+        // Guarda o número de alterações de cada jogada
+        fprintf (Jogo, "%d ", J -> nAlts);
 
-            // Verifica se houve infrações relativas a casas vazias
-            else if (I -> Tabuleiro [i][j] == '#')
-                if (!verificaCasaVazia (I, i, j, flag)) validade = 0;
-        }
+        // Percorre o array de alterações
+        for (int j = 0; j < J -> nAlts; j++)
+            fprintf (Jogo, "%c%d%c ", J -> Jogadas [j] -> C, J -> Jogadas [j] -> L, J -> Jogadas [j] -> cAnterior);
 
-    return validade;
+        // Passa para a linha seguinte
+        fprintf (Jogo, "\n");
+
+        // Avança na lista
+        J = J -> JAnt;
+    }
 }
 
 
 
-// Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-int verificaCaminhoOrtogonal (IJ *I, int flag) {
+// Lê a informação de um ficheiro
+int leFicheiro (FILE *Jogo, Info I) {
 
-    // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
-    int aux [I -> linhas][I -> colunas], nLetras, l, c;
+    // Liberta a memória alocada para o tabuleiro anterior
+    libertaTabuleiro (I);
 
-    // No tabuleiro auxiliar, '0' representa as casas vazias e '1' representa as letras (as casas restantes)
-    for (int i = nLetras = 0; i < I -> linhas; i++)
-        for (int j = 0; j < I -> colunas; j++)
-            if (I -> Tabuleiro [i][j] == '#') aux [i][j] = 0;
-            else {
-                l = i;
-                c = j;
-                aux [i][j] = 1;
-                nLetras++;
-            }
+    // Lê o número do tabuleiro e de jogadas
+    if (fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> nJogadas) != 2) return 3;
 
-    // Verifica se o tabuleiro possui letras
-    if (nLetras == 0) return 1;
+    // Lê o número de linhas e de colunas
+    if (fscanf (Jogo, "%d %d", &I -> dL, &I -> dC) != 2) return 3;
 
-    // Verifica se o número de letras total é igual ao número de letras ligadas a uma letra do tabuleiro
-    if (nLetras == contaLetrasLigadas (I -> linhas, I -> colunas, aux, l, c)) return 1;
+    // Aloca memória para o tabuleiro novo
+    inicializaTabuleiro (I);
 
-    if (flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
+    // Lê o tabuleiro
+    for (int i = 0; i < I -> dL; i++) if (fscanf (Jogo, "%s", I -> Tabuleiro [i]) != 1) return 3;
+
+    // Verifica se o tabuleiro é válido
+    if (!tabuleiroValido (I)) {
+        libertaTabuleiro (I);
+        return 4;
+    }
+
+    // Lê as jogadas
+    for (int i = 0; i < I -> nTabuleiro - 1; i++) {
+        if (leLinhaJogadas (Jogo, I)) return 3;
+
+        I -> nTabuleiro--;
+    }
+
+    // Verifica se as jogadas são válidas
+    if (!jogadasValidas (I)) {
+        libertaTabuleiro (I);
+        libertaLJogadas (&I -> HJogadas);
+        return 5;
+    }
+
+    // Inverte o histórico de jogadas
+    I -> HJogadas = inverteHistorico (I -> HJogadas);
+
+    // Fecha o ficheiro
+    fclose (Jogo);
 
     return 0;
 }
 
 
 
-// Realiza alterações necessárias na posição atual
-int ajudaUmaVez (IJ *I) {
+// Lê a informação de uma linha de jogadas
+int leLinhaJogadas (FILE *Jogo, Info I) {
 
-    // Indicador de alterações
-    int flag = 0;
+    // Lê a quantidade de alterações
+    int nA;
+    if (fscanf (Jogo, "%d", &nA) != 1) return 3;
 
-    // Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
-    if (riscaCasas (I)) flag = 1;
+    // Aloca memória para as alterações
+    Jogada *Jogs = malloc (nA * (sizeof (JOGADA)));
 
-    // Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-    if (pintaCasas (I)) flag = 1;
+    // Lê as jogadas
+    for (int k = 0; k < nA; k++) {
+        
+        // Linha da alteração
+        int L;
 
-    // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
-    if (testaPossibilidadesCasa (I)) flag = 1;
+        // Coluna da alteração
+        char C; 
+        
+        // Caractere anterior à alteração
+        char cAnt;
+        
+        // Lê a linha, a coluna e o caractere anterior
+        if (fscanf (Jogo, " %c%d%c", &C, &L, &cAnt) != 3) return 3;
 
-    return flag;
-}
-
-
-
-// Resolve o jogo (se possível)
-int resolve (IJ *I) {
-
-    // Realiza todas as jogadas necessárias na posição
-    while (ajudaUmaVez (I));
-
-
-
-    // Inteiro representante da validade do tabuleiro
-    int validade = 1;
-
-    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-    if (!verificaInfracoes (I, 0)) validade = 0;
-
-    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
-
-    // Verifica se o tabuleiro é válido
-    if (validade == 0) {
-        for (int i = 0; i < I -> linhas; i++)
-            strcpy (I -> Tabuleiro [i], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][i]);
-        return 0;
+        // Forma a jogada
+        formaJogada (&Jogs [k], L, C, cAnt);
     }
 
+    // Adiciona a jogada à lista
+    addJogada (I, Jogs, nA);
 
-
-    // Percorre o tabuleiro para mudar as letras minúsculas restantes
-    for (int i = 0; i < I -> linhas; i++)
-        for (int j = 0; j < I -> colunas; j++)
-            if (eMinuscula (I -> Tabuleiro [i][j])) {
-
-                // Testa o caso da casa ser pintada de branco
-                I -> Tabuleiro [i][j] += 'A' - 'a';
-                if (resolve (I)) return 1;
-                for (int k = 0; k < I -> linhas; k++)
-                    strcpy (I -> Tabuleiro [k], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][k]);
-
-                // Testa o caso da casa ser riscada
-                I -> Tabuleiro [i][j] = '#';
-                if (resolve (I)) return 1;
-                for (int k = 0; k < I -> linhas; k++)
-                    strcpy (I -> Tabuleiro [k], I -> hTabuleiros -> TAnteriores [I -> hTabuleiros -> sp - 1][k]);
-
-                // É impossível resolver o jogo
-                return 0;
-            }
-
-
-
-    // Não há minúsculas e o tabuleiro é válido, logo o jogo está resolvido
-    return 1;
+    return 0;
 }

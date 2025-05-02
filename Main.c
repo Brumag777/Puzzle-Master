@@ -1,27 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "puzzle.h"
+#include "Puzzle.h"
 
 // Função principal
 int main () {
 
-    // Lista de comandos do jogo: s, l, g, b, r, h, d, V, v, a, A, R, X
-    COMANDO comandos [] = {sair, ler, gravar, pintarCasa, riscarCasa, listarComandos, desfazerJogada, visualizarHistorico,           
-                           verifica, ajuda, ajudaRep, resolveJogo, mostrarSolucao, NULL};
+    // Lista de comandos do jogo
+    COMANDO comandos [] = {sair, ler, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, NULL};
 
 
 
-    // Inicializa o estado do jogo
-    ESTADO estado;
-    estado.looping = true;
-    iniciarTabuleiro (&estado, 1);
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    if (I == NULL) return 1;
 
 
 
-    // Mantém o jogo a correr até ser usado o comando 's'
-    while (estado.looping) {
-        
+    // Corre o jogo
+    while (I -> aCorrer) {
         printf ("> ");
 
         char line [LINE_SIZE] = {0};
@@ -31,7 +25,7 @@ int main () {
         // Recebe o input
         if (fgets (line, LINE_SIZE, stdin) != NULL)
             assert (line [strlen (line) - 1] == '\n');
-        else estado.looping = false;
+        else I -> aCorrer = false;
 
 
 
@@ -52,19 +46,21 @@ int main () {
         // Verifica se algum dos comandos foi invocado
         else {
             bool ret = false;
-            int I;
+            int i;
 
-            for (I = 0; !ret && comandos [I] != NULL; I++)
-                ret = comandos [I] (cmd, (num_args == 2) ? arg : NULL, &estado);
+            for (i = 0; !ret && comandos [i] != NULL; i++)
+                ret = comandos [i] (cmd, (num_args == 2) ? arg : NULL, I);
 
-            if (cmd != 'X' && comandos [I] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
+            if (cmd != 'g' && comandos [i] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
         }
     }
 
 
 
-    // Liberta a memória alocada
-    if (estado.info != NULL) libertaTabuleiro (estado.info, 1);
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+
+
 
     return 0;
 }
