@@ -4,7 +4,8 @@
 int main () {
 
     // Lista de comandos do jogo
-    COMANDO comandos [] = {sair, ler, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, NULL};
+    COMANDO comandos [] = {sair, ler, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
+                           verifica, ajuda, ajudaRep, resolveJogo, imprimeNJogadas, desfazerJogada, mostrarSolucao, NULL};
 
 
 
@@ -51,7 +52,7 @@ int main () {
             for (i = 0; !ret && comandos [i] != NULL; i++)
                 ret = comandos [i] (cmd, (num_args == 2) ? arg : NULL, I);
 
-            if (cmd != 'g' && comandos [i] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
+            if (cmd != 'X' && comandos [i] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
         }
     }
 

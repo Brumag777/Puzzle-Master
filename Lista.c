@@ -22,7 +22,8 @@ void remJogada (Info I) {
     LJogadas aRemover = I -> HJogadas;
     I -> HJogadas = I -> HJogadas -> JAnt;
 
-    libertaJogadas (aRemover -> Jogadas, I -> HJogadas -> nAlts);
+    libertaJogadas (aRemover -> Jogadas, aRemover -> nAlts);
+    
     free (aRemover);
 
     I -> nTabuleiro--;

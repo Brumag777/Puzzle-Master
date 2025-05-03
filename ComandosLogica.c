@@ -132,6 +132,47 @@ int logicaRiscarCasa (char *coordenada, Info I) {
 
 
 
+// Função que realiza a lógica do comando 'd' (desfazerJogada)
+int logicaDesfazerJogada (char *nTab, Info I) {
+
+    // Verifica se existem tabuleiros anteriores
+    if (I -> nTabuleiro == 1) return 1;
+
+    // Índice do tabuleiro para o qual o jogador pretende retornar
+    int q;
+
+    // Verifica se o jogador pretende desfazer múltiplas jogadas
+    if (nTab == NULL) q = I -> nTabuleiro - 1;
+
+    // Caso em que o jogador pretende desfazer múltiplas jogadas
+    else {
+        // Desfaz as últimas jogadas até ao tabuleiro q
+        q = atoi (nTab);
+
+        // Verifica se o argumento é um número natural
+        if (q < 1) return 2;
+
+        // Verifica se o argumento não é igual ao tabuleiro atual
+        if (q == I -> nTabuleiro) return 3;
+
+        // Verifica se o tabuleiro desejado existe
+        if (q > I -> nTabuleiro) return 4;
+    }
+
+    // Desfaz as últimas jogadas até ao tabuleiro anterior ao desejado
+    while (I -> nTabuleiro > q) {
+        realizaAlteracoesJogada (I -> Tabuleiro, I -> HJogadas -> Jogadas, I -> HJogadas -> nAlts);
+        remJogada (I);
+    }
+
+    // Conta uma jogada
+    I -> nJogadas++;
+
+    return 0;
+}
+
+
+
 // Função que realiza a lógica do comando 'V' (vizualizarHistorico)
 int logicaVizualizarHistorico (char *nTab, Info I) {
 
@@ -155,7 +196,184 @@ int logicaVizualizarHistorico (char *nTab, Info I) {
 
 
 
-// Função que realiza a lógia do comando 'h' (listarComandos)
+// Função que realiza a lógica do comando 'v' (verifica)
+int logicaVerifica (char *arg, Info I) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return -1;
+
+    putchar ('\n');
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+
+    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+    if (!verificaInfracoes (I, 1)) validade = 0;
+
+    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+    if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
+
+    return validade;
+}
+
+
+
+// Função que realiza a lógica do comando 'a' (ajuda)
+int logicaAjuda (char *arg, Info I) {
+
+    // Indica qual das versões do comando foi invocada
+    int versaoComando = 0;
+
+    // Verifica qual é o argumento
+    if (arg == NULL) versaoComando = 1;
+    else if (strcmp (arg, "b") == 0) versaoComando = 2;
+    else if (strcmp (arg, "r") == 0) versaoComando = 3;
+    else if (strcmp (arg, "o") == 0) versaoComando = 4;
+
+    // Executa a lógica da função
+    if (versaoComando) {
+
+        // Verifica se o tabuleiro atual não possui infrações
+        int validade = 1;
+
+        // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+        if (!verificaInfracoes (I, 0)) validade = 0;
+
+        // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+        if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
+
+        // O tabuleiro não possui infrações
+        if (validade) {
+
+            // Armazena o tabuleiro atual e o número de jogadas
+            char TPreAlteracoes [I -> dL][I -> dC + 2];
+            int nJogadasAnterior = I -> nJogadas;
+            
+            // Copia o tabuleiro atual
+            for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
+
+            // Comando foi invocado como 'a'
+            if (versaoComando == 1) {
+                if (ajudaUmaVez (I) == 0) return 2;
+            }
+
+            // Comando foi invocado como 'a b'
+            else if (versaoComando == 2) {
+                if (pintaCasas (I) == 0) return 2;
+            }
+
+            // Comando foi invocado como 'a r'
+            else if (versaoComando == 3) {
+                if (riscaCasas (I) == 0) return 2;
+            }
+
+            // Comando foi invocado como 'a o'
+            else if (testaPossibilidadesCasa (I) == 0) return 2;
+
+            // Adiciona a jogada ao histórico
+            adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+        }
+
+        // Avisa que o tabuleiro possui infrações
+        else return 3;
+    }
+
+    // Avisa que o argumento é inválido
+    else return 1;
+
+    return 0;
+}
+
+
+
+// Função que realiza a lógica do comando 'A' (ajudaRep)
+int logicaAjudaRep (char *arg, Info I) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Verifica se o tabuleiro atual não possui infrações
+    int validade = 1;
+
+    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
+    if (!verificaInfracoes (I, 0)) validade = 0;
+
+    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
+    if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
+
+    // Avisa que o tabuleiro possui infrações
+    if (validade == 0) return 3;
+
+    // Armazena o tabuleiro atual e o número de jogadas
+    char TPreAlteracoes [I -> dL][I -> dC + 2];
+    int nJogadasAnterior = I -> nJogadas;
+            
+    // Copia o tabuleiro atual
+    for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
+
+    // Realiza as alterações necessárias
+    if (ajudaUmaVez (I) == 0) return 2;
+
+    // Repete o processo até não haver nada a alterar
+    while (ajudaUmaVez (I));
+
+    // Adiciona a jogada ao histórico
+    adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+
+    return 0;
+}
+
+
+
+// Função que realiza a lógica dos comandos 'R' e 'X'
+int logicaResolveJogo (char *arg, Info I, int flag) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Verifica se existe um jogo para resolver
+    if (I -> nTabuleiro == 0) return 2;
+
+    // Armazena o tabuleiro atual e o número de jogadas
+    char TPreAlteracoes [I -> dL][I -> dC + 2];
+    int nJogadasAnterior = I -> nJogadas;
+
+    // Copia o tabuleiro atual
+    for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
+
+    // Resolve o jogo (se possível)
+    if (!resolve (I, I -> dL, I -> dC, TPreAlteracoes)) return 3;
+
+    // Foi invocado o comando 'R'
+    if (flag) adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+
+    // Foi invocado o comando 'X'
+    else {
+        imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, 0, 1);
+        for (int i = 0; i < I -> dL; i++) strcpy (I -> Tabuleiro [i], TPreAlteracoes [i]);
+    }
+
+    // Foi possível resolver o jogo
+    return 0;
+}
+
+
+
+// Função que realiza a lógica do comando 'j' (imprimeNJogadas)
+int logicaImprimeNJogadas (char *arg, Info I) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Verifica se já foi lido um tabuleiro
+    if (I -> nTabuleiro == 0) return 2;
+
+    return 0;
+}
+
+
+
+// Função que realiza a lógica do comando 'h' (listarComandos)
 int logicaListarComandos (char *arg, Info I) {
 
     // Para evitar warnings
