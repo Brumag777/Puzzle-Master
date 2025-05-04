@@ -2,6 +2,7 @@
 
 // Guarda a informação do jogo num ficheiro
 void guardaInfo (FILE *Jogo, Info I) {
+    
     // Guarda o número do tabuleiro e de jogadas
     fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
     
@@ -134,7 +135,7 @@ int leLinhaJogadas (FILE *Jogo, Info I) {
 
 // Lê o tabuleiro de um ficheiro
 int leTabuleiro (FILE *Jogo) {
-    
+
     // Lê o número do tabuleiro e de jogadas
     int nTab, nJ;
     if (fscanf (Jogo, "%d %d", &nTab, &nJ) != 2) return 3;
