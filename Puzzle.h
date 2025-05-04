@@ -147,7 +147,7 @@ int logicaListarInfo (char *arg);
 
 
 
-// Funções auxiliares à lógica dos comandos - ComandosLogicaAuxiliares.c
+// Funções auxiliares à lógica dos comandos - ComandosLogicaA.c
 
 // Guarda o tabuleiro num ficheiro
 void guardaInfo (FILE *Jogo, Info I);
@@ -160,6 +160,9 @@ int leFicheiro (FILE *Jogo, Info I);
 
 // Lê a informação de uma linha de jogadas
 int leLinhaJogadas (FILE *Jogo, Info I);
+
+// Lê o tabuleiro de um ficheiro
+int leTabuleiro (FILE *Jogo);
 
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
 int verificaInfracoes (Info I, int flag);

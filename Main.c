@@ -8,33 +8,22 @@ int main () {
                            verifica, ajuda, ajudaRep, resolveJogo, imprimeNJogadas, desfazerJogada, apagaHistorico,
                            explicaJogo, mostrarSolucao, NULL};
 
-
-
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
-    if (I == NULL) return 1;
-
-
 
     // Mensagem inicial
     printf ("Bem vindo ao Puzzle Master. Pressione 'h' para ver a lista de comandos.\n");
 
-
-
     // Corre o jogo
     while (I -> aCorrer) {
+
+        // Indica ao usuário que deve usar um comando
         printf ("> ");
 
-        char line [LINE_SIZE] = {0};
-        
-
-
         // Recebe o input
-        if (fgets (line, LINE_SIZE, stdin) != NULL)
-            assert (line [strlen (line) - 1] == '\n');
+        char line [LINE_SIZE] = {0};
+        if (fgets (line, LINE_SIZE, stdin)) assert (line [strlen (line) - 1] == '\n');
         else I -> aCorrer = false;
-
-
 
         // Armazena o input
         char cmd = 0;
@@ -42,32 +31,20 @@ int main () {
         char resto [LINE_SIZE];
         int num_args = sscanf (line, "%c %s %[^\n]", &cmd, arg, resto);
 
-
-
         // Verifica se o número de argumentos é válido (0 ou 1)
-        if (num_args > 2)
-            fprintf (stderr, "\nErro: Comando %c foi invocado com argumentos extra: %s.\n\n", cmd, resto);
-            
-
+        if (num_args > 2) fprintf (stderr, "\nErro: Comando inválido.\n\n");
 
         // Verifica se algum dos comandos foi invocado
-        else {
-            bool ret = false;
-            int i;
-
-            for (i = 0; !ret && comandos [i] != NULL; i++)
-                ret = comandos [i] (cmd, (num_args == 2) ? arg : NULL, I);
-
-            if (cmd != 'X' && comandos [i] == NULL) fprintf (stderr, "\nErro: Comando inválido.\n\n");
-        }
+        else for (int i = 0, flag = 0; flag == 0; i++)
+                if (i > 16) {
+                    fprintf (stderr, "\nErro: Comando inváldio.\n\n");
+                    flag = 1;
+                }
+                else flag = comandos [i] (cmd, (num_args == 2) ? arg : NULL, I);
     }
-
-
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
-
-
 
     return 0;
 }

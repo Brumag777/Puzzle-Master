@@ -262,9 +262,8 @@ bool verifica (char cmd, char *arg, Info I) {
         int n = logicaVerifica (arg, I);
 
         // Casos de sucesso da função
-        if (n == 0) putchar ('\n');
-        if (n == 1) {
-            printf ("Não há nenhuma infração.\n");
+        if (n >= 0) {
+            if (n) printf ("Não há nenhuma infração.\n");
             putchar ('\n');
         }
 
@@ -467,6 +466,7 @@ bool listarComandos (char cmd, char *arg, Info I) {
             printf ("\nOs comandos do jogo são:\n"
                     "g <ficheiro>: Grava o tabuleiro num ficheiro.\n"
                     "l <ficheiro>: Lê um tabuleiro de um ficheiro.\n"
+                    "p <ficheiro>: Revela o tabuleiro armazenado num ficheiro.\n"
                     "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
                     "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
                     "v: Verifica se existem infrações na posição atual.\n"

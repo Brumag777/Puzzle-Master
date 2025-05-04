@@ -1,17 +1,17 @@
-CC      = gcc
-CFLAGS  = -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
+CC         = gcc
+CFLAGS     = -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
 COV_CFLAGS = -Wall -Wextra -pedantic -O1 -fprofile-arcs -ftest-coverage -g
 
-GAME_SRC    = Main.c MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c
+GAME_SRC = Main.c MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c
 
-TESTAUX_SRC       = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
-TESTCLAUX_SRC     = TComandosLogicaAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
-TESTLOGICA_SRC    = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
-TESTLISTA_SRC     = TLista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
+TESTAUX_SRC    = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
+TESTCLAUX_SRC  = TComandosLogicaA.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
+TESTLOGICA_SRC = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
+TESTLISTA_SRC  = TLista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
 
-EXEC            = PuzzleMaster
+EXEC = PuzzleMaster
 
-.PHONY: all Jogo Testes TAuxiliares TComandosLogicaAuxiliares TComandosLogica coverage clean
+.PHONY: all Jogo Testes TAuxiliares TComandosLogicaA TComandosLogica coverage clean
 
 all: Jogo
 
@@ -23,8 +23,8 @@ TAuxiliares: $(TESTAUX_SRC)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTAUX_SRC)
 	./$@
 
-TComandosLogicaAuxiliares: LDFLAGS += -lcunit
-TComandosLogicaAuxiliares: $(TESTCLAUX_SRC)
+TComandosLogicaA: LDFLAGS += -lcunit
+TComandosLogicaA: $(TESTCLAUX_SRC)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTCLAUX_SRC)
 	./$@
 
@@ -40,4 +40,4 @@ TLista: $(TESTLISTA_SRC)
 
 clean:
 	rm -f *.o *.gcda *.gcno *.gcov \
-	       $(EXEC) TAuxiliares TComandosLogicaAuxiliares TComandosLogica TLista
+	       $(EXEC) TAuxiliares TComandosLogicaA TComandosLogica TLista
