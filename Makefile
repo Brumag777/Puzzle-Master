@@ -8,7 +8,7 @@ TESTAUX_SRC       = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c Coman
 TESTCLAUX_SRC     = TComandosLogicaAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
 TESTLOGICA_SRC    = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Stack.c
 
-EXEC            = Jogo
+EXEC            = PuzzleMaster
 
 .PHONY: all Jogo Testes TAuxiliares TComandosLogicaAuxiliares TComandosLogica coverage clean
 

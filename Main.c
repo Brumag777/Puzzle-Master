@@ -16,6 +16,11 @@ int main () {
 
 
 
+    // Mensagem inicial
+    printf ("\nBem vindo ao Puzzle Master. Pressione 'h' para ver a lista de comandos.\n\n");
+
+
+
     // Corre o jogo
     while (I -> aCorrer) {
         printf ("> ");
