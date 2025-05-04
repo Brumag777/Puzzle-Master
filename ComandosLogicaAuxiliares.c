@@ -65,7 +65,7 @@ int leFicheiro (FILE *Jogo, Info I) {
     for (int i = 0; i < I -> dL; i++) if (fscanf (Jogo, "%s", I -> Tabuleiro [i]) != 1) return 3;
 
     // Verifica se o tabuleiro é válido
-    if (!tabuleiroValido (I)) {
+    if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) {
         libertaTabuleiro (I);
         return 4;
     }

@@ -39,7 +39,7 @@ bool ler (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Imprime o tabuleiro atualizado
-            imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Avisa que o ficheiro foi fido com sucesso
             fprintf (stderr, "Tabuleiro lido com sucesso.\n\n");
@@ -59,6 +59,37 @@ bool ler (char cmd, char *arg, Info I) {
 
         // Avisa se as alterações do ficheiro lido são inválidas
         else if (n == 5) fprintf (stderr, "\nErro: As alterações são inválidas.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Revela o tabuleiro armazenado num ficheiro
+bool preview (char cmd, char *arg, Info I) {
+
+    // Para evitar warnings
+    (void) I;
+
+    if (cmd == 'p') {
+
+        // Realiza a lógica da comando 'p'
+        int n = logicaPreview (arg);
+
+        // Avisa se não foi dado um argumento
+        if (n == 1) fprintf (stderr, "\nErro: O comando p precisa de um argumento (nome do ficheiro).\n\n");
+
+        // Avisa se o ficheiro não foi aberto corretamente
+        else if (n == 2) fprintf (stderr, "\nErro: Não foi possível abrir o ficheiro.\n\n");
+
+        // Avisa se houve erros a ler o ficheiro
+        else if (n == 3) fprintf (stderr, "\nErro: Não foi possível ler o ficheiro.\n\n");
+
+        // Avisa se o tabuleiro do ficheiro lido é inválido
+        else if (n == 4) fprintf (stderr, "\nErro: O tabuleiro não é válido.\n\n");
 
         return true;
     }
@@ -97,7 +128,7 @@ bool pintarCasa (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Imprime o tabuleiro atualizado
-            imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
             if (testeJogo (I)) printf ("Parabéns! Conseguiste resolver o puzzle em %d jogadas.\n\n", I -> nJogadas);
@@ -134,7 +165,7 @@ bool riscarCasa (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Imprime o tabuleiro atualizado
-            imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
             if (testeJogo (I)) printf ("Parabéns! Conseguiste resolver o puzzle em %d jogadas.\n\n", I -> nJogadas);
@@ -169,7 +200,7 @@ bool desfazerJogada (char cmd, char *arg, Info I) {
         int n = logicaDesfazerJogada (arg, I);
 
         // Caso de sucesso da função
-        if (n == 0) imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+        if (n == 0) imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
         // Avisa se não há um tabuleiro anterior
         else if (n == 1) fprintf (stderr, "\nErro: Não existem tabuleiros para desfazer.\n\n");
@@ -259,7 +290,7 @@ bool ajuda (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Imprime o tabuleiro resultante
-            imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
             if (testeJogo (I)) printf ("Parabéns! Conseguiste resolver o puzzle em %d jogadas.\n\n", I -> nJogadas);
@@ -293,7 +324,7 @@ bool ajudaRep (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Imprime o tabuleiro resultante
-            imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
             if (testeJogo (I)) printf ("Parabéns! Conseguiste resolver o puzzle em %d jogadas.\n\n", I -> nJogadas);
@@ -325,7 +356,7 @@ bool resolveJogo (char cmd, char *arg, Info I) {
         int n = logicaResolveJogo (arg, I, 1);
 
         // Caso de sucesso da função
-        if (n == 0) imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 1);
+        if (n == 0) imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
         // Avisa se foi dado um argumento
         else if (n == 1) fprintf (stderr, "\nErro: O comando R não precisa de um argumento.\n\n");
@@ -403,7 +434,7 @@ bool listarComandos (char cmd, char *arg, Info I) {
     if (cmd == 'h') {
 
         // Realiza a lógica do comando 'h'
-        int n = logicaListarComandos (arg, I);
+        int n = logicaListarComandos (arg);
 
         // Caso de sucesso da função
         if (n == 0) {

@@ -44,6 +44,67 @@ int logicaLer (char *nomeFicheiro, Info I) {
 
 
 
+// Função que realiza a lógica do comando 'p' (preview)
+int logicaPreview (char *nomeFicheiro) {
+
+    // Verifica se foi recebido um argumento
+    if (nomeFicheiro == NULL) return 1;
+
+    // Abre o ficheiro a ler
+    FILE *Jogo = fopen (nomeFicheiro, "r");
+
+    // Verifica se o ficheiro foi lido com sucesso
+    if (Jogo == NULL) return 2;
+
+    // Lê o número do tabuleiro e de jogadas
+    int nTab, nJ;
+    if (fscanf (Jogo, "%d %d", &nTab, &nJ) != 2) return 3;
+
+    // Lê o número de linhas e de colunas do tabuleiro
+    int l, c;
+    if (fscanf (Jogo, "%d %d", &l, &c) != 2) return 3;
+
+    // Lê o tabuleiro do ficheiro
+    char **Tab = malloc (l * sizeof (char *));
+    for (int i = 0; i < l; i++) {
+        Tab [i] = malloc ((c + 2) * sizeof (char));
+        if (fscanf (Jogo, "%s", Tab [i]) != 1) {
+            if (Tab != NULL) {
+                for (int j = 0; j <= i; j++) if (Tab [j] != NULL) free (Tab [j]);
+                free (Tab);
+            }
+            return 3;
+        }
+    }
+
+    // Verifica se o tabuleiro é válido
+    if (!tabuleiroValido (l, c, Tab)) {
+        if (Tab != NULL) {
+            for (int j = 0; j < l; j++) if (Tab [j] != NULL) free (Tab [j]);
+            free (Tab);
+        }
+        return 4;
+    }
+
+    // Imprime o tabuleiro do ficheiro
+    imprimeTabuleiro (l, c, Tab, nTab, 1);
+
+    // Indica o número de jogadas
+    if (nJ == 1) printf ("Esta posição foi alcançada com %d jogada.\n\n", nJ);
+    else if (nJ) printf ("Esta posição foi alcançada com %d jogadas.\n\n", nJ);
+    else printf ("Esta é a posição inicial.\n\n");
+
+    // Liberta a memória alocada
+    if (Tab != NULL) {
+        for (int j = 0; j < l; j++) if (Tab [j] != NULL) free (Tab [j]);
+        free (Tab);
+    }
+    
+    return 0;
+}
+
+
+
 // Função que realiza a lógica do comando 's' (sair)
 int logicaSair (char *arg, Info I) {
 
@@ -136,7 +197,7 @@ int logicaRiscarCasa (char *coordenada, Info I) {
 int logicaDesfazerJogada (char *nTab, Info I) {
 
     // Verifica se existem tabuleiros anteriores
-    if (I -> nTabuleiro == 1) return 1;
+    if (I -> nTabuleiro == 0 || I -> nTabuleiro == 1) return 1;
 
     // Índice do tabuleiro para o qual o jogador pretende retornar
     int q;
@@ -349,7 +410,7 @@ int logicaResolveJogo (char *arg, Info I, int flag) {
 
     // Foi invocado o comando 'X'
     else {
-        imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, 0, 1);
+        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, 0, 1);
         for (int i = 0; i < I -> dL; i++) strcpy (I -> Tabuleiro [i], TPreAlteracoes [i]);
     }
 
@@ -374,10 +435,7 @@ int logicaImprimeNJogadas (char *arg, Info I) {
 
 
 // Função que realiza a lógica do comando 'h' (listarComandos)
-int logicaListarComandos (char *arg, Info I) {
-
-    // Para evitar warnings
-    (void) I;
+int logicaListarComandos (char *arg) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;

@@ -46,6 +46,9 @@ bool gravar (char cmd, char *arg, Info I);
 // Lê um ficheiro
 bool ler (char cmd, char *arg, Info I);
 
+// Revela o tabuleiro armazenado num ficheiro
+bool preview (char cmd, char *arg, Info I);
+
 // Termina o jogo
 bool sair (char cmd, char *arg, Info I);
 
@@ -94,6 +97,9 @@ int logicaGravar (char *nomeFicheiro, Info I);
 // Função que realiza a lógica do comando 'l' (ler)
 int logicaLer (char *nomeFicheiro, Info I);
 
+// Função que realiza a lógica do comando 'p' (preview)
+int logicaPreview (char *nomeFicheiro);
+
 // Função que realiza a lógica do comando 's' (sair)
 int logicaSair (char *arg, Info I);
 
@@ -125,7 +131,7 @@ int logicaResolveJogo (char *arg, Info I, int flag);
 int logicaImprimeNJogadas (char *arg, Info I);
 
 // Função que realiza a lógia do comando 'h' (listarComandos)
-int logicaListarComandos (char *arg, Info I);
+int logicaListarComandos (char *arg);
 
 
 
@@ -167,7 +173,7 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
 void visualizaUltimosTabuleiros (Info I, int nTabs, int flag);
 
 // Imprime um tabuleiro
-void imprimeTabuleiro (char **Tabuleiro, int dL, int dC, int nTabuleiro, int flag);
+void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
 
 // Forma uma jogada
 void formaJogada (Jogada *JNova, int linha, char coluna, char c);
@@ -185,7 +191,7 @@ int eMinuscula (char c);
 int coordenadaValida (int l, char c, int linhas, int colunas);
 
 // Verifica se um tabuleiro é válido
-int tabuleiroValido (Info I);
+int tabuleiroValido (int dL, int dC, char **Tabuleiro);
 
 // Verifica se as jogadas são válidas
 int jogadasValidas (Info I);

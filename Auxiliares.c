@@ -7,7 +7,7 @@ void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
         else printf ("\nOs últimos %d tabuleiros são:\n", nTabs);
     }
 
-    if (nTabs == 1) imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 0);
+    if (nTabs == 1) imprimeTabuleiro (I -> dL, I -> dL, I -> Tabuleiro, I -> nTabuleiro, 0);
 
     else {
         // Armazena a lista original
@@ -39,7 +39,7 @@ void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
         I -> HJogadas = Atual;
 
         // Visualiza o tabuleiro atual
-        imprimeTabuleiro (I -> Tabuleiro, I -> dL, I -> dC, I -> nTabuleiro, 0);
+        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
         // Liberta a memória alocada para a reserva
         libertaJogadas (Reserva, Atual -> nAlts);
@@ -49,7 +49,7 @@ void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
 
 
 // Imprime um tabuleiro
-void imprimeTabuleiro (char **Tabuleiro, int dL, int dC, int nTabuleiro, int flag) {
+void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag) {
 
     // Imprime o número do tabuleiro (ou 'S' caso seja a solução do jogo)
     if (nTabuleiro) {
@@ -130,20 +130,23 @@ int coordenadaValida (int l, char c, int linhas, int colunas) {
 
 
 // Verifica se um tabuleiro é válido
-int tabuleiroValido (Info I) {
+int tabuleiroValido (int dL, int dC, char **Tabuleiro) {
 
     // Verifica se o tabuleiro não é nulo
-    if (I -> Tabuleiro == NULL) return 0;
+    if (Tabuleiro == NULL) return 0;
 
-    // Verifica se todas as casas do tabuleiro possuem caracteres válidos
-    for (int i = 0; i < I -> dL; i++) {
-        for (int j = 0; j < I -> dC; j++) {
-            char c = I -> Tabuleiro [i][j];
+    // Percorre o tabuleiro para verificar a sua validade
+    for (int i = 0; i < dL; i++) {
+
+        // Verifica se todas as casas do tabuleiro possuem caracteres válidos
+        for (int j = 0; j < dC; j++) {
+            char c = Tabuleiro [i][j];
             if (!(eMinuscula (c) || eMaiuscula (c) || c == '#')) return 0;
         }
 
-        int t = strlen (I -> Tabuleiro [i]);
-        if (t != I -> dC) return 0;
+        // Verifica se a linha possui o número correto de colunas
+        int t = strlen (Tabuleiro [i]);
+        if (t != dC) return 0;
     }
 
     // O tabuleiro é válido
