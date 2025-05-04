@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "CUnit/Basic.h"
 
 #define LINE_SIZE 1024
 
