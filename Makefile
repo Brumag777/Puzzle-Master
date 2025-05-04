@@ -7,6 +7,7 @@ GAME_SRC    = Main.c MemoryManagement.c Lista.c Auxiliares.c Comandos.c Comandos
 TESTAUX_SRC       = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
 TESTCLAUX_SRC     = TComandosLogicaAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
 TESTLOGICA_SRC    = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
+TESTLISTA_SRC     = TLista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaAuxiliares.c Lista.c MemoryManagement.c
 
 EXEC            = PuzzleMaster
 
@@ -32,25 +33,11 @@ TComandosLogica: $(TESTLOGICA_SRC)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTLOGICA_SRC)
 	./$@
 
-TAuxiliares-cov: LDFLAGS += -lcunit
-TAuxiliares-cov: $(TESTAUX_SRC)
-	$(CC) $(COV_CFLAGS) -o $@ $(TESTAUX_SRC) $(LDFLAGS)
-
-TComandosLogicaAuxiliares-cov: LDFLAGS += -lcunit
-TComandosLogicaAuxiliares-cov: $(TESTCLAUX_SRC)
-	$(CC) $(COV_CFLAGS) -o $@ $(TESTCLAUX_SRC) $(LDFLAGS)
-
-TComandosLogica-cov: LDFLAGS += -lcunit
-TComandosLogica-cov: $(TESTLOGICA_SRC)
-	$(CC) $(COV_CFLAGS) -o $@ $(TESTLOGICA_SRC) $(LDFLAGS)
-
-coverage: TAuxiliares-cov TComandosLogicaAuxiliares-cov TComandosLogica-cov
-	./TAuxiliares-cov
-	./TComandosLogicaAuxiliares-cov
-	./TComandosLogica-cov
-	gcov -b Auxiliares.c ComandosLogicaAuxiliares.c ComandosLogica.c
+TLista: LDFLAGS += -lcunit
+TLista: $(TESTLISTA_SRC)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTLISTA_SRC)
+	./$@
 
 clean:
 	rm -f *.o *.gcda *.gcno *.gcov \
-	       $(EXEC) TAuxiliares TComandosLogicaAuxiliares TComandosLogica \
-	       TAuxiliares-cov TComandosLogicaAuxiliares-cov TComandosLogica-cov
+	       $(EXEC) TAuxiliares TComandosLogicaAuxiliares TComandosLogica TLista
