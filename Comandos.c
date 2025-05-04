@@ -403,6 +403,31 @@ bool mostrarSolucao (char cmd, char *arg, Info I) {
 
 
 
+// Apaga o histoŕico de jogadas
+bool apagaHistorico (char cmd, char *arg, Info I) {
+
+    if (cmd == 'D') {
+
+        // Realiza a lógica do comando 'D'
+        int n = logicaApagaHistorico (arg, I);
+
+        // Caso de sucesso da função
+        if (n == 0) printf ("\nO histórico foi apagado.\n\n");
+
+        // Avisa se foi dado um argumento
+        else if (n == 1) fprintf (stderr, "\nErro: O comando D não precisa de um argumento.\n\n");
+
+        // Avisa se não há nada do histórico
+        else if (n == 2) fprintf (stderr, "\nErro: O histórico já está vazio.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
 // Mostra o número de jogadas atual
 bool imprimeNJogadas (char cmd, char *arg, Info I) {
 
@@ -414,7 +439,7 @@ bool imprimeNJogadas (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) printf ("\nO número de jogadas atual é %d.\n\n", I -> nJogadas);
 
-        // Avisa se não foi dado um argumento
+        // Avisa se foi dado um argumento
         else if (n == 1) fprintf (stderr, "\nErro: O comando j não precisa de um argumento.\n\n");
 
         // Avisa se ainda não foi lido um ficheiro
@@ -434,7 +459,7 @@ bool listarComandos (char cmd, char *arg, Info I) {
     if (cmd == 'h') {
 
         // Realiza a lógica do comando 'h'
-        int n = logicaListarComandos (arg);
+        int n = logicaListarInfo (arg);
 
         // Caso de sucesso da função
         if (n == 0) {
@@ -456,6 +481,7 @@ bool listarComandos (char cmd, char *arg, Info I) {
                     "X: Mostra a solução do tabuleiro atual (caso exista).\n"
                     "d: Desfaz a última jogada.\n"
                     "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
+                    "D: Apaga o histórico do jogo.\n"
                     "j: Mostra o número de jogadas atual.\n"
                     "s: Termina o jogo.\n"
                     "h: Lista todos os comandos do jogo.\n\n");
@@ -464,6 +490,34 @@ bool listarComandos (char cmd, char *arg, Info I) {
                 printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", I -> nTabuleiro);
             }
             else printf ("Leia um ficheiro para usar os comandos.\n\n");
+        }
+
+        // Avisa se foi dado um argumento
+        else if (n == 1) fprintf (stderr, "\nErro: O comando h não precisa de um argumento.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Explica o objetivo e as regras do jogo
+bool explicaJogo (char cmd, char *arg, Info I) {
+
+    // Para evitar warnings
+    (void) I;
+
+    if (cmd == 'e') {
+
+        // Realiza a lógica do comando 'e'
+        int n = logicaListarInfo (arg);
+
+        // Caso de sucesso da função
+        if (n == 0) {
+            // Explica o jogo
+            printf ("\nO objetivo do jogo é...\n\n");
         }
 
         // Avisa se foi dado um argumento

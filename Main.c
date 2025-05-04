@@ -5,7 +5,8 @@ int main () {
 
     // Lista de comandos do jogo
     COMANDO comandos [] = {sair, ler, preview, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
-                           verifica, ajuda, ajudaRep, resolveJogo, imprimeNJogadas, desfazerJogada, mostrarSolucao, NULL};
+                           verifica, ajuda, ajudaRep, resolveJogo, imprimeNJogadas, desfazerJogada, apagaHistorico,
+                           explicaJogo, mostrarSolucao, NULL};
 
 
 

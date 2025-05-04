@@ -69,20 +69,14 @@ int logicaPreview (char *nomeFicheiro) {
     for (int i = 0; i < l; i++) {
         Tab [i] = malloc ((c + 2) * sizeof (char));
         if (fscanf (Jogo, "%s", Tab [i]) != 1) {
-            if (Tab != NULL) {
-                for (int j = 0; j <= i; j++) if (Tab [j] != NULL) free (Tab [j]);
-                free (Tab);
-            }
+            libertaTabLocal (i, Tab);
             return 3;
         }
     }
 
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (l, c, Tab)) {
-        if (Tab != NULL) {
-            for (int j = 0; j < l; j++) if (Tab [j] != NULL) free (Tab [j]);
-            free (Tab);
-        }
+        libertaTabLocal (l, Tab);
         return 4;
     }
 
@@ -95,10 +89,7 @@ int logicaPreview (char *nomeFicheiro) {
     else printf ("Esta é a posição inicial.\n\n");
 
     // Liberta a memória alocada
-    if (Tab != NULL) {
-        for (int j = 0; j < l; j++) if (Tab [j] != NULL) free (Tab [j]);
-        free (Tab);
-    }
+    libertaTabLocal (l, Tab);
     
     return 0;
 }
@@ -420,6 +411,23 @@ int logicaResolveJogo (char *arg, Info I, int flag) {
 
 
 
+// Função que realiza a lógica do comando 'D' (apagaHistorico)
+int logicaApagaHistorico (char *arg, Info I) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return 1;
+
+    // Verifica se o histórico não está vazio
+    if (I -> nTabuleiro < 2) return 2;
+
+    // Apaga o histórico
+    while (I -> nTabuleiro > 1) remJogada (I);
+
+    return 0;
+}
+
+
+
 // Função que realiza a lógica do comando 'j' (imprimeNJogadas)
 int logicaImprimeNJogadas (char *arg, Info I) {
 
@@ -434,8 +442,8 @@ int logicaImprimeNJogadas (char *arg, Info I) {
 
 
 
-// Função que realiza a lógica do comando 'h' (listarComandos)
-int logicaListarComandos (char *arg) {
+// Função que realiza a lógica dos comandos 'h' (listarComandos) e 'e' (explicaJogo)
+int logicaListarInfo (char *arg) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;

@@ -86,3 +86,14 @@ void libertaJogadas (Jogada *J, int nAlts) {
         free (J);
     }
 }
+
+
+
+// Liberta a memória alocada para um tabuleiro local
+void libertaTabLocal (int dL, char **Tabuleiro) {
+    if (Tabuleiro != NULL) {
+        for (int i = 0; i < dL; i++) if (Tabuleiro [i] != NULL) free (Tabuleiro [i]);
+
+        free (Tabuleiro);
+    }
+}

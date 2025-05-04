@@ -76,14 +76,20 @@ bool ajudaRep (char cmd, char *arg, Info I);
 // Resolve o jogo automaticamente
 bool resolveJogo (char cmd, char *arg, Info I);
 
+// Mostra a solução do jogo (caso exista)
+bool mostrarSolucao (char cmd, char *arg, Info I);
+
+// Apaga o histoŕico de jogadas
+bool apagaHistorico (char cmd, char *arg, Info I);
+
 // Mostra o número de jogadas atual
 bool imprimeNJogadas (char cmd, char *arg, Info I);
 
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char *arg, Info I);
 
-// Mostra a solução do jogo (caso exista)
-bool mostrarSolucao (char cmd, char *arg, Info I);
+// Explica o objetivo e as regras do jogo
+bool explicaJogo (char cmd, char *arg, Info I);
 
 
 
@@ -127,11 +133,14 @@ int logicaAjudaRep (char *arg, Info I);
 // Função que realiza a lógica do comando 'R'
 int logicaResolveJogo (char *arg, Info I, int flag);
 
+// Função que realiza a lógica do comando 'D' (apagaHistorico)
+int logicaApagaHistorico (char *arg, Info I);
+
 // Função que realiza a lógica do comando 'j' (imprimeNJogadas)
 int logicaImprimeNJogadas (char *arg, Info I);
 
-// Função que realiza a lógia do comando 'h' (listarComandos)
-int logicaListarComandos (char *arg);
+// Função que realiza a lógica dos comandos 'h' (listarComandos) e 'e' (explicaJogo)
+int logicaListarInfo (char *arg);
 
 
 
@@ -261,6 +270,9 @@ void libertaLJogadas (Info I);
 
 // Liberta a memória alocada para um array de jogadas
 void libertaJogadas (Jogada *J, int nJogadas);
+
+// Liberta a memória alocada para um tabuleiro local
+void libertaTabLocal (int dL, char **Tabuleiro);
 
 
 
