@@ -1,5 +1,61 @@
 #include "Puzzle.h"
 
+// Testa a função 'visualizaUltimosTabuleiros'
+void teste_visualizaUltimosTabuleiros () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> eJogo = false;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "EcaDc");
+    strcpy (I -> Tabuleiro [1], "dcD#C");
+    strcpy (I -> Tabuleiro [2], "bdfCe");
+
+    // Aloca memória para os arrays de alterações
+    Jogada *J1 = malloc (sizeof (JOGADA));
+    Jogada *J2 = malloc (sizeof (JOGADA));
+    Jogada *J3 = malloc (4 * (sizeof (JOGADA)));
+
+    // Inicializa J1
+    formaJogada (&J1 [0], 1, 'a', 'e');
+
+    // Inicializa J2
+    formaJogada (&J2 [0], 2, 'd', 'e');
+
+    // Inicializa J3
+    formaJogada (&J3 [0], 1, 'd', 'd');
+    formaJogada (&J3 [1], 2, 'c', 'd');
+    formaJogada (&J3 [2], 2, 'e', 'c');
+    formaJogada (&J3 [3], 3, 'd', 'c');
+
+    // Adiciona as jogadas ao histórico
+    addJogada (I, J1, 1);
+    addJogada (I, J2, 1);
+    addJogada (I, J3, 4);
+
+    // Testa a função
+    CU_ASSERT_EQUAL (visualizaUltimosTabuleiros (I, 1, 1), 1);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "EcaDc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcD#C"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "bdfCe"), 0);
+    CU_ASSERT_EQUAL (visualizaUltimosTabuleiros (I, 2, 1), 2);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "EcaDc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcD#C"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "bdfCe"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
 // Testa a função 'realizaAlteracoesJogada'
 void teste_realizaAlteracoesJogada () {
 
@@ -321,6 +377,7 @@ void teste_testeJogo () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
+    I -> eJogo = false;
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
@@ -341,6 +398,12 @@ void teste_testeJogo () {
 
     // Testa a função para o tabuleiro atual
     CU_ASSERT_EQUAL (testeJogo (I), 1);
+
+    // Comete uma infração no tabuleiro
+    I -> Tabuleiro [0][0] = '#';
+
+    // Testa a função para o tabuleiro atual
+    CU_ASSERT_EQUAL (testeJogo (I), 0);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -508,6 +571,7 @@ int main () {
 
     CU_pSuite suite = CU_add_suite ("Testes - Auxiliares.c", NULL, NULL);
 
+    CU_add_test (suite, "visualizaUltimosTabuleiros", teste_visualizaUltimosTabuleiros);
     CU_add_test (suite, "realizaAlteracoesJogada", teste_realizaAlteracoesJogada);
     CU_add_test (suite, "formaJogada", teste_formaJogada);
     CU_add_test (suite, "eMaiuscula", teste_eMaiuscula);

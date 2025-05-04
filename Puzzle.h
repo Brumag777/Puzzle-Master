@@ -30,6 +30,7 @@ typedef struct info {
     int dC;
     char **Tabuleiro;
     LJogadas HJogadas;
+    bool eJogo;
 } INFO, *Info;
 
 // Função dos comandos do jogo
@@ -46,9 +47,6 @@ bool gravar (char cmd, char *arg, Info I);
 
 // Lê um ficheiro
 bool ler (char cmd, char *arg, Info I);
-
-// Revela o tabuleiro armazenado num ficheiro
-bool preview (char cmd, char *arg, Info I);
 
 // Termina o jogo
 bool sair (char cmd, char *arg, Info I);
@@ -104,9 +102,6 @@ int logicaGravar (char *nomeFicheiro, Info I);
 // Função que realiza a lógica do comando 'l' (ler)
 int logicaLer (char *nomeFicheiro, Info I);
 
-// Função que realiza a lógica do comando 'p' (preview)
-int logicaPreview (char *nomeFicheiro);
-
 // Função que realiza a lógica do comando 's' (sair)
 int logicaSair (char *arg, Info I);
 
@@ -161,9 +156,6 @@ int leFicheiro (FILE *Jogo, Info I);
 // Lê a informação de uma linha de jogadas
 int leLinhaJogadas (FILE *Jogo, Info I);
 
-// Lê o tabuleiro de um ficheiro
-int leTabuleiro (FILE *Jogo);
-
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
 int verificaInfracoes (Info I, int flag);
 
@@ -171,7 +163,7 @@ int verificaInfracoes (Info I, int flag);
 int verificaCaminhoOrtogonal (Info I, int flag);
 
 // Realiza alterações necessárias na posição atual
-int ajudaUmaVez (Info I);
+int ajudaUmaVez (Info I, int versaoComando);
 
 // Resolve o jogo (se possível)
 int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
@@ -183,7 +175,7 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
 // Funções auxiliares (gerais) - Auxiliares.c
 
 // Imprime os últimos 'nTabs' tabuleiros
-void visualizaUltimosTabuleiros (Info I, int nTabs, int flag);
+int visualizaUltimosTabuleiros (Info I, int nTabs, int flag);
 
 // Imprime um tabuleiro
 void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
@@ -274,9 +266,6 @@ void libertaLJogadas (Info I);
 
 // Liberta a memória alocada para um array de jogadas
 void libertaJogadas (Jogada *J, int nJogadas);
-
-// Liberta a memória alocada para um tabuleiro local
-void libertaTabLocal (int dL, char **Tabuleiro);
 
 
 

@@ -1,13 +1,19 @@
 #include "Puzzle.h"
 
 // Imprime os últimos 'nTabs' tabuleiros
-void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
-    if (flag) {
+int visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
+
+    if (I -> eJogo && flag) {
         if (nTabs == 1) printf ("\nO último tabuleiro é:\n");
         else printf ("\nOs últimos %d tabuleiros são:\n", nTabs);
     }
 
-    if (nTabs == 1) imprimeTabuleiro (I -> dL, I -> dL, I -> Tabuleiro, I -> nTabuleiro, 0);
+    int n;
+
+    if (nTabs == 1) {
+        if (I -> eJogo) imprimeTabuleiro (I -> dL, I -> dL, I -> Tabuleiro, I -> nTabuleiro, 0);
+        return 1;
+    }
 
     else {
         // Armazena a lista original
@@ -31,7 +37,7 @@ void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
         I -> nTabuleiro--;
 
         // Visualiza os tabuleiros anteriores
-        visualizaUltimosTabuleiros (I, nTabs - 1, 0);
+        n = 1 + visualizaUltimosTabuleiros (I, nTabs - 1, 0);
 
         // Retorna ao original
         realizaAlteracoesJogada (I -> Tabuleiro, Reserva, Atual -> nAlts);
@@ -39,11 +45,13 @@ void visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
         I -> HJogadas = Atual;
 
         // Visualiza o tabuleiro atual
-        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
+        if (I -> eJogo) imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
         // Liberta a memória alocada para a reserva
         libertaJogadas (Reserva, Atual -> nAlts);
     }
+
+    return n;
 }
 
 
@@ -200,7 +208,7 @@ int verificaLinhas (Info I, char c, int linha, int coluna, int flag) {
     for (int j = coluna + 1; j < I -> dC; j++)
 
         if (I -> Tabuleiro [linha][j] == c) {
-            if (flag) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo && flag) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -219,7 +227,7 @@ int verificaColunas (Info I, char c, int linha, int coluna, int flag) {
     for (int i = linha + 1; i < I -> dL; i++)
 
         if (I -> Tabuleiro [i][coluna] == c) {
-            if (flag) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            if (I -> eJogo && flag) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -237,14 +245,14 @@ int verificaCasaVazia (Info I, int linha, int coluna, int flag) {
     // Verifica a casa à direita
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (I -> Tabuleiro [linha][coluna + 1] == '#') {
-            if (flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (I -> eJogo && flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
     // Verifica a casa abaixo
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (I -> Tabuleiro [linha + 1][coluna] == '#') {
-            if (flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (I -> eJogo && flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 
@@ -288,7 +296,7 @@ int testeJogo (Info I) {
     // Se não existem infrações, o jogador ganhou
     if (validade) return 1;
 
-    putchar ('\n');
+    if (I -> eJogo) putchar ('\n');
 
     return 0;
 }

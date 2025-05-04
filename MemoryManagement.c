@@ -10,6 +10,7 @@ Info inicializaJogo () {
     I -> dL = I -> dC = 0;
     I -> Tabuleiro = NULL;
     I -> HJogadas = NULL;
+    I -> eJogo = true;
     return I;
 }
 
@@ -84,16 +85,5 @@ void libertaJogadas (Jogada *J, int nAlts) {
             if (J [i] != NULL) free (J [i]);
 
         free (J);
-    }
-}
-
-
-
-// Liberta a memória alocada para um tabuleiro local
-void libertaTabLocal (int dL, char **Tabuleiro) {
-    if (Tabuleiro != NULL) {
-        for (int i = 0; i < dL; i++) if (Tabuleiro [i] != NULL) free (Tabuleiro [i]);
-
-        free (Tabuleiro);
     }
 }

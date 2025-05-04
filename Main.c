@@ -4,7 +4,7 @@
 int main () {
 
     // Lista de comandos do jogo
-    COMANDO comandos [] = {sair, ler, preview, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
+    COMANDO comandos [] = {sair, ler, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
                            verifica, ajuda, ajudaRep, resolveJogo, imprimeNJogadas, desfazerJogada, apagaHistorico,
                            explicaJogo, mostrarSolucao, NULL};
 
@@ -36,7 +36,7 @@ int main () {
 
         // Verifica se algum dos comandos foi invocado
         else for (int i = 0, flag = 0; flag == 0; i++)
-                if (i > 16) {
+                if (i > 15) {
                     fprintf (stderr, "\nErro: Comando inváldio.\n\n");
                     flag = 1;
                 }

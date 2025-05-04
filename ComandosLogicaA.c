@@ -2,7 +2,7 @@
 
 // Guarda a informação do jogo num ficheiro
 void guardaInfo (FILE *Jogo, Info I) {
-    
+
     // Guarda o número do tabuleiro e de jogadas
     fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
     
@@ -133,49 +133,6 @@ int leLinhaJogadas (FILE *Jogo, Info I) {
 
 
 
-// Lê o tabuleiro de um ficheiro
-int leTabuleiro (FILE *Jogo) {
-
-    // Lê o número do tabuleiro e de jogadas
-    int nTab, nJ;
-    if (fscanf (Jogo, "%d %d", &nTab, &nJ) != 2) return 3;
-
-    // Lê o número de linhas e de colunas do tabuleiro
-    int l, c;
-    if (fscanf (Jogo, "%d %d", &l, &c) != 2) return 3;
-
-    // Lê o tabuleiro do ficheiro
-    char **Tab = malloc (l * sizeof (char *));
-    for (int i = 0; i < l; i++) {
-        Tab [i] = malloc ((c + 2) * sizeof (char));
-        if (fscanf (Jogo, "%s", Tab [i]) != 1) {
-            libertaTabLocal (i, Tab);
-            return 3;
-        }
-    }
-
-    // Verifica se o tabuleiro é válido
-    if (!tabuleiroValido (l, c, Tab)) {
-        libertaTabLocal (l, Tab);
-        return 4;
-    }
-
-    // Imprime o tabuleiro do ficheiro
-    imprimeTabuleiro (l, c, Tab, nTab, 1);
-
-    // Indica o número de jogadas
-    if (nJ == 1) printf ("Esta posição foi alcançada com %d jogada.\n\n", nJ);
-    else if (nJ) printf ("Esta posição foi alcançada com %d jogadas.\n\n", nJ);
-    else printf ("Esta é a posição inicial.\n\n");
-
-    // Liberta a memória alocada
-    libertaTabLocal (l, Tab);
-    
-    return 0;
-}
-
-
-
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
 int verificaInfracoes (Info I, int flag) {
 
@@ -227,7 +184,7 @@ int verificaCaminhoOrtogonal (Info I, int flag) {
     // Verifica se o número de letras total é igual ao número de letras ligadas a uma letra do tabuleiro
     if (nLetras == contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) return 1;
 
-    if (flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
+    if (I -> eJogo && flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
 
     return 0;
 }
@@ -235,19 +192,19 @@ int verificaCaminhoOrtogonal (Info I, int flag) {
 
 
 // Realiza alterações necessárias na posição atual
-int ajudaUmaVez (Info I) {
+int ajudaUmaVez (Info I, int versaoComando) {
 
     // Indicador de alterações
     int flag = 0;
 
     // Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
-    if (riscaCasas (I)) flag = 1;
+    if (versaoComando == 1 || versaoComando == 3) if (riscaCasas (I)) flag = 1;
 
     // Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-    if (pintaCasas (I)) flag = 1;
+    if (versaoComando == 1 || versaoComando == 2) if (pintaCasas (I)) flag = 1;
 
     // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
-    if (testaPossibilidadesCasa (I)) flag = 1;
+    if (versaoComando == 1 || versaoComando == 4) if (testaPossibilidadesCasa (I)) flag = 1;
 
     return flag;
 }
@@ -258,7 +215,7 @@ int ajudaUmaVez (Info I) {
 int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]) {
 
     // Realiza todas as jogadas necessárias na posição
-    while (ajudaUmaVez (I));
+    while (ajudaUmaVez (I, 1));
 
     // Inteiro representante da validade do tabuleiro
     int validade = 1;

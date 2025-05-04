@@ -44,24 +44,6 @@ int logicaLer (char *nomeFicheiro, Info I) {
 
 
 
-// Função que realiza a lógica do comando 'p' (preview)
-int logicaPreview (char *nomeFicheiro) {
-
-    // Verifica se foi recebido um argumento
-    if (nomeFicheiro == NULL) return 1;
-
-    // Abre o ficheiro a ler
-    FILE *Jogo = fopen (nomeFicheiro, "r");
-
-    // Verifica se o ficheiro foi lido com sucesso
-    if (Jogo == NULL) return 2;
-
-    // Lê o tabuleiro
-    return leTabuleiro (Jogo);
-}
-
-
-
 // Função que realiza a lógica do comando 's' (sair)
 int logicaSair (char *arg, Info I) {
 
@@ -220,7 +202,7 @@ int logicaVerifica (char *arg, Info I) {
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return -1;
 
-    putchar ('\n');
+    if (I -> eJogo) putchar ('\n');
 
     // Inteiro representante da validade do tabuleiro
     int validade = 1;
@@ -262,34 +244,7 @@ int logicaAjuda (char *arg, Info I) {
 
         // O tabuleiro não possui infrações
         if (validade) {
-
-            // Armazena o tabuleiro atual e o número de jogadas
-            char TPreAlteracoes [I -> dL][I -> dC + 2];
-            int nJogadasAnterior = I -> nJogadas;
-            
-            // Copia o tabuleiro atual
-            for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
-
-            // Comando foi invocado como 'a'
-            if (versaoComando == 1) {
-                if (ajudaUmaVez (I) == 0) return 2;
-            }
-
-            // Comando foi invocado como 'a b'
-            else if (versaoComando == 2) {
-                if (pintaCasas (I) == 0) return 2;
-            }
-
-            // Comando foi invocado como 'a r'
-            else if (versaoComando == 3) {
-                if (riscaCasas (I) == 0) return 2;
-            }
-
-            // Comando foi invocado como 'a o'
-            else if (testaPossibilidadesCasa (I) == 0) return 2;
-
-            // Adiciona a jogada ao histórico
-            adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+            if (!ajudaUmaVez (I, versaoComando)) return 2;
         }
 
         // Avisa que o tabuleiro possui infrações
@@ -330,10 +285,10 @@ int logicaAjudaRep (char *arg, Info I) {
     for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
 
     // Realiza as alterações necessárias
-    if (ajudaUmaVez (I) == 0) return 2;
+    if (ajudaUmaVez (I, 1) == 0) return 2;
 
     // Repete o processo até não haver nada a alterar
-    while (ajudaUmaVez (I));
+    while (ajudaUmaVez (I, 1));
 
     // Adiciona a jogada ao histórico
     adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);

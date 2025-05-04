@@ -68,37 +68,6 @@ bool ler (char cmd, char *arg, Info I) {
 
 
 
-// Revela o tabuleiro armazenado num ficheiro
-bool preview (char cmd, char *arg, Info I) {
-
-    // Para evitar warnings
-    (void) I;
-
-    if (cmd == 'p') {
-
-        // Realiza a lógica da comando 'p'
-        int n = logicaPreview (arg);
-
-        // Avisa se não foi dado um argumento
-        if (n == 1) fprintf (stderr, "\nErro: O comando p precisa de um argumento (nome do ficheiro).\n\n");
-
-        // Avisa se o ficheiro não foi aberto corretamente
-        else if (n == 2) fprintf (stderr, "\nErro: Não foi possível abrir o ficheiro.\n\n");
-
-        // Avisa se houve erros a ler o ficheiro
-        else if (n == 3) fprintf (stderr, "\nErro: Não foi possível ler o ficheiro.\n\n");
-
-        // Avisa se o tabuleiro do ficheiro lido é inválido
-        else if (n == 4) fprintf (stderr, "\nErro: O tabuleiro não é válido.\n\n");
-
-        return true;
-    }
-
-    return false;
-}
-
-
-
 // Termina o jogo
 bool sair (char cmd, char *arg, Info I) {
 
@@ -517,7 +486,7 @@ bool explicaJogo (char cmd, char *arg, Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Explica o jogo
-            printf ("\nO objetivo do jogo é...\n\n");
+            printf ("\nO objetivo do jogo é ganhar. Por outras palavras, não perder.\n\n");
         }
 
         // Avisa se foi dado um argumento

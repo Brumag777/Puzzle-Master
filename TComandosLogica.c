@@ -1,14 +1,23 @@
 #include "Puzzle.h"
 
-// Testa a função 'guardaInfo'
-void teste_guardaInfo () {
-    
+// Testa a função 'logicaGravar'
+void teste_logicaGravar () {
+
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
     I -> dL = 3;
     I -> dC = 5;
-    I -> nTabuleiro = 1;
+    I -> nTabuleiro = 0;
     I -> nJogadas = 6;
+
+    // Testa o caso em que não há nenhum tabuleiro
+    CU_ASSERT_EQUAL (logicaGravar ("JogoParaTestarGravar", I), 2);
+
+    // Testa o caso em que não é dado um argumento
+    CU_ASSERT_EQUAL (logicaGravar (NULL, I), 1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -40,17 +49,11 @@ void teste_guardaInfo () {
     addJogada (I, J2, 1);
     addJogada (I, J3, 4);
 
-    // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarGravar", "w");
-
     // Realiza a função
-    guardaInfo (Jogo, I);
-
-    // Fecha o ficheiro
-    fclose (Jogo);
+    CU_ASSERT_EQUAL (logicaGravar ("JogoParaTestarGravar", I), 0);
 
     // Abre o ficheiro novamente
-    Jogo = fopen ("JogoParaTestarGravar", "r");
+    FILE *Jogo = fopen ("JogoParaTestarGravar", "r");
 
     // Lê o número do tabuleiro e de jogadas
     int nTab, nJ;
@@ -131,17 +134,20 @@ void teste_guardaInfo () {
 
 
 
-// Testa a função 'leFicheiro'
-void teste_leFicheiro () {
+// Testa a função 'logicaLer'
+void teste_logicaLer () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
 
-    // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarLer", "r");
+    // Testa o caso em que o ficheiro é inválido
+    CU_ASSERT_EQUAL (logicaLer ("FICHEIROQUENAOEXITE", I), 2);
+
+    // Testa o caso em que não é dado um argumento
+    CU_ASSERT_EQUAL (logicaLer (NULL, I), 1);
 
     // Realiza a função
-    leFicheiro (Jogo, I);
+    CU_ASSERT_EQUAL (logicaLer ("JogoParaTestarLer", I), 0);
 
     // Testa se foram lidos os valores corretos
     CU_ASSERT_EQUAL (I -> nTabuleiro, 4);
@@ -177,49 +183,20 @@ void teste_leFicheiro () {
 
 
 
-// Testa a função 'verificaInfracoes'
-void teste_verificaInfracoes () {
+// Testa a função 'logicaSair'
+void teste_logicaSair () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
-    I -> dL = 3;
-    I -> dC = 5;
-    I -> nTabuleiro = 1;
 
-    // Aloca memória para o tabuleiro
-    inicializaTabuleiro (I);
+    // Testa o caso em que é dado um argumento
+    CU_ASSERT_EQUAL (logicaSair ("ARGUMENTO", I), 1);
 
-    // Inicializa o tabuleiro
-    strcpy (I -> Tabuleiro [0], "E#cDc");
-    strcpy (I -> Tabuleiro [1], "dcD#C");
-    strcpy (I -> Tabuleiro [2], "bddCe");
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaSair (NULL, I), 0);
 
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaInfracoes (I, 0), 1);
-
-    // Altera o tabuleiro
-    I -> Tabuleiro [1][0] = 'D';
-
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaInfracoes (I, 0), 0);
-
-    // Retorna o tabuleiro ao original
-    I -> Tabuleiro [1][0] = 'd';
-
-    // Altera o tabuleiro
-    I -> Tabuleiro [2][2] = 'D';
-
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaInfracoes (I, 0), 0);
-
-    // Retorna o tabuleiro ao original
-    I -> Tabuleiro [2][2] = 'd';
-
-    // Altera o tabuleiro
-    I -> Tabuleiro [0][2] = '#';
-
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaInfracoes (I, 0), 0);
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (I -> aCorrer, false);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -227,37 +204,45 @@ void teste_verificaInfracoes () {
 
 
 
-// Testa a função 'verificaCaminhoOrtogonal'
-void teste_verificaCaminhoOrtogonal () {
+// Testa a função 'logicaPintarCasa'
+void teste_logicaPintarCasa () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+
+    // Testa o caso em que não é dado um argumento
+    CU_ASSERT_EQUAL (logicaPintarCasa (NULL, I), 1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
 
     // Inicializa o tabuleiro
-    strcpy (I -> Tabuleiro [0], "E#cDc");
-    strcpy (I -> Tabuleiro [1], "dcD#C");
-    strcpy (I -> Tabuleiro [2], "bddCe");
+    strcpy (I -> Tabuleiro [0], "ec#dc");
+    strcpy (I -> Tabuleiro [1], "dcdEc");
+    strcpy (I -> Tabuleiro [2], "dfdce");
 
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I, 0), 1);
+    // Testa o caso em que é dada uma coordenada inválida
+    CU_ASSERT_EQUAL (logicaPintarCasa ("b5", I), 2);
 
-    // Altera o tabuleiro
-    I -> Tabuleiro [1][0] = 'D';
+    // Testa o caso em que a casa está riscada
+    CU_ASSERT_EQUAL (logicaPintarCasa ("c1", I), 3);
 
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I, 0), 1);
+    // Testa o caso em que a casa está pintada
+    CU_ASSERT_EQUAL (logicaPintarCasa ("d2", I), 4);
 
-    // Altera o tabuleiro
-    I -> Tabuleiro [1][0] = '#';
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaPintarCasa ("a1", I), 0);
 
-    // Testa a função para o tabuleiro atual
-    CU_ASSERT_EQUAL (verificaCaminhoOrtogonal (I, 0), 0);
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (I -> Tabuleiro [0][0], 'E');
+    CU_ASSERT_EQUAL (I -> nJogadas, 1);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -265,13 +250,84 @@ void teste_verificaCaminhoOrtogonal () {
 
 
 
-// Testa a função 'ajudaUmaVez'
-void teste_ajudaUmaVez () {
+// Testa a função 'logicaRiscarCasa'
+void teste_logicaRiscarCasa () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
     I -> dL = 3;
     I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+
+    // Testa o caso em que não é dado um argumento
+    CU_ASSERT_EQUAL (logicaRiscarCasa (NULL, I), 1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ec#dc");
+    strcpy (I -> Tabuleiro [1], "dcdEc");
+    strcpy (I -> Tabuleiro [2], "dfdce");
+
+    // Testa o caso em que é dada uma coordenada inválida
+    CU_ASSERT_EQUAL (logicaRiscarCasa ("b5", I), 2);
+
+    // Testa o caso em que a casa está riscada
+    CU_ASSERT_EQUAL (logicaRiscarCasa ("c1", I), 3);
+
+    // Testa o caso em que a casa está pintada
+    CU_ASSERT_EQUAL (logicaRiscarCasa ("d2", I), 4);
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaRiscarCasa ("a1", I), 0);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (I -> Tabuleiro [0][0], '#');
+    CU_ASSERT_EQUAL (I -> nJogadas, 1);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaDesfazerJogada'
+void teste_logicaDesfazerJogada () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 0;
+    I -> nJogadas = 0;
+
+    // Testa o caso em que ainda não foi lido um ficheiro
+    CU_ASSERT_EQUAL (logicaDesfazerJogada (NULL, I), 1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
+
+    // Testa o caso em que ainda não foi feitas alterações
+    CU_ASSERT_EQUAL (logicaDesfazerJogada (NULL, I), 1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 2;
+    
+    // Testa o caso em que o argumento não é um natural
+    CU_ASSERT_EQUAL (logicaDesfazerJogada ("-1", I), 2);
+
+    // Testa o caso em que foi selecionado o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaDesfazerJogada ("2", I), 3);
+
+    // Testa o caso em que foi seleciona um tabuleiro que ainda não existe
+    CU_ASSERT_EQUAL (logicaDesfazerJogada ("3", I), 4);
+
+    // Altera o número do tabuleiro
     I -> nTabuleiro = 1;
 
     // Aloca memória para o tabuleiro
@@ -280,67 +336,43 @@ void teste_ajudaUmaVez () {
     // Inicializa o tabuleiro
     strcpy (I -> Tabuleiro [0], "ecadc");
     strcpy (I -> Tabuleiro [1], "dcdec");
-    strcpy (I -> Tabuleiro [2], "bfdce");
+    strcpy (I -> Tabuleiro [2], "bddce");
+
+    // Aloca memória para os arrays de alterações
+    Jogada *J1 = malloc (sizeof (JOGADA));
+    Jogada *J2 = malloc (sizeof (JOGADA));
+    Jogada *J3 = malloc (4 * (sizeof (JOGADA)));
+
+    // Inicializa J1
+    formaJogada (&J1 [0], 1, 'a', 'e');
+
+    // Inicializa J2
+    formaJogada (&J2 [0], 2, 'd', 'e');
+
+    // Inicializa J3
+    formaJogada (&J3 [0], 1, 'd', 'd');
+    formaJogada (&J3 [1], 2, 'c', 'd');
+    formaJogada (&J3 [2], 2, 'e', 'c');
+    formaJogada (&J3 [3], 3, 'd', 'c');
+
+    // Aplica J1, J2 e J3 ao tabuleiro
+    realizaAlteracoesJogada (I -> Tabuleiro, J1, 1);
+    realizaAlteracoesJogada (I -> Tabuleiro, J2, 1);
+    realizaAlteracoesJogada (I -> Tabuleiro, J3, 4);
+
+    // Adiciona as jogadas ao histórico
+    addJogada (I, J1, 1);
+    addJogada (I, J2, 1);
+    addJogada (I, J3, 4);
 
     // Realiza a função
-    CU_ASSERT_EQUAL (ajudaUmaVez (I, 1), 0);
-
-    // Altera o tabuleiro
-    I -> Tabuleiro [1][2] = 'D';
-    I -> Tabuleiro [2][3] = '#';
-
-    // Realiza a função
-    CU_ASSERT_EQUAL (ajudaUmaVez (I, 1), 1);
+    CU_ASSERT_EQUAL (logicaDesfazerJogada ("1", I), 0);
 
     // Testa o resultado da função
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ECadc"), 0);
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#CDEC"), 0);
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "BF##E"), 0);
-
-    // Liberta a memória alocada para a informação do jogo
-    libertaInfo (I);
-}
-
-
-
-// Testa a função 'resolve'
-void teste_resolve () {
-
-    // Inicializa a informação sobre o jogo
-    Info I = inicializaJogo ();
-    I -> dL = 3;
-    I -> dC = 5;
-    I -> nTabuleiro = 1;
-
-    // Aloca memória para o tabuleiro
-    inicializaTabuleiro (I);
-
-    // Declara o tabuleiro original
-    char TabOriginal [3][7];
-
-    // Inicializa o tabuleiro
-    strcpy (I -> Tabuleiro [0], "eCadc");
-    strcpy (I -> Tabuleiro [1], "dcdec");
-    strcpy (I -> Tabuleiro [2], "bfdce");
-
-    // Inicializa o tabuleiro original
-    strcpy (TabOriginal [0], "eCadc");
-    strcpy (TabOriginal [1], "dcdec");
-    strcpy (TabOriginal [2], "bfdce");
-
-    // Realiza a função
-    CU_ASSERT_EQUAL (resolve (I, 3, 5, TabOriginal), 0);
-
-    // Altera os tabuleiros
-    I -> Tabuleiro [0][1] = TabOriginal [0][1] = 'c';
-
-    // Realiza a função
-    CU_ASSERT_EQUAL (resolve (I, 3, 5, TabOriginal), 1);
-
-    // Testa o resultado da função
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "E#ADC"), 0);
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "DC#E#"), 0);
-    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "BFDCE"), 0);
+    CU_ASSERT_EQUAL (I -> nTabuleiro, 1);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecadc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcdec"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "bddce"), 0);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -355,12 +387,12 @@ int main () {
 
     CU_pSuite suite = CU_add_suite ("Testes - Auxiliares.c", NULL, NULL);
 
-    CU_add_test (suite, "guardaInfo", teste_guardaInfo);
-    CU_add_test (suite, "leFicheiro", teste_leFicheiro);
-    CU_add_test (suite, "verificaInfracoes", teste_verificaInfracoes);
-    CU_add_test (suite, "verificaCaminhoOrtogonal", teste_verificaCaminhoOrtogonal);
-    CU_add_test (suite, "ajudaUmaVez", teste_ajudaUmaVez);
-    CU_add_test (suite, "resolve", teste_resolve);
+    CU_add_test (suite, "logicaGravar", teste_logicaGravar);
+    CU_add_test (suite, "logicaLer", teste_logicaLer);
+    CU_add_test (suite, "logicaSair", teste_logicaSair);
+    CU_add_test (suite, "logicaPintarCasa", teste_logicaPintarCasa);
+    CU_add_test (suite, "logicaRiscarCasa", teste_logicaRiscarCasa);
+    CU_add_test (suite, "logicaDesfazerJogada", teste_logicaDesfazerJogada);
 
     CU_basic_set_mode (CU_BRM_VERBOSE);
     CU_basic_run_tests ();
