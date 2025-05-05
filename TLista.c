@@ -1,5 +1,3 @@
-#include "Puzzle.h"
-
 // Testa a função 'addJogada'
 void teste_addJogada () {
 
@@ -163,24 +161,4 @@ void teste_inverteHistorico () {
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
-}
-
-
-
-// Função principal
-int main () {
-
-    CU_initialize_registry ();
-
-    CU_pSuite suite = CU_add_suite ("Testes - Auxiliares.c", NULL, NULL);
-
-    CU_add_test (suite, "addJogada", teste_addJogada);
-    CU_add_test (suite, "remJogada", teste_remJogada);
-    CU_add_test (suite, "inverteHistorico", teste_inverteHistorico);
-
-    CU_basic_set_mode (CU_BRM_VERBOSE);
-    CU_basic_run_tests ();
-    CU_cleanup_registry ();
-
-    return 0;
 }

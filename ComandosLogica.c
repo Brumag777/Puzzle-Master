@@ -173,8 +173,8 @@ int logicaDesfazerJogada (char *nTab, Info I) {
 
 
 
-// Função que realiza a lógica do comando 'V' (vizualizarHistorico)
-int logicaVizualizarHistorico (char *nTab, Info I) {
+// Função que realiza a lógica do comando 'V' (visualizarHistorico)
+int logicaVisualizarHistorico (char *nTab, Info I) {
 
     // Define a quantidade de tabuleiros a imprimir
     int nTabs;

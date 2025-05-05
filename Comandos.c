@@ -197,7 +197,7 @@ bool visualizarHistorico (char cmd, char *arg, Info I) {
     if (cmd == 'V') {
 
         // Realiza a lógica do comando 'V'
-        int n = logicaVizualizarHistorico (arg, I);
+        int n = logicaVisualizarHistorico (arg, I);
 
         // Caso de sucesso da função
         if (n > 0) {

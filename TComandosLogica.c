@@ -1,5 +1,3 @@
-#include "Puzzle.h"
-
 // Testa a função 'logicaGravar'
 void teste_logicaGravar () {
 
@@ -380,23 +378,92 @@ void teste_logicaDesfazerJogada () {
 
 
 
-// Função principal
-int main () {
+// Testa a função 'logicaVisualizarHistorico'
+void teste_logicaVisualizarHistorico () {
 
-    CU_initialize_registry ();
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 0;
+    I -> nJogadas = 0;
 
-    CU_pSuite suite = CU_add_suite ("Testes - Auxiliares.c", NULL, NULL);
+    // Testa o caso em que o argumento não é um natural
+    CU_ASSERT_EQUAL (logicaVisualizarHistorico ("-1", I), -1);
 
-    CU_add_test (suite, "logicaGravar", teste_logicaGravar);
-    CU_add_test (suite, "logicaLer", teste_logicaLer);
-    CU_add_test (suite, "logicaSair", teste_logicaSair);
-    CU_add_test (suite, "logicaPintarCasa", teste_logicaPintarCasa);
-    CU_add_test (suite, "logicaRiscarCasa", teste_logicaRiscarCasa);
-    CU_add_test (suite, "logicaDesfazerJogada", teste_logicaDesfazerJogada);
+    // Testa o caso em que ainda não foi lido um ficheiro
+    CU_ASSERT_EQUAL (logicaVisualizarHistorico (NULL, I), -2);
 
-    CU_basic_set_mode (CU_BRM_VERBOSE);
-    CU_basic_run_tests ();
-    CU_cleanup_registry ();
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
 
-    return 0;
+    // Testa o caso em que foi selecionada uma quantidade de tabuleiros superior à existente
+    CU_ASSERT_EQUAL (logicaVisualizarHistorico ("2", I), -3);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 2;
+
+    // Testa o caso em que foi selecionado o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaVisualizarHistorico ("2", I), 2);
+
+    // Testa o caso em que foi seleciona um tabuleiro que ainda não existe
+    CU_ASSERT_EQUAL (logicaVisualizarHistorico ("1", I), 1);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaVerifica'
+void teste_logicaVerifica () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 0;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa o caso em que é dado um argumento
+    CU_ASSERT_EQUAL (logicaVerifica ("ARGUMENTO", I), -1);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "e#adc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "bddc#");
+
+    // Testa a função para o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaVerifica (NULL, I), 1);
+
+    // Comete uma infração
+    I -> Tabuleiro [2][3] = '#';
+
+    // Testa a função para o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaVerifica (NULL, I), 0);
+
+    // Retorna ao tabuleiro original
+    I -> Tabuleiro [2][3] = 'c';
+
+    // Comete uma infração
+    I -> Tabuleiro [1][0] = 'D';
+
+    // Testa a função para o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaVerifica (NULL, I), 0);
+
+    // Comete uma infração
+    I -> Tabuleiro [1][0] = '#';
+
+    // Testa a função para o tabuleiro atual
+    CU_ASSERT_EQUAL (logicaVerifica (NULL, I), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
 }

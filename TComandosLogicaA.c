@@ -1,5 +1,3 @@
-#include "Puzzle.h"
-
 // Testa a função 'guardaInfo'
 void teste_guardaInfo () {
     
@@ -344,27 +342,4 @@ void teste_resolve () {
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
-}
-
-
-
-// Função principal
-int main () {
-
-    CU_initialize_registry ();
-
-    CU_pSuite suite = CU_add_suite ("Testes - Auxiliares.c", NULL, NULL);
-
-    CU_add_test (suite, "guardaInfo", teste_guardaInfo);
-    CU_add_test (suite, "leFicheiro", teste_leFicheiro);
-    CU_add_test (suite, "verificaInfracoes", teste_verificaInfracoes);
-    CU_add_test (suite, "verificaCaminhoOrtogonal", teste_verificaCaminhoOrtogonal);
-    CU_add_test (suite, "ajudaUmaVez", teste_ajudaUmaVez);
-    CU_add_test (suite, "resolve", teste_resolve);
-
-    CU_basic_set_mode (CU_BRM_VERBOSE);
-    CU_basic_run_tests ();
-    CU_cleanup_registry ();
-
-    return 0;
 }

@@ -1,43 +1,27 @@
-CC         = gcc
-CFLAGS     = -Wall -Wextra -pedantic -O1 -fsanitize=address -fno-omit-frame-pointer -g
-COV_CFLAGS = -Wall -Wextra -pedantic -O1 -fprofile-arcs -ftest-coverage -g
+CC = gcc
+BASE_FLAGS = -Wall -Wextra -pedantic -O1 -g
+SANITIZE_FLAGS = -fsanitize=address -fno-omit-frame-pointer
+COVERAGE_FLAGS = --coverage
+CFLAGS = $(BASE_FLAGS) $(SANITIZE_FLAGS) $(COVERAGE_FLAGS)
+LDFLAGS = -lcunit
 
-GAME_SRC = Main.c MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c
-
-TESTAUX_SRC    = TAuxiliares.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
-TESTCLAUX_SRC  = TComandosLogicaA.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
-TESTLOGICA_SRC = TComandosLogica.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
-TESTLISTA_SRC  = TLista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Lista.c MemoryManagement.c
-
-EXEC = PuzzleMaster
-
-.PHONY: all Jogo Testes TAuxiliares TComandosLogicaA TComandosLogica coverage clean
+SRC = MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c
+OBJ = $(SRC:.c=.o)
+TEST_OBJ = Testes.o $(OBJ)
+MAIN_OBJ = Main.o $(OBJ)
 
 all: Jogo
 
-Jogo: $(GAME_SRC)
-	$(CC) $(CFLAGS) -o $(EXEC) $(GAME_SRC)
+Jogo: $(MAIN_OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-TAuxiliares: LDFLAGS += -lcunit
-TAuxiliares: $(TESTAUX_SRC)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTAUX_SRC)
-	./$@
+Testes: $(TEST_OBJ)
+	$(CC) $(CFLAGS) -DTESTING -o $@ $^ $(LDFLAGS)
+	./Testes
+	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c
 
-TComandosLogicaA: LDFLAGS += -lcunit
-TComandosLogicaA: $(TESTCLAUX_SRC)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTCLAUX_SRC)
-	./$@
-
-TComandosLogica: LDFLAGS += -lcunit
-TComandosLogica: $(TESTLOGICA_SRC)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTLOGICA_SRC)
-	./$@
-
-TLista: LDFLAGS += -lcunit
-TLista: $(TESTLISTA_SRC)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TESTLISTA_SRC)
-	./$@
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o *.gcda *.gcno *.gcov \
-	       $(EXEC) TAuxiliares TComandosLogicaA TComandosLogica TLista
+	rm -f Jogo Testes *.o *.gcov *.gcda *.gcno

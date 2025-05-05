@@ -114,8 +114,8 @@ int logicaRiscarCasa (char *coordenada, Info I);
 // Função que realiza a lógica do comando 'd' (desfazerJogada)
 int logicaDesfazerJogada (char *nTab, Info I);
 
-// Função que realiza a lógica do comando 'V' (vizualizarHistorico)
-int logicaVizualizarHistorico (char *nTab, Info I);
+// Função que realiza a lógica do comando 'V' (visualizarHistorico)
+int logicaVisualizarHistorico (char *nTab, Info I);
 
 // Função que realiza a lógica do comando 'v' (verifica)
 int logicaVerifica (char *arg, Info I);
