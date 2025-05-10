@@ -207,11 +207,17 @@ int logicaVerifica (char *arg, Info I) {
     // Inteiro representante da validade do tabuleiro
     int validade = 1;
 
-    // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-    if (!verificaInfracoes (I, 1)) validade = 0;
+    // Cria o tabuleiro de infrações
+    int TabInfracoes [I -> dL][I -> dC];
 
-    // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
+    // Preenche o tabuleiro de infrações com zeros
+    for (int i = 0; i < I -> dL; i++) for (int j = 0; j < I -> dC; j++) TabInfracoes [i][j] = 0;
+
+    // Preenche o tabuleiro de infrações com uns onde possui infrações
+    validade = preencheTabInfracoes (I, TabInfracoes);
+
+    // Imprime o tabuleiro do jogo indicando as infrações
+    if (validade == 0 && I -> eJogo) destacaInfracoes (I -> dL, I -> dC, I -> Tabuleiro, TabInfracoes);
 
     return validade;
 }
@@ -237,10 +243,10 @@ int logicaAjuda (char *arg, Info I) {
         int validade = 1;
 
         // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-        if (!verificaInfracoes (I, 0)) validade = 0;
+        if (!verificaInfracoes (I, 1)) validade = 0;
 
         // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-        if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
+        if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
 
         // O tabuleiro não possui infrações
         if (validade) {
@@ -269,10 +275,10 @@ int logicaAjudaRep (char *arg, Info I) {
     int validade = 1;
 
     // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-    if (!verificaInfracoes (I, 0)) validade = 0;
+    if (!verificaInfracoes (I, 1)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
+    if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
 
     // Avisa que o tabuleiro possui infrações
     if (validade == 0) return 3;

@@ -5,20 +5,23 @@ COVERAGE_FLAGS = --coverage
 CFLAGS = $(BASE_FLAGS) $(SANITIZE_FLAGS) $(COVERAGE_FLAGS)
 LDFLAGS = -lcunit
 
-SRC = MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c
+SRC = MemoryManagement.c Lista.c Auxiliares.c Comandos.c ComandosLogica.c ComandosLogicaA.c Tab.c
 OBJ = $(SRC:.c=.o)
 TEST_OBJ = Testes.o $(OBJ)
 MAIN_OBJ = Main.o $(OBJ)
 
-all: Jogo
+all: PuzzleMaster
 
-Jogo: $(MAIN_OBJ)
+PuzzleMaster: $(MAIN_OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
 Testes: $(TEST_OBJ)
 	$(CC) $(CFLAGS) -DTESTING -o $@ $^ $(LDFLAGS)
 	./Testes
-	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c
+	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c | grep -A 3 "File 'Lista.c'"
+	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c | grep -A 3 "File 'Auxiliares.c'"
+	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c | grep -A 3 "File 'ComandosLogica.c'"
+	gcov -b -c Lista.c Auxiliares.c ComandosLogica.c ComandosLogicaA.c | grep -A 3 "File 'ComandosLogicaA.c'"
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

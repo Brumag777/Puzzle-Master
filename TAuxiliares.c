@@ -451,6 +451,117 @@ void teste_adicionaJogada () {
 
 
 
+// Testa a função 'riscaCasasAux'
+void teste_riscaCasasAux () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecddc");
+    strcpy (I -> Tabuleiro [1], "dcdec");
+    strcpy (I -> Tabuleiro [2], "#dFce");
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (riscaCasasAux (I, 2, 2), 0);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [1][2] = 'D';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (riscaCasasAux (I, 1, 2), 1);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ec#dc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#cDec"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "#dFce"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'percorreLinha'
+void teste_percorreLinha () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecddc");
+    strcpy (I -> Tabuleiro [1], "dcdec");
+    strcpy (I -> Tabuleiro [2], "#dFce");
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (percorreLinha (I, 'F', 2, 2), 0);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [1][2] = 'D';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (percorreLinha (I, 'D', 1, 2), 1);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecddc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#cDec"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "#dFce"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'percorreColuna'
+void teste_percorreColuna () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecddc");
+    strcpy (I -> Tabuleiro [1], "dcdec");
+    strcpy (I -> Tabuleiro [2], "#dFce");
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (percorreColuna (I, 'F', 2, 2), 0);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [1][2] = 'D';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (percorreColuna (I, 'D', 1, 2), 1);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ec#dc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcDec"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "#dFce"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
 // Testa a função 'riscaCasas'
 void teste_riscaCasas () {
 
@@ -481,6 +592,40 @@ void teste_riscaCasas () {
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ec#dc"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#cDec"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "#dFce"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'pintaCasasAux'
+void teste_pintaCasasAux () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecdD#");
+    strcpy (I -> Tabuleiro [1], "dcDeC");
+    strcpy (I -> Tabuleiro [2], "#dFce");
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (pintaCasasAux (I, 0, 4), 0);
+    
+    // Realiza a função
+    CU_ASSERT_EQUAL (pintaCasasAux (I, 2, 0), 1);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecdD#"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "DcDeC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "#DFce"), 0);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -525,6 +670,40 @@ void teste_pintaCasas () {
 
 
 
+// Testa a função 'testaPossibilidadesCasaAux'
+void teste_testaPossibilidadesCasaAux () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecddc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "bdF#d");
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (testaPossibilidadesCasaAux (I, 2, 2), 0);
+    
+    // Realiza a função
+    CU_ASSERT_EQUAL (testaPossibilidadesCasaAux (I, 1, 4), 1);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecddc"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcDeC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "bdF#d"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
 // Testa a função 'testaPossibilidadesCasa'
 void teste_testaPossibilidadesCasa () {
 
@@ -555,6 +734,114 @@ void teste_testaPossibilidadesCasa () {
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecDDC"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcD#c"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "bdFc#"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'procuraInfracoesL'
+void teste_procuraInfracoesL () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "EcaDc");
+    strcpy (I -> Tabuleiro [1], "DcD#C");
+    strcpy (I -> Tabuleiro [2], "bddCe");
+
+    // Cria o tabuleiro de infrações
+    int TabInfracoes [3][5];
+
+    // Preenche o tabuleiro de infrações com zeros
+    for (int i = 0; i < 3; i++) for (int j = 0; j < 5; j++) TabInfracoes [i][j] = 0;
+
+    // Testa a função
+    CU_ASSERT_EQUAL (procuraInfracoesL (I, 'E', 0, 0, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (procuraInfracoesL (I, 'D', 1, 0, TabInfracoes), 0);
+    CU_ASSERT_EQUAL (procuraInfracoesL (I, 'C', 2, 3, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (TabInfracoes [1][0], 1);
+    CU_ASSERT_EQUAL (TabInfracoes [1][2], 1);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'procuraInfracoesC'
+void teste_procuraInfracoesC () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "EcaDc");
+    strcpy (I -> Tabuleiro [1], "DcD#C");
+    strcpy (I -> Tabuleiro [2], "bdDCe");
+
+        // Cria o tabuleiro de infrações
+    int TabInfracoes [3][5];
+
+    // Preenche o tabuleiro de infrações com zeros
+    for (int i = 0; i < 3; i++) for (int j = 0; j < 5; j++) TabInfracoes [i][j] = 0;
+
+    // Testa a função
+    CU_ASSERT_EQUAL (procuraInfracoesC (I, 'E', 0, 0, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (procuraInfracoesC (I, 'D', 1, 2, TabInfracoes), 0);
+    CU_ASSERT_EQUAL (procuraInfracoesC (I, 'C', 2, 3, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (TabInfracoes [1][2], 1);
+    CU_ASSERT_EQUAL (TabInfracoes [2][2], 1);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'procuraInfracoesV'
+void teste_procuraInfracoesV () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "E##Dc");
+    strcpy (I -> Tabuleiro [1], "DcD#C");
+    strcpy (I -> Tabuleiro [2], "bdDCe");
+
+        // Cria o tabuleiro de infrações
+    int TabInfracoes [3][5];
+
+    // Preenche o tabuleiro de infrações com zeros
+    for (int i = 0; i < 3; i++) for (int j = 0; j < 5; j++) TabInfracoes [i][j] = 0;
+
+    // Testa a função
+    CU_ASSERT_EQUAL (procuraInfracoesV (I, 0, 1, TabInfracoes), 0);
+    CU_ASSERT_EQUAL (procuraInfracoesV (I, 0, 2, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (procuraInfracoesV (I, 1, 3, TabInfracoes), 1);
+    CU_ASSERT_EQUAL (TabInfracoes [0][1], 1);
+    CU_ASSERT_EQUAL (TabInfracoes [0][2], 1);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);

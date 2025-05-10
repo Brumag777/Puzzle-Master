@@ -53,10 +53,6 @@ void teste_logicaGravar () {
     // Abre o ficheiro novamente
     FILE *Jogo = fopen ("JogoParaTestarGravar", "r");
 
-    // Lê o número do tabuleiro e de jogadas
-    int nTab, nJ;
-    if (fscanf (Jogo, "%d %d", &nTab, &nJ) != 2) return;
-
     // Lê o número de linhas e de colunas
     int nL, nC;
     if (fscanf (Jogo, "%d %d", &nL, &nC) != 2) return;
@@ -64,6 +60,10 @@ void teste_logicaGravar () {
     // Lê o tabuleiro
     char Tab [3][7];
     for (int i = 0; i < 3; i++) if (fscanf (Jogo, "%s", Tab [i]) != 1) return;
+
+    // Lê o número do tabuleiro e de jogadas
+    int nTab, nJ;
+    if (fscanf (Jogo, "%d %d", &nTab, &nJ) != 2) return;
 
     // Lê o número de alterações de J3
     int nA3;
@@ -466,4 +466,221 @@ void teste_logicaVerifica () {
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaAjuda'
+void teste_logicaAjuda () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa a função para um argumento inválido
+    CU_ASSERT_EQUAL (logicaAjuda ("ARGUMENTOINVALIDO", I), 1);
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecadc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "bdDc#");
+
+    // Testa a função para um tabuleiro inválido
+    CU_ASSERT_EQUAL (logicaAjuda (NULL, I), 3);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [2][2] = 'd';
+
+    // Testa a função para um caso em que não realiza nenhuma alteração
+    CU_ASSERT_EQUAL (logicaAjuda ("o", I), 2);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [0][1] = '#';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaAjuda (NULL, I), 0);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "E#ADC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#CDEC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "BD#C#"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaAjudaRep'
+void teste_logicaAjudaRep () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa a função quando é dado um argumento
+    CU_ASSERT_EQUAL (logicaAjudaRep ("ARGUMENTO", I), 1);
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecadc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "bdDc#");
+
+    // Testa a função para um tabuleiro inválido
+    CU_ASSERT_EQUAL (logicaAjudaRep (NULL, I), 3);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [2][2] = 'd';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaAjudaRep (NULL, I), 0);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ECaD#"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "#CDEC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "BD#C#"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaResolveJogo'
+void teste_logicaResolveJogo () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa a função quando é dado um argumento
+    CU_ASSERT_EQUAL (logicaResolveJogo ("ARGUMENTO", I, 1), 1);
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecadc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "b#dc#");
+
+    // Testa um caso em que não é possível resolver o jogo
+    CU_ASSERT_EQUAL (logicaResolveJogo (NULL, I, 1), 3);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [1][2] = 'd';
+    I -> Tabuleiro [2][1] = 'f';
+    I -> Tabuleiro [2][4] = 'e';
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaResolveJogo (NULL, I, 1), 0);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "E#ADC"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "DC#E#"), 0);
+    CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "BFDCE"), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaApagaHistorico'
+void teste_logicaApagaHistorico () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa a função quando é dado um argumento
+    CU_ASSERT_EQUAL (logicaApagaHistorico ("ARGUMENTO", I), 1);
+
+    // Testa o caso em que o histórico já está vazio
+    CU_ASSERT_EQUAL (logicaApagaHistorico (NULL, I), 2);
+
+    // Aloca memória para o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Inicializa o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecadc");
+    strcpy (I -> Tabuleiro [1], "dcDec");
+    strcpy (I -> Tabuleiro [2], "b#dc#");
+
+    // Realiza jogadas
+    logicaPintarCasa ("a1", I);
+    logicaRiscarCasa ("a2", I);
+    ajudaUmaVez (I, 1);
+
+    // Realiza a função
+    CU_ASSERT_EQUAL (logicaApagaHistorico (NULL, I), 0);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (I -> nTabuleiro, 1);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaImprimeNJogadas'
+void teste_logicaImprimeNJogadas () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 0;
+    I -> nJogadas = 0;
+    I -> eJogo = false;
+
+    // Testa o caso em que é dado um argumento
+    CU_ASSERT_EQUAL (logicaImprimeNJogadas ("ARGUMENTO", I), 1);
+
+    // Testa o caso em que ainda não foi lido um ficheiro
+    CU_ASSERT_EQUAL (logicaImprimeNJogadas (NULL, I), 2);
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 3;
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaImprimeNJogadas (NULL, I), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaListarInfo'
+void teste_logicaListarInfo () {
+
+    // Testa o caso em que é dado um argumento
+    CU_ASSERT_EQUAL (logicaListarInfo ("ARGUMENTO"), 1);
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaListarInfo (NULL), 0);
 }

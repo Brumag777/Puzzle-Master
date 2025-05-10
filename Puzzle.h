@@ -7,6 +7,9 @@
 
 #define LINE_SIZE 1024
 
+#define VERMELHO "\033[38;2;255;0;0m"
+#define RESET "\033[0m"
+
 // Informação acerca de uma jogada
 typedef struct jogada {
     int L;
@@ -168,6 +171,9 @@ int ajudaUmaVez (Info I, int versaoComando);
 // Resolve o jogo (se possível)
 int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
 
+// Procura infrações no tabuleiro para preencher o tabuleiro de infrações
+int preencheTabInfracoes (Info I, int TabInfracoes [I -> dL][I -> dC]);
+
 
 
 
@@ -176,9 +182,6 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
 
 // Imprime os últimos 'nTabs' tabuleiros
 int visualizaUltimosTabuleiros (Info I, int nTabs, int flag);
-
-// Imprime um tabuleiro
-void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
 
 // Forma uma jogada
 void formaJogada (Jogada *JNova, int linha, char coluna, char c);
@@ -243,6 +246,15 @@ int testaPossibilidadesCasaAux (Info I, int linha, int coluna);
 // Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
 int testaPossibilidadesCasa (Info I);
 
+// Procura infrações numa linha do tabuleiro
+int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+
+// Procura infrações numa coluna do tabuleiro
+int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+
+// Procura casas vazias adjacentes a outras
+int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+
 
 
 
@@ -280,3 +292,15 @@ void remJogada (Info I);
 
 // Inverte o histórico de jogadas
 LJogadas inverteHistorico (LJogadas L);
+
+
+
+
+
+// Funções para imprimir o tabuleiro - Tab.c
+
+// Imprime um tabuleiro
+void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
+
+// Imprime um tabuleiro destacando as infrações
+void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][dC]);

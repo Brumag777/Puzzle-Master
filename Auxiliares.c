@@ -56,47 +56,6 @@ int visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
 
 
 
-// Imprime um tabuleiro
-void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag) {
-
-    // Imprime o número do tabuleiro (ou 'S' caso seja a solução do jogo)
-    if (nTabuleiro) {
-        if      (nTabuleiro < 9)  printf ("\n%d   ", nTabuleiro);
-        else if (nTabuleiro < 99) printf ("\n%d  ", nTabuleiro);
-        else                      printf ("\n%d ", nTabuleiro);
-    }
-    else printf ("\nA solução do jogo atual é a seguinte:\n\nS   ");
-
-    // Imprime o índice das colunas
-    if (dL > 9) putchar (' ');
-    for (int j = 0; j < dC; j++) printf ("%c ", 'a' + j);
-    printf ("\n    ");
-
-    // Imprime os '-' em baixo dos índices das colunas
-    if (dL > 9) putchar (' ');
-    for (int j = 0; j < dC; j++) printf ("- ");
-    putchar ('\n');
-
-    // Imprime o tabuleiro linha a linha
-    for (int i = 0; i < dL; i++) {
-
-        // Imprime o índice das linhas
-        if (i < 9 && dL > 9) printf ("%2d | ", i + 1);
-        else printf ("%d | ", i + 1);
-
-        // Imprime a linha atual
-        for (int j = 0; j < dC; j++)
-            printf ("%c ", Tabuleiro [i][j]);
-        
-        // Avança para a linha seguinte
-        putchar ('\n');
-    }
-
-    if (flag) putchar ('\n');
-}
-
-
-
 // Realiza a um tabuleiro as alterações de uma jogada
 void realizaAlteracoesJogada (char **Tabuleiro, Jogada *Jogadas, int nAlts) {
     for (int i = 0; i < nAlts; i++)
@@ -507,4 +466,69 @@ int testaPossibilidadesCasa (Info I) {
                 if (testaPossibilidadesCasaAux (I, i, j)) flag = 1;
 
     return flag;
+}
+
+
+
+// Procura infrações numa linha do tabuleiro
+int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+    
+    // Percorre o resto da linha para procurar infrações
+    for (int j = coluna + 1; j < I -> dC; j++)
+        if (I -> Tabuleiro [linha][j] == c) {
+            TabInfracoes [linha][coluna] = TabInfracoes [linha][j] = 1;
+            if (I -> eJogo) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            validade = 0;
+        }
+
+    return validade;
+}
+
+
+
+// Procura infrações numa coluna do tabuleiro
+int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+    
+    // Percorre o resto da coluna para procurar infrações
+    for (int i = linha + 1; i < I -> dL; i++)
+        if (I -> Tabuleiro [i][coluna] == c) {
+            TabInfracoes [linha][coluna] = TabInfracoes [i][coluna] = 1;
+            if (I -> eJogo) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            validade = 0;
+        }
+
+    return validade;
+}
+
+
+
+// Procura casas vazias adjacentes a outras
+int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+
+    // Verifica a casa à direita
+    if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
+        if (I -> Tabuleiro [linha][coluna + 1] == '#') {
+            TabInfracoes [linha][coluna] = TabInfracoes [linha][coluna + 1] = 1;
+            if (I -> eJogo) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            validade = 0;
+        }
+
+    // Verifica a casa abaixo
+    if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
+        if (I -> Tabuleiro [linha + 1][coluna] == '#') {
+            TabInfracoes [linha][coluna] = TabInfracoes [linha + 1][coluna] = 1;
+            if (I -> eJogo) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            validade = 0;
+        }
+
+    return validade;
 }

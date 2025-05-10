@@ -2,9 +2,6 @@
 
 // Guarda a informação do jogo num ficheiro
 void guardaInfo (FILE *Jogo, Info I) {
-
-    // Guarda o número do tabuleiro e de jogadas
-    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
     
     // Guarda o número de linhas e de colunas do tabuleiro
     fprintf (Jogo, "%d %d\n", I -> dL, I -> dC);
@@ -14,6 +11,9 @@ void guardaInfo (FILE *Jogo, Info I) {
         fprintf (Jogo, "%s", I -> Tabuleiro [i]);
         fprintf (Jogo, "\n");
     }
+
+    // Guarda o número do tabuleiro e de jogadas
+    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
 
     // Guarda o histórico de jogadas no ficheiro
     guardaJogadas (Jogo, I);
@@ -53,8 +53,11 @@ int leFicheiro (FILE *Jogo, Info I) {
     // Liberta a memória alocada para o tabuleiro anterior
     libertaTabuleiro (I);
 
-    // Lê o número do tabuleiro e de jogadas
-    if (fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> nJogadas) != 2) return 3;
+    // Limpa o histórico
+    logicaApagaHistorico (NULL, I);
+
+    // Atualiza o número do tabuleiro
+    I -> nTabuleiro = 1;
 
     // Lê o número de linhas e de colunas
     if (fscanf (Jogo, "%d %d", &I -> dL, &I -> dC) != 2) return 3;
@@ -68,13 +71,31 @@ int leFicheiro (FILE *Jogo, Info I) {
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) {
         libertaTabuleiro (I);
+        I -> dL = I -> dC = 0;
+        I -> nTabuleiro = 0;
         return 4;
+    }
+
+    // Lê o número do tabuleiro e de jogadas
+    int n = fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> nJogadas);
+
+    // Não leu nenhum valor
+    if (n == -1) {
+        I -> nTabuleiro = 1;
+        I -> nJogadas = 0;
+    }
+
+    // Leu incorretamente os valores
+    else if (n != 2) {
+        libertaTabuleiro (I);
+        I -> dL = I -> dC = 0;
+        I -> nTabuleiro = 0;
+        return 3;
     }
 
     // Lê as jogadas
     for (int i = 0; i < I -> nTabuleiro - 1; i++) {
         if (leLinhaJogadas (Jogo, I)) return 3;
-
         I -> nTabuleiro--;
     }
 
@@ -82,6 +103,8 @@ int leFicheiro (FILE *Jogo, Info I) {
     if (!jogadasValidas (I)) {
         libertaTabuleiro (I);
         libertaLJogadas (I);
+        I -> dL = I -> dC = 0;
+        I -> nTabuleiro = 0;
         return 5;
     }
 
@@ -184,6 +207,7 @@ int verificaCaminhoOrtogonal (Info I, int flag) {
     // Verifica se o número de letras total é igual ao número de letras ligadas a uma letra do tabuleiro
     if (nLetras == contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) return 1;
 
+    // Avisa que não existe um caminho ortogonal entre todas as letras
     if (I -> eJogo && flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
 
     return 0;
@@ -238,17 +262,17 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]) {
         for (int j = 0; j < I -> dC; j++)
             if (eMinuscula (I -> Tabuleiro [i][j])) {
 
+                // Armazena o caractere original
+                char c = I -> Tabuleiro [i][j];
+
                 // Testa o caso da casa ser pintada de branco
                 I -> Tabuleiro [i][j] += 'A' - 'a';
                 if (resolve (I, dL, dC, TabuleiroOriginal)) return 1;
-                for (int k = 0; k < I -> dL; k++)
-                    strcpy (I -> Tabuleiro [k], TabuleiroOriginal [k]);
 
                 // Testa o caso da casa ser riscada
                 I -> Tabuleiro [i][j] = '#';
                 if (resolve (I, dL, dC, TabuleiroOriginal)) return 1;
-                for (int k = 0; k < I -> dL; k++)
-                    strcpy (I -> Tabuleiro [k], TabuleiroOriginal [k]);
+                I -> Tabuleiro [i][j] = c;
 
                 // É impossível resolver o jogo
                 return 0;
@@ -256,4 +280,40 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]) {
 
     // Não há minúsculas e o tabuleiro é válido, logo o jogo está resolvido
     return 1;
+}
+
+
+
+// Procura infrações no tabuleiro para preencher o tabuleiro de infrações
+int preencheTabInfracoes (Info I, int TabInfracoes [I -> dL][I -> dC]) {
+
+    // Inteiro representante da validade do tabuleiro
+    int validade = 1;
+
+    // Verifica se existe um caminho ortogonal entre todas as letras
+    int validadeCaminho = verificaCaminhoOrtogonal (I, 1);
+
+    // Atualiza a validade
+    if (!validadeCaminho) validade = 0;
+
+    // Percorre o tabuleiro para procurar infrações
+    for (int i = 0; i < I -> dL; i++)
+
+        // Percorre cada linha do tabuleiro para procurar infrações
+        for (int j = 0; j < I -> dC; j++) {
+
+            // Verifica se houve infrações relativas a casas brancas
+            if (eMaiuscula (I -> Tabuleiro [i][j])) {
+                if (!procuraInfracoesL (I, I -> Tabuleiro [i][j], i, j, TabInfracoes) ||
+                    !procuraInfracoesC (I, I -> Tabuleiro [i][j], i, j, TabInfracoes)) validade = 0;
+            }
+
+            // Verifica se houve infrações relativas a casas vazias
+            else if (I -> Tabuleiro [i][j] == '#') {
+                if (validadeCaminho == 0) TabInfracoes [i][j] = 1;
+                if (!procuraInfracoesV (I, i, j, TabInfracoes)) validade = 0;
+            }
+        }
+
+    return validade;
 }
