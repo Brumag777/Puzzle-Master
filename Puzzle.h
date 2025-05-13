@@ -8,6 +8,8 @@
 #define LINE_SIZE 1024
 
 #define VERMELHO "\033[38;2;255;0;0m"
+#define VERDE "\033[38;2;0;255;0m"
+#define AMARELO "\033[38;2;255;190;0m"
 #define RESET "\033[0m"
 
 // Informação acerca de uma jogada
@@ -28,7 +30,7 @@ typedef struct lJogadas {
 typedef struct info {
     bool aCorrer;
     int nTabuleiro;
-    int nJogadas;
+    int pont;
     int dL;
     int dC;
     char **Tabuleiro;
@@ -37,7 +39,7 @@ typedef struct info {
 } INFO, *Info;
 
 // Função dos comandos do jogo
-typedef bool (*COMANDO) (char cmd, char *arg, Info I);
+typedef bool (*COMANDO) (char cmd, char args [2][LINE_SIZE], Info I);
 
 
 
@@ -46,52 +48,52 @@ typedef bool (*COMANDO) (char cmd, char *arg, Info I);
 // Funções relativas à interface dos comandos - Comandos.c
 
 // Grava o jogo num ficheiro
-bool gravar (char cmd, char *arg, Info I);
+bool gravar (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Lê um ficheiro
-bool ler (char cmd, char *arg, Info I);
+bool ler (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Termina o jogo
-bool sair (char cmd, char *arg, Info I);
+bool sair (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Pinta uma casa de branco
-bool pintarCasa (char cmd, char *arg, Info I);
+bool pintarCasa (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Muda uma casa para vazia
-bool riscarCasa (char cmd, char *arg, Info I);
+bool riscarCasa (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Desfaz a últimas jogadas
-bool desfazerJogada (char cmd, char *arg, Info I);
+bool desfazerJogada (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Imprime os últimos tabuleiros armazenados no histórico
-bool visualizarHistorico (char cmd, char *arg, Info I);
+bool visualizarHistorico (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Verifica se existem infrações no tabuleiro
-bool verifica (char cmd, char *arg, Info I);
+bool verifica (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Ajuda o jogador realizando jogadas 'obrigatórias' na posição
-bool ajuda (char cmd, char *arg, Info I);
+bool ajuda (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
-bool ajudaRep (char cmd, char *arg, Info I);
+bool ajudaRep (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Resolve o jogo automaticamente
-bool resolveJogo (char cmd, char *arg, Info I);
+bool resolveJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Mostra a solução do jogo (caso exista)
-bool mostrarSolucao (char cmd, char *arg, Info I);
+bool mostrarSolucao (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Apaga o histoŕico de jogadas
-bool apagaHistorico (char cmd, char *arg, Info I);
+bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Mostra o número de jogadas atual
-bool imprimeNJogadas (char cmd, char *arg, Info I);
+// Revela a pontuação atual
+bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Lista os comandos do jogo
-bool listarComandos (char cmd, char *arg, Info I);
+bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Explica o objetivo e as regras do jogo
-bool explicaJogo (char cmd, char *arg, Info I);
+bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
 
 
@@ -103,7 +105,7 @@ bool explicaJogo (char cmd, char *arg, Info I);
 int logicaGravar (char *nomeFicheiro, Info I);
 
 // Função que realiza a lógica do comando 'l' (ler)
-int logicaLer (char *nomeFicheiro, Info I);
+int logicaLer (char args [2][LINE_SIZE], Info I);
 
 // Função que realiza a lógica do comando 's' (sair)
 int logicaSair (char *arg, Info I);
@@ -135,8 +137,8 @@ int logicaResolveJogo (char *arg, Info I, int flag);
 // Função que realiza a lógica do comando 'D' (apagaHistorico)
 int logicaApagaHistorico (char *arg, Info I);
 
-// Função que realiza a lógica do comando 'j' (imprimeNJogadas)
-int logicaImprimeNJogadas (char *arg, Info I);
+// Função que realiza a lógica do comando 'p' (imprimePont)
+int logicaImprimePont (char *arg, Info I);
 
 // Função que realiza a lógica dos comandos 'h' (listarComandos) e 'e' (explicaJogo)
 int logicaListarInfo (char *arg);
@@ -255,6 +257,12 @@ int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [
 // Procura casas vazias adjacentes a outras
 int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
 
+// Forma o nome de um ficheiro
+void formaNomeFicheiro (char *nomeFicheiro, char args [2][LINE_SIZE], bool eJogo);
+
+// Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
+int valorPont (int dL, int dC, int pont);
+
 
 
 
@@ -282,6 +290,7 @@ void libertaJogadas (Jogada *J, int nJogadas);
 
 
 
+
 // Funções relativas às listas - Lista.c
 
 // Adiciona uma jogada ao histórico
@@ -303,4 +312,4 @@ LJogadas inverteHistorico (LJogadas L);
 void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
 
 // Imprime um tabuleiro destacando as infrações
-void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][dC]);
+void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][dC], int eSolucao);

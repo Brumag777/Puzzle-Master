@@ -6,7 +6,7 @@ void teste_guardaInfo () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 6;
+    I -> pont = 6;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -39,7 +39,7 @@ void teste_guardaInfo () {
     addJogada (I, J3, 4);
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarGravar", "w");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "w");
 
     // Realiza a função
     guardaInfo (Jogo, I);
@@ -48,7 +48,7 @@ void teste_guardaInfo () {
     fclose (Jogo);
 
     // Abre o ficheiro novamente
-    Jogo = fopen ("JogoParaTestarGravar", "r");
+    Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "r");
 
     // Lê o número de linhas e de colunas
     int nL, nC;
@@ -137,7 +137,7 @@ void teste_guardaJogadas () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 6;
+    I -> pont = 6;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -170,7 +170,7 @@ void teste_guardaJogadas () {
     addJogada (I, J3, 4);
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarGravar", "w");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "w");
     
     // Guarda o número de linhas e de colunas do tabuleiro
     fprintf (Jogo, "%d %d\n", I -> dL, I -> dC);
@@ -182,7 +182,7 @@ void teste_guardaJogadas () {
     }
 
     // Guarda o número do tabuleiro e de jogadas
-    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
+    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> pont);
 
     // Realiza a função
     guardaJogadas (Jogo, I);
@@ -191,7 +191,7 @@ void teste_guardaJogadas () {
     fclose (Jogo);
 
     // Abre o ficheiro novamente
-    Jogo = fopen ("JogoParaTestarGravar", "r");
+    Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "r");
 
     // Variáveis para ler partes desnecessárias do ficheiro
     int x; char s [7];
@@ -274,14 +274,14 @@ void teste_leFicheiro () {
     Info I = inicializaJogo ();
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarLer", "r");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarLer", "r");
 
     // Realiza a função
     leFicheiro (Jogo, I);
 
     // Testa se foram lidos os valores corretos
     CU_ASSERT_EQUAL (I -> nTabuleiro, 4);
-    CU_ASSERT_EQUAL (I -> nJogadas, 6);
+    CU_ASSERT_EQUAL (I -> pont, 6);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecadc"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcdec"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "dfdce"), 0);
@@ -320,7 +320,7 @@ void teste_leLinhasJogadas () {
     Info I = inicializaJogo ();
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("JogoParaTestarLer", "r");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarLer", "r");
 
     // Liberta a memória alocada para o tabuleiro anterior
     libertaTabuleiro (I);
@@ -341,7 +341,7 @@ void teste_leLinhasJogadas () {
     for (int i = 0; i < I -> dL; i++) if (fscanf (Jogo, "%s", I -> Tabuleiro [i]) != 1) return;
 
     // Lê o número do tabuleiro e de jogadas
-    if (fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> nJogadas) != 2) return;
+    if (fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> pont) != 2) return;
 
     // Realiza a função
     leLinhaJogadas (Jogo, I);
@@ -549,7 +549,7 @@ void teste_preencheTabInfracoes () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 0;
     I -> eJogo = false;
 
     // Aloca memória para o tabuleiro

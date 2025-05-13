@@ -1,8 +1,8 @@
 #include "Puzzle.h"
-#include "TLista.c"
-#include "TAuxiliares.c"
-#include "TComandosLogica.c"
-#include "TComandosLogicaA.c"
+#include "TLogica/TLista.c"
+#include "TLogica/TAuxiliares.c"
+#include "TLogica/TComandosLogica.c"
+#include "TLogica/TComandosLogicaA.c"
 
 // Função principal
 int main () {
@@ -23,11 +23,11 @@ int main () {
     CU_add_test (suite, "logicaAjudaRep", teste_logicaAjudaRep);
     CU_add_test (suite, "logicaResolveJogo", teste_logicaResolveJogo);
     CU_add_test (suite, "logicaApagaHistorico", teste_logicaApagaHistorico);
-    CU_add_test (suite, "logicaImprimeNJogadas", teste_logicaImprimeNJogadas);
+    CU_add_test (suite, "logicaImprimePont", teste_logicaImprimePont);
     CU_add_test (suite, "logicaListarInfo", teste_logicaListarInfo);
 
-    //CU_add_test (suite, "guardaInfo", teste_guardaInfo);
-    //CU_add_test (suite, "guardaJogadas", teste_guardaJogadas);
+    CU_add_test (suite, "guardaInfo", teste_guardaInfo);
+    CU_add_test (suite, "guardaJogadas", teste_guardaJogadas);
     CU_add_test (suite, "leFicheiro", teste_leFicheiro);
     CU_add_test (suite, "leLinhaJogadas", teste_leLinhasJogadas);
     CU_add_test (suite, "verificaInfracoes", teste_verificaInfracoes);
@@ -65,6 +65,8 @@ int main () {
     CU_add_test (suite, "procuraInfracoesL", teste_procuraInfracoesL);
     CU_add_test (suite, "procuraInfracoesC", teste_procuraInfracoesC);
     CU_add_test (suite, "procuraInfracoesV", teste_procuraInfracoesV);
+    CU_add_test (suite, "formaNomeFicheiro", teste_formaNomeFicheiro);
+    CU_add_test (suite, "valorPont", teste_valorPont);
 
     CU_basic_set_mode (CU_BRM_VERBOSE);
     CU_basic_run_tests ();

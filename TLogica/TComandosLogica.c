@@ -6,7 +6,7 @@ void teste_logicaGravar () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 6;
+    I -> pont = 6;
 
     // Testa o caso em que não há nenhum tabuleiro
     CU_ASSERT_EQUAL (logicaGravar ("JogoParaTestarGravar", I), 2);
@@ -137,19 +137,30 @@ void teste_logicaLer () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
+    I -> eJogo = false;
+
+    // Declara os argumentos
+    char args [2][LINE_SIZE];
+
+    // Define os argumentos
+    strcpy (args [0], "-1");
+    strcpy (args [1], "0");
 
     // Testa o caso em que o ficheiro é inválido
-    CU_ASSERT_EQUAL (logicaLer ("FICHEIROQUENAOEXITE", I), 2);
+    CU_ASSERT_EQUAL (logicaLer (args, I), 6);
 
     // Testa o caso em que não é dado um argumento
     CU_ASSERT_EQUAL (logicaLer (NULL, I), 1);
 
+    // Altera o primeiro argumento
+    strcpy (args [0], "1");
+
     // Realiza a função
-    CU_ASSERT_EQUAL (logicaLer ("JogoParaTestarLer", I), 0);
+    CU_ASSERT_EQUAL (logicaLer (args, I), 0);
 
     // Testa se foram lidos os valores corretos
     CU_ASSERT_EQUAL (I -> nTabuleiro, 4);
-    CU_ASSERT_EQUAL (I -> nJogadas, 6);
+    CU_ASSERT_EQUAL (I -> pont, 6);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [0], "ecadc"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [1], "dcdec"), 0);
     CU_ASSERT_EQUAL (strcmp (I -> Tabuleiro [2], "dfdce"), 0);
@@ -210,7 +221,7 @@ void teste_logicaPintarCasa () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
 
     // Testa o caso em que não é dado um argumento
     CU_ASSERT_EQUAL (logicaPintarCasa (NULL, I), 1);
@@ -240,7 +251,7 @@ void teste_logicaPintarCasa () {
 
     // Testa o resultado da função
     CU_ASSERT_EQUAL (I -> Tabuleiro [0][0], 'E');
-    CU_ASSERT_EQUAL (I -> nJogadas, 1);
+    CU_ASSERT_EQUAL (I -> pont, 1);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -256,7 +267,7 @@ void teste_logicaRiscarCasa () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
 
     // Testa o caso em que não é dado um argumento
     CU_ASSERT_EQUAL (logicaRiscarCasa (NULL, I), 1);
@@ -286,7 +297,7 @@ void teste_logicaRiscarCasa () {
 
     // Testa o resultado da função
     CU_ASSERT_EQUAL (I -> Tabuleiro [0][0], '#');
-    CU_ASSERT_EQUAL (I -> nJogadas, 1);
+    CU_ASSERT_EQUAL (I -> pont, 1);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -302,7 +313,7 @@ void teste_logicaDesfazerJogada () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 0;
+    I -> pont = 2;
 
     // Testa o caso em que ainda não foi lido um ficheiro
     CU_ASSERT_EQUAL (logicaDesfazerJogada (NULL, I), 1);
@@ -386,7 +397,7 @@ void teste_logicaVisualizarHistorico () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 0;
+    I -> pont = 2;
 
     // Testa o caso em que o argumento não é um natural
     CU_ASSERT_EQUAL (logicaVisualizarHistorico ("-1", I), -1);
@@ -423,7 +434,7 @@ void teste_logicaVerifica () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa o caso em que é dado um argumento
@@ -478,7 +489,7 @@ void teste_logicaAjuda () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa a função para um argumento inválido
@@ -526,7 +537,7 @@ void teste_logicaAjudaRep () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa a função quando é dado um argumento
@@ -568,7 +579,7 @@ void teste_logicaResolveJogo () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa a função quando é dado um argumento
@@ -612,7 +623,7 @@ void teste_logicaApagaHistorico () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa a função quando é dado um argumento
@@ -646,28 +657,28 @@ void teste_logicaApagaHistorico () {
 
 
 
-// Testa a função 'logicaImprimeNJogadas'
-void teste_logicaImprimeNJogadas () {
+// Testa a função 'logicaImprimePont'
+void teste_logicaImprimePont () {
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 0;
+    I -> pont = 2;
     I -> eJogo = false;
 
     // Testa o caso em que é dado um argumento
-    CU_ASSERT_EQUAL (logicaImprimeNJogadas ("ARGUMENTO", I), 1);
+    CU_ASSERT_EQUAL (logicaImprimePont ("ARGUMENTO", I), -1);
 
     // Testa o caso em que ainda não foi lido um ficheiro
-    CU_ASSERT_EQUAL (logicaImprimeNJogadas (NULL, I), 2);
+    CU_ASSERT_EQUAL (logicaImprimePont (NULL, I), -2);
 
     // Altera o número do tabuleiro
     I -> nTabuleiro = 3;
 
     // Testa a função
-    CU_ASSERT_EQUAL (logicaImprimeNJogadas (NULL, I), 0);
+    CU_ASSERT_EQUAL (logicaImprimePont (NULL, I), 3);
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);

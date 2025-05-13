@@ -1,4 +1,4 @@
-#include "Puzzle.h"
+#include "../Puzzle.h"
 
 // Adiciona uma jogada ao histórico
 int addJogada (Info I, Jogada *JogadasNovas, int nAlteracoes) {

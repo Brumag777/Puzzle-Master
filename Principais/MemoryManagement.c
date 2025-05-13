@@ -1,4 +1,4 @@
-#include "Puzzle.h"
+#include "../Puzzle.h"
 
 // Inicializa a informação sobre o jogo
 Info inicializaJogo () {
@@ -6,7 +6,7 @@ Info inicializaJogo () {
     if (I == NULL) return NULL;
     I -> aCorrer = true;
     I -> nTabuleiro = 0;
-    I -> nJogadas = 0;
+    I -> pont = -1;
     I -> dL = I -> dC = 0;
     I -> Tabuleiro = NULL;
     I -> HJogadas = NULL;

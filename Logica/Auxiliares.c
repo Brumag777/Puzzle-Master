@@ -1,4 +1,4 @@
-#include "Puzzle.h"
+#include "../Puzzle.h"
 
 // Imprime os últimos 'nTabs' tabuleiros
 int visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
@@ -167,7 +167,7 @@ int verificaLinhas (Info I, char c, int linha, int coluna, int flag) {
     for (int j = coluna + 1; j < I -> dC; j++)
 
         if (I -> Tabuleiro [linha][j] == c) {
-            if (I -> eJogo && flag) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo && flag) printf (VERMELHO "Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n" RESET, c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -186,7 +186,7 @@ int verificaColunas (Info I, char c, int linha, int coluna, int flag) {
     for (int i = linha + 1; i < I -> dL; i++)
 
         if (I -> Tabuleiro [i][coluna] == c) {
-            if (I -> eJogo && flag) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n" RESET, c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -204,14 +204,14 @@ int verificaCasaVazia (Info I, int linha, int coluna, int flag) {
     // Verifica a casa à direita
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (I -> Tabuleiro [linha][coluna + 1] == '#') {
-            if (I -> eJogo && flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
     // Verifica a casa abaixo
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (I -> Tabuleiro [linha + 1][coluna] == '#') {
-            if (I -> eJogo && flag) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 
@@ -328,7 +328,7 @@ int percorreLinha (Info I, char c, int linha, int coluna) {
     for (int j = 0; j < I -> dC; j++)
         if (I -> Tabuleiro [linha][j] == c && j != coluna) {
             I -> Tabuleiro [linha][j] = '#';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -349,7 +349,7 @@ int percorreColuna (Info I, char c, int linha, int coluna) {
     for (int i = 0; i < I -> dL; i++)
         if (I -> Tabuleiro [i][coluna] == c && i != linha) {
             I -> Tabuleiro [i][coluna] = '#';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -368,7 +368,7 @@ int pintaCasasAux (Info I, int linha, int coluna) {
     if (coordenadaValida (linha, coluna + 'a', I -> dL, I -> dC))
         if (eMinuscula (I -> Tabuleiro [linha - 1][coluna])) {
             I -> Tabuleiro [linha - 1][coluna] += 'A' - 'a';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -376,7 +376,7 @@ int pintaCasasAux (Info I, int linha, int coluna) {
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (eMinuscula (I -> Tabuleiro [linha + 1][coluna])) {
             I -> Tabuleiro [linha + 1][coluna] += 'A' - 'a';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -384,7 +384,7 @@ int pintaCasasAux (Info I, int linha, int coluna) {
     if (coordenadaValida (linha + 1, coluna + 'a' - 1, I -> dL, I -> dC))
         if (eMinuscula (I -> Tabuleiro [linha][coluna - 1])) {
             I -> Tabuleiro [linha][coluna - 1] += 'A' - 'a';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -392,7 +392,7 @@ int pintaCasasAux (Info I, int linha, int coluna) {
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (eMinuscula (I -> Tabuleiro [linha][coluna + 1])) {
             I -> Tabuleiro [linha][coluna + 1] += 'A' - 'a';
-            I -> nJogadas++;
+            I -> pont--;
             flag = 1;
         }
 
@@ -444,7 +444,7 @@ int testaPossibilidadesCasaAux (Info I, int linha, int coluna) {
     // Verifica se existe um caminho ortogonal entre todas as letras
     if (nLetras != contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) {
         I -> Tabuleiro [linha][coluna] = C + 'A' - 'a';
-        I -> nJogadas++;
+        I -> pont--;
         return 1;
     }
     else I -> Tabuleiro [linha][coluna] = C;
@@ -480,7 +480,7 @@ int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [
     for (int j = coluna + 1; j < I -> dC; j++)
         if (I -> Tabuleiro [linha][j] == c) {
             TabInfracoes [linha][coluna] = TabInfracoes [linha][j] = 1;
-            if (I -> eJogo) printf ("Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo) printf (VERMELHO "Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n" RESET, c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -499,7 +499,7 @@ int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [
     for (int i = linha + 1; i < I -> dL; i++)
         if (I -> Tabuleiro [i][coluna] == c) {
             TabInfracoes [linha][coluna] = TabInfracoes [i][coluna] = 1;
-            if (I -> eJogo) printf ("Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
+            if (I -> eJogo) printf (VERMELHO "Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n" RESET, c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -518,7 +518,7 @@ int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL]
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (I -> Tabuleiro [linha][coluna + 1] == '#') {
             TabInfracoes [linha][coluna] = TabInfracoes [linha][coluna + 1] = 1;
-            if (I -> eJogo) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (I -> eJogo) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
@@ -526,9 +526,50 @@ int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL]
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (I -> Tabuleiro [linha + 1][coluna] == '#') {
             TabInfracoes [linha][coluna] = TabInfracoes [linha + 1][coluna] = 1;
-            if (I -> eJogo) printf ("Infração: As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (I -> eJogo) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 
     return validade;
+}
+
+
+
+// Forma o nome de um ficheiro
+void formaNomeFicheiro (char *nomeFicheiro, char args [2][LINE_SIZE], bool eJogo) {
+
+    // Se é um teste, define o nome como o nome dos ficheiros de teste
+    if (!eJogo) {
+        strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestarLer");
+        return;
+    }
+
+    // Calcula o tamanho do primeiro argumento
+    int tArg1 = strlen (args [0]);
+
+    // Forma o nome
+    strcpy (nomeFicheiro, "Jogos/J");
+    strcpy (nomeFicheiro + 7, args [0]);
+    strcpy (nomeFicheiro + 7 + tArg1, "/S");
+    strcpy (nomeFicheiro + 7 + tArg1 + 2, args [1]);
+}
+
+
+
+// Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
+int valorPont (int dL, int dC, int pont) {
+
+    // Calcula a percentagem de pontuação máxima
+    float pontMaxima = 3 * dL * dC;
+    float pontAtual = pont;
+    float percentagemPont = pontAtual / pontMaxima;
+
+    // A pontuação é alta
+    if (percentagemPont > 0.667) return 1;
+
+    // A pontuação é média
+    if (percentagemPont > 0.334) return 2;
+
+    // A pontuação é baixa
+    return 3;
 }

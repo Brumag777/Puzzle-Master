@@ -1,4 +1,4 @@
-#include "Puzzle.h"
+#include "../Puzzle.h"
 
 // Guarda a informação do jogo num ficheiro
 void guardaInfo (FILE *Jogo, Info I) {
@@ -12,8 +12,8 @@ void guardaInfo (FILE *Jogo, Info I) {
         fprintf (Jogo, "\n");
     }
 
-    // Guarda o número do tabuleiro e de jogadas
-    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> nJogadas);
+    // Guarda o número do tabuleiro e a pontuação
+    fprintf (Jogo, "%d %d\n", I -> nTabuleiro, I -> pont);
 
     // Guarda o histórico de jogadas no ficheiro
     guardaJogadas (Jogo, I);
@@ -76,13 +76,13 @@ int leFicheiro (FILE *Jogo, Info I) {
         return 4;
     }
 
-    // Lê o número do tabuleiro e de jogadas
-    int n = fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> nJogadas);
+    // Lê o número do tabuleiro e a pontuação
+    int n = fscanf (Jogo, "%d %d", &I -> nTabuleiro, &I -> pont);
 
     // Não leu nenhum valor
     if (n == -1) {
         I -> nTabuleiro = 1;
-        I -> nJogadas = 0;
+        I -> pont = 4 * (I -> dL * I -> dC);
     }
 
     // Leu incorretamente os valores
@@ -208,7 +208,7 @@ int verificaCaminhoOrtogonal (Info I, int flag) {
     if (nLetras == contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) return 1;
 
     // Avisa que não existe um caminho ortogonal entre todas as letras
-    if (I -> eJogo && flag) printf ("Não existe um caminho ortogonal entre todas as letras.\n");
+    if (I -> eJogo && flag) printf (VERMELHO "Não existe um caminho ortogonal entre todas as letras.\n" RESET);
 
     return 0;
 }

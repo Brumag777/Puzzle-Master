@@ -749,6 +749,7 @@ void teste_procuraInfracoesL () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
+    I -> eJogo = false;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -785,6 +786,7 @@ void teste_procuraInfracoesC () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
+    I -> eJogo = false;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -821,6 +823,7 @@ void teste_procuraInfracoesV () {
     I -> dL = 3;
     I -> dC = 5;
     I -> nTabuleiro = 1;
+    I -> eJogo = false;
 
     // Aloca memória para o tabuleiro
     inicializaTabuleiro (I);
@@ -845,4 +848,45 @@ void teste_procuraInfracoesV () {
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
+}
+
+
+
+// Testa a função 'formaNomeFicheiro'
+void teste_formaNomeFicheiro () {
+
+    // Declara o nome do ficheiro
+    char nomeFicheiro [LINE_SIZE];
+
+    // Declara os argumentos
+    char args [2][LINE_SIZE];
+
+    // Realiza a função
+    formaNomeFicheiro (nomeFicheiro, NULL, false);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (nomeFicheiro, "Jogos/Testes/JogoParaTestarLer"), 0);
+
+    // Altera os argumentos
+    strcpy (args [0], "1");
+    strcpy (args [1], "2");
+
+    // Realiza a função
+    formaNomeFicheiro (nomeFicheiro, args, true);
+
+    // Testa o resultado da função
+    CU_ASSERT_EQUAL (strcmp (nomeFicheiro, "Jogos/J1/S2"), 0);
+}
+
+
+
+// Testa a função 'valorPont'
+void teste_valorPont () {
+    CU_ASSERT_EQUAL (valorPont (5, 5, 77), 1);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 69), 1);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 51), 1);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 50), 2);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 25), 3);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 13), 3);
+    CU_ASSERT_EQUAL (valorPont (5, 5, 0), 3);
 }

@@ -1,4 +1,4 @@
-#include "Puzzle.h"
+#include "../Puzzle.h"
 
 // Função que realiza a lógica do comando 'g' (gravar)
 int logicaGravar (char *nomeFicheiro, Info I) {
@@ -27,10 +27,29 @@ int logicaGravar (char *nomeFicheiro, Info I) {
 
 
 // Função que realiza a lógica do comando 'l' (ler)
-int logicaLer (char *nomeFicheiro, Info I) {
+int logicaLer (char args [2][LINE_SIZE], Info I) {
 
     // Verifica se foi recebido um argumento
-    if (nomeFicheiro == NULL) return 1;
+    if (args == NULL) return 1;
+
+    // Torna os dois argumentos em inteiros (para verificar se são válidos)
+    int arg1 = atoi (args [0]), arg2 = 0;
+    if (args [1][0]) arg2 = atoi (args [1]);
+    
+    // Se não foi dado um segundo argumento, é interpretado como 0
+    else {
+        args [1][0] = '0';
+        args [1][1] = 0;
+    }
+
+    // Verifica se os argumentos são válidos
+    if (arg1 < 1 || arg2 < 0) return 6;
+
+    // Declara o nome do ficheiro (Jogos/Jarg1/Sarg2)
+    char nomeFicheiro [LINE_SIZE];
+
+    // Forma o nome do ficheiro
+    formaNomeFicheiro (nomeFicheiro, args, I -> eJogo);
 
     // Abre o ficheiro a ler
     FILE *Jogo = fopen (nomeFicheiro, "r");
@@ -84,8 +103,8 @@ int logicaPintarCasa (char *coordenada, Info I) {
     // Adiciona a nova jogada à lista de jogadas
     addJogada (I, Jogs, 1);
 
-    // Conta uma jogada
-    I -> nJogadas++;
+    // Contabiliza uma jogada na pontuação
+    I -> pont--;
 
     // Pinta a casa de branco
     I -> Tabuleiro [l - 1][c - 'a'] += 'A' - 'a';
@@ -121,8 +140,8 @@ int logicaRiscarCasa (char *coordenada, Info I) {
     // Adiciona a nova jogada à lista de jogadas
     addJogada (I, Jogs, 1);
 
-    // Conta uma jogada
-    I -> nJogadas++;
+    // Contabiliza uma jogada na pontuação
+    I -> pont--;
 
     // Muda a casa para vazia
     I -> Tabuleiro [l - 1][c - 'a'] = '#';
@@ -140,6 +159,9 @@ int logicaDesfazerJogada (char *nTab, Info I) {
 
     // Índice do tabuleiro para o qual o jogador pretende retornar
     int q;
+
+    // Armazena o número do tabuleiro original
+    int nTabOriginal = I -> nTabuleiro;
 
     // Verifica se o jogador pretende desfazer múltiplas jogadas
     if (nTab == NULL) q = I -> nTabuleiro - 1;
@@ -165,8 +187,8 @@ int logicaDesfazerJogada (char *nTab, Info I) {
         remJogada (I);
     }
 
-    // Conta uma jogada
-    I -> nJogadas++;
+    // Contabiliza uma jogada na pontuação
+    I -> pont += I -> nTabuleiro - nTabOriginal;
 
     return 0;
 }
@@ -217,7 +239,7 @@ int logicaVerifica (char *arg, Info I) {
     validade = preencheTabInfracoes (I, TabInfracoes);
 
     // Imprime o tabuleiro do jogo indicando as infrações
-    if (validade == 0 && I -> eJogo) destacaInfracoes (I -> dL, I -> dC, I -> Tabuleiro, TabInfracoes);
+    if (validade == 0 && I -> eJogo) destacaInfracoes (I -> dL, I -> dC, I -> Tabuleiro, TabInfracoes, 0);
 
     return validade;
 }
@@ -243,14 +265,26 @@ int logicaAjuda (char *arg, Info I) {
         int validade = 1;
 
         // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-        if (!verificaInfracoes (I, 1)) validade = 0;
+        if (!verificaInfracoes (I, 0)) validade = 0;
 
         // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-        if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
+        if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
 
         // O tabuleiro não possui infrações
         if (validade) {
+
+            // Armazena o tabuleiro atual e a pontuação
+            char TPreAlteracoes [I -> dL][I -> dC + 2];
+            int pontAnterior = I -> pont;
+
+            // Copia o tabuleiro atual
+            for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
+
+            // Realiza o comando
             if (!ajudaUmaVez (I, versaoComando)) return 2;
+
+            // Adiciona a jogada ao histórico
+            adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, pontAnterior - I -> pont);
         }
 
         // Avisa que o tabuleiro possui infrações
@@ -283,9 +317,9 @@ int logicaAjudaRep (char *arg, Info I) {
     // Avisa que o tabuleiro possui infrações
     if (validade == 0) return 3;
 
-    // Armazena o tabuleiro atual e o número de jogadas
+    // Armazena o tabuleiro atual e a pontuação
     char TPreAlteracoes [I -> dL][I -> dC + 2];
-    int nJogadasAnterior = I -> nJogadas;
+    int pontAnterior = I -> pont;
             
     // Copia o tabuleiro atual
     for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
@@ -297,7 +331,7 @@ int logicaAjudaRep (char *arg, Info I) {
     while (ajudaUmaVez (I, 1));
 
     // Adiciona a jogada ao histórico
-    adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+    adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, pontAnterior - I -> pont);
 
     return 0;
 }
@@ -313,9 +347,9 @@ int logicaResolveJogo (char *arg, Info I, int flag) {
     // Verifica se existe um jogo para resolver
     if (I -> nTabuleiro == 0) return 2;
 
-    // Armazena o tabuleiro atual e o número de jogadas
+    // Armazena o tabuleiro atual e a pontuação
     char TPreAlteracoes [I -> dL][I -> dC + 2];
-    int nJogadasAnterior = I -> nJogadas;
+    int pontAnterior = I -> pont;
 
     // Copia o tabuleiro atual
     for (int i = 0; i < I -> dL; i++) strcpy (TPreAlteracoes [i], I -> Tabuleiro [i]);
@@ -324,11 +358,25 @@ int logicaResolveJogo (char *arg, Info I, int flag) {
     if (!resolve (I, I -> dL, I -> dC, TPreAlteracoes)) return 3;
 
     // Foi invocado o comando 'R'
-    if (flag) adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, I -> nJogadas - nJogadasAnterior);
+    if (flag) adicionaJogada (I, I -> dL, I -> dC, TPreAlteracoes, pontAnterior - I -> pont);
 
     // Foi invocado o comando 'X'
     else {
-        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, 0, 1);
+        // Cria o tabuleiro de infrações
+        int TabInfracoes [I -> dL][I -> dC];
+
+        // Preenche o tabuleiro de infrações
+        for (int i = 0; i < I -> dL; i++) 
+            for (int j = 0; j < I -> dC; j++) {
+                if (eMinuscula (TPreAlteracoes [i][j])) TabInfracoes [i][j] = 2;
+                else if (I -> Tabuleiro [i][j] == TPreAlteracoes [i][j]) TabInfracoes [i][j] = 0;
+                else TabInfracoes [i][j] = 1;
+            }
+
+        // Imprime o tabuleiro
+        destacaInfracoes (I -> dL, I -> dC, I -> Tabuleiro, TabInfracoes, 1);
+
+        // Retorna ao tabuleiro original
         for (int i = 0; i < I -> dL; i++) strcpy (I -> Tabuleiro [i], TPreAlteracoes [i]);
     }
 
@@ -355,16 +403,16 @@ int logicaApagaHistorico (char *arg, Info I) {
 
 
 
-// Função que realiza a lógica do comando 'j' (imprimeNJogadas)
-int logicaImprimeNJogadas (char *arg, Info I) {
+// Função que realiza a lógica do comando 'p' (imprimePont)
+int logicaImprimePont (char *arg, Info I) {
 
     // Verifica se não foi recebido um argumento
-    if (arg != NULL) return 1;
+    if (arg != NULL) return -1;
 
     // Verifica se já foi lido um tabuleiro
-    if (I -> nTabuleiro == 0) return 2;
+    if (I -> nTabuleiro == 0) return -2;
 
-    return 0;
+    return valorPont (I -> dL, I -> dC, I -> pont);
 }
 
 
