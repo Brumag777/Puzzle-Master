@@ -9,16 +9,16 @@ bool gravar (char cmd, char args [2][LINE_SIZE], Info I) {
         int n = logicaGravar (args [0], I);
 
         // Avisa se o jogo foi gravado com sucesso
-        if (n == 0) printf (VERDE "\nJogo gravado em '%s'.\n\n" RESET, args [0]);
-
-        // Avisa se não foi dado um argumento
-        else if (n == 1) fprintf (stderr, VERMELHO "\nErro: O comando g precisa de um argumento (nome do ficheiro).\n\n" RESET);
+        if (n >= 0) printf (VERDE "\nJogo gravado na save %d do jogo %d.\n\n" RESET, n, I -> nJogo);
 
         // Avisa se não há nada a guardar
-        else if (n == 2) fprintf (stderr, VERMELHO "\nErro: Não há nenhum tabuleiro para guardar. Leia um ficheiro para iniciar o jogo.\n\n" RESET);
+        else if (n == -1) fprintf (stderr, VERMELHO "\nErro: Não há nenhum tabuleiro para guardar. Leia um ficheiro para iniciar o jogo.\n\n" RESET);
 
         // Avisa se não foi possível abrir o ficheiro
-        else if (n == 3) fprintf (stderr, VERMELHO "\nErro: Não foi possível abrir o ficheiro.\n\n" RESET);
+        else if (n == -2) fprintf (stderr, VERMELHO "\nErro: Não foi possível abrir o ficheiro.\n\n" RESET);
+
+        // Avisa se o argumento dado não é um natural
+        else if (n == -3) fprintf (stderr, VERMELHO "\nErro: O argumento deve ser um número natural.\n\n" RESET);
 
         return true;
     }

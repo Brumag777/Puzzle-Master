@@ -536,22 +536,22 @@ int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL]
 
 
 // Forma o nome de um ficheiro
-void formaNomeFicheiro (char *nomeFicheiro, char args [2][LINE_SIZE], bool eJogo) {
+void formaNomeFicheiro (char *nomeFicheiro, char nums [2][LINE_SIZE], bool eJogo) {
 
     // Se é um teste, define o nome como o nome dos ficheiros de teste
     if (!eJogo) {
-        strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestarLer");
+        strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestar");
         return;
     }
 
     // Calcula o tamanho do primeiro argumento
-    int tArg1 = strlen (args [0]);
+    int tArg1 = strlen (nums [0]);
 
     // Forma o nome
     strcpy (nomeFicheiro, "Jogos/J");
-    strcpy (nomeFicheiro + 7, args [0]);
+    strcpy (nomeFicheiro + 7, nums [0]);
     strcpy (nomeFicheiro + 7 + tArg1, "/S");
-    strcpy (nomeFicheiro + 7 + tArg1 + 2, args [1]);
+    strcpy (nomeFicheiro + 7 + tArg1 + 2, nums [1]);
 }
 
 

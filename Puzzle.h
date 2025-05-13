@@ -36,6 +36,7 @@ typedef struct info {
     char **Tabuleiro;
     LJogadas HJogadas;
     bool eJogo;
+    int nJogo;
 } INFO, *Info;
 
 // Função dos comandos do jogo
@@ -258,7 +259,7 @@ int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [
 int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
 
 // Forma o nome de um ficheiro
-void formaNomeFicheiro (char *nomeFicheiro, char args [2][LINE_SIZE], bool eJogo);
+void formaNomeFicheiro (char *nomeFicheiro, char nums [2][LINE_SIZE], bool eJogo);
 
 // Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
 int valorPont (int dL, int dC, int pont);

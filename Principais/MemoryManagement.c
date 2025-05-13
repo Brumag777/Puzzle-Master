@@ -11,6 +11,7 @@ Info inicializaJogo () {
     I -> Tabuleiro = NULL;
     I -> HJogadas = NULL;
     I -> eJogo = true;
+    I -> nJogo = 0;
     return I;
 }
 

@@ -1,19 +1,61 @@
 #include "../Puzzle.h"
 
 // Função que realiza a lógica do comando 'g' (gravar)
-int logicaGravar (char *nomeFicheiro, Info I) {
+int logicaGravar (char *arg, Info I) {
 
-    // Verifica se foi recebido um argumento
-    if (nomeFicheiro == NULL) return 1;
+    // Inteiro a devolver no fim
+    int nSave;
 
     // Verifica se existe um tabuleiro para guardar
-    if (I -> nTabuleiro == 0) return 2;
+    if (I -> nTabuleiro == 0) return -1;
+
+    // Declara o nome do ficheiro
+    char nomeFicheiro [LINE_SIZE] = "Jogos/J0/S0";
+
+    // Define o número do jogo
+    nomeFicheiro [7] = I -> nJogo + '0';
+
+    // Se foi dado um argumento o jogo será guardado no ficheiro escolhido
+    if (arg != NULL) {
+
+        // Torna o argumetno num inteiro (para verificar se é válido)
+        nSave = atoi (arg);
+
+        // Verifica se o argumento é válido (número natural)
+        if (nSave < 1) return -3;
+        
+        // Define o ficheiro escolhido
+        sprintf (nomeFicheiro + 10, "%d", nSave);
+    }
+
+    // Caso contrário será guardado na save de menor índice que ainda não existe
+    else {
+
+        // Procura, índice a índice, um ficheiro que ainda não existe
+        for (int flag = nSave = 1; flag; nSave++) {
+
+            // Altera o índice
+            sprintf (nomeFicheiro + 10, "%d", nSave);
+
+            // Tenta abrir o ficheiro
+            FILE *Jogo = fopen (nomeFicheiro, "r");
+
+            // Não conseguiu abrir o ficheiro, então não existe
+            if (Jogo == NULL) flag = 0;
+
+            // Conseguiu abrir o ficheiro
+            else fclose (Jogo);
+        }
+
+        // Decrementa nSave
+        nSave--;
+    }
 
     // Abre o ficheiro a preencher
     FILE *Jogo = fopen (nomeFicheiro, "w");
 
     // Verifica se o ficheiro foi aberto corretamente
-    if (Jogo == NULL) return 3;
+    if (Jogo == NULL) return -2;
 
     // Guarda a informação do jogo no ficheiro
     guardaInfo (Jogo, I);
@@ -21,7 +63,7 @@ int logicaGravar (char *nomeFicheiro, Info I) {
     // Fecha o ficheiro
     fclose (Jogo);
 
-    return 0;
+    return nSave;
 }
 
 
@@ -56,6 +98,9 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
 
     // Verifica se o ficheiro foi lido com sucesso
     if (Jogo == NULL) return 2;
+
+    // Define o número do jogo
+    I -> nJogo = arg1;
 
     // Lê o ficheiro
     return leFicheiro (Jogo, I);
