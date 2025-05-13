@@ -465,6 +465,9 @@ bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I) {
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
 
+    // Para evitar warnings
+    (void) I;
+
     if (cmd == 'h') {
 
         // Realiza a lógica do comando 'h'

@@ -142,7 +142,7 @@ void teste_logicaLer () {
 
     // Define os argumentos
     strcpy (args [0], "-1");
-    strcpy (args [1], "0");
+    strcpy (args [1], "1");
 
     // Testa o caso em que o ficheiro é inválido
     CU_ASSERT_EQUAL (logicaLer (args, I), 6);

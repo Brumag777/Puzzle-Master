@@ -10,14 +10,11 @@ int logicaGravar (char *arg, Info I) {
     if (I -> nTabuleiro == 0) return -1;
 
     // Declara o nome do ficheiro
-    char nomeFicheiro [LINE_SIZE] = "Jogos/J0/S0";
-
-    // Define o número do jogo
-    nomeFicheiro [7] = I -> nJogo + '0';
+    char nomeFicheiro [LINE_SIZE];
 
     // Caso de testes
     if (!I -> eJogo) strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestar");
-
+    
     // Se foi dado um argumento o jogo será guardado no ficheiro escolhido
     else if (arg != NULL) {
 
@@ -28,7 +25,7 @@ int logicaGravar (char *arg, Info I) {
         if (nSave < 1) return -3;
         
         // Define o ficheiro escolhido
-        sprintf (nomeFicheiro + 10, "%d", nSave);
+        sprintf (nomeFicheiro, "Jogos/J%d/S%d", I -> nJogo, nSave);
     }
 
     // Caso contrário será guardado na save de menor índice que ainda não existe
@@ -38,7 +35,7 @@ int logicaGravar (char *arg, Info I) {
         for (int flag = nSave = 1; flag; nSave++) {
 
             // Altera o índice
-            sprintf (nomeFicheiro + 10, "%d", nSave);
+            sprintf (nomeFicheiro, "Jogos/J%d/S%d", I -> nJogo, nSave);
 
             // Tenta abrir o ficheiro
             FILE *Jogo = fopen (nomeFicheiro, "r");
@@ -79,16 +76,18 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
 
     // Torna os dois argumentos em inteiros (para verificar se são válidos)
     int arg1 = atoi (args [0]), arg2 = 0;
-    if (args [1][0]) arg2 = atoi (args [1]);
+    if (args [1][0]) {
+        arg2 = atoi (args [1]);
+
+        // Verifica se os argumentos são válidos
+        if (arg1 < 1 || arg2 < 0) return 6;
+    }
     
     // Se não foi dado um segundo argumento, é interpretado como 0
     else {
         args [1][0] = '0';
         args [1][1] = 0;
     }
-
-    // Verifica se os argumentos são válidos
-    if (arg1 < 1 || arg2 < 1) return 6;
 
     // Declara o nome do ficheiro (Jogos/Jarg1/Sarg2)
     char nomeFicheiro [LINE_SIZE];

@@ -544,14 +544,8 @@ void formaNomeFicheiro (char *nomeFicheiro, char nums [2][LINE_SIZE], bool eJogo
         return;
     }
 
-    // Calcula o tamanho do primeiro argumento
-    int tArg1 = strlen (nums [0]);
-
     // Forma o nome
-    strcpy (nomeFicheiro, "Jogos/J");
-    strcpy (nomeFicheiro + 7, nums [0]);
-    strcpy (nomeFicheiro + 7 + tArg1, "/S");
-    strcpy (nomeFicheiro + 7 + tArg1 + 2, nums [1]);
+    sprintf (nomeFicheiro, "Jogos/J%s/S%s", nums [0], nums [1]);
 }
 
 
