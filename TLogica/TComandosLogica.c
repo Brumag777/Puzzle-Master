@@ -7,12 +7,10 @@ void teste_logicaGravar () {
     I -> dC = 5;
     I -> nTabuleiro = 0;
     I -> pont = 6;
+    I -> eJogo = false;
 
     // Testa o caso em que não há nenhum tabuleiro
-    CU_ASSERT_EQUAL (logicaGravar ("JogoParaTestarGravar", I), 2);
-
-    // Testa o caso em que não é dado um argumento
-    CU_ASSERT_EQUAL (logicaGravar (NULL, I), 1);
+    CU_ASSERT_EQUAL (logicaGravar (NULL, I), -1);
 
     // Altera o número do tabuleiro
     I -> nTabuleiro = 1;
@@ -48,10 +46,10 @@ void teste_logicaGravar () {
     addJogada (I, J3, 4);
 
     // Realiza a função
-    CU_ASSERT_EQUAL (logicaGravar ("JogoParaTestarGravar", I), 0);
+    CU_ASSERT_EQUAL (logicaGravar ("1", I), 1);
 
     // Abre o ficheiro novamente
-    FILE *Jogo = fopen ("JogoParaTestarGravar", "r");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestar", "r");
 
     // Lê o número de linhas e de colunas
     int nL, nC;

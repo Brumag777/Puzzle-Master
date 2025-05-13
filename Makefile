@@ -18,10 +18,10 @@ PuzzleMaster: $(MAIN_OBJ)
 Testes: $(TEST_OBJ)
 	$(CC) $(CFLAGS) -DTESTING -o $@ $^ $(LDFLAGS)
 	./Testes
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Lista.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Auxiliares.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'ComandosLogica.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'ComandosLogicaA.c'"
+	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Lista.c'"
+	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Auxiliares.c'"
+	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogica.c'"
+	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogicaA.c'"
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

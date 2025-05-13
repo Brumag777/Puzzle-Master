@@ -865,7 +865,7 @@ void teste_formaNomeFicheiro () {
     formaNomeFicheiro (nomeFicheiro, NULL, false);
 
     // Testa o resultado da função
-    CU_ASSERT_EQUAL (strcmp (nomeFicheiro, "Jogos/Testes/JogoParaTestarLer"), 0);
+    CU_ASSERT_EQUAL (strcmp (nomeFicheiro, "Jogos/Testes/JogoParaTestar"), 0);
 
     // Altera os argumentos
     strcpy (args [0], "1");

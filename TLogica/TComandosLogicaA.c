@@ -39,7 +39,7 @@ void teste_guardaInfo () {
     addJogada (I, J3, 4);
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "w");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestar", "w");
 
     // Realiza a função
     guardaInfo (Jogo, I);
@@ -48,7 +48,7 @@ void teste_guardaInfo () {
     fclose (Jogo);
 
     // Abre o ficheiro novamente
-    Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "r");
+    Jogo = fopen ("Jogos/Testes/JogoParaTestar", "r");
 
     // Lê o número de linhas e de colunas
     int nL, nC;
@@ -170,7 +170,7 @@ void teste_guardaJogadas () {
     addJogada (I, J3, 4);
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "w");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestar", "w");
     
     // Guarda o número de linhas e de colunas do tabuleiro
     fprintf (Jogo, "%d %d\n", I -> dL, I -> dC);
@@ -191,7 +191,7 @@ void teste_guardaJogadas () {
     fclose (Jogo);
 
     // Abre o ficheiro novamente
-    Jogo = fopen ("Jogos/Testes/JogoParaTestarGravar", "r");
+    Jogo = fopen ("Jogos/Testes/JogoParaTestar", "r");
 
     // Variáveis para ler partes desnecessárias do ficheiro
     int x; char s [7];
@@ -274,7 +274,7 @@ void teste_leFicheiro () {
     Info I = inicializaJogo ();
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarLer", "r");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestar", "r");
 
     // Realiza a função
     leFicheiro (Jogo, I);
@@ -320,7 +320,7 @@ void teste_leLinhasJogadas () {
     Info I = inicializaJogo ();
 
     // Abre o ficheiro
-    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestarLer", "r");
+    FILE *Jogo = fopen ("Jogos/Testes/JogoParaTestar", "r");
 
     // Liberta a memória alocada para o tabuleiro anterior
     libertaTabuleiro (I);

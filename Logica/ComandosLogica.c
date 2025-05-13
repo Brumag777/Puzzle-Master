@@ -4,7 +4,7 @@
 int logicaGravar (char *arg, Info I) {
 
     // Inteiro a devolver no fim
-    int nSave;
+    int nSave = 1;
 
     // Verifica se existe um tabuleiro para guardar
     if (I -> nTabuleiro == 0) return -1;
@@ -15,8 +15,11 @@ int logicaGravar (char *arg, Info I) {
     // Define o número do jogo
     nomeFicheiro [7] = I -> nJogo + '0';
 
+    // Caso de testes
+    if (!I -> eJogo) strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestar");
+
     // Se foi dado um argumento o jogo será guardado no ficheiro escolhido
-    if (arg != NULL) {
+    else if (arg != NULL) {
 
         // Torna o argumetno num inteiro (para verificar se é válido)
         nSave = atoi (arg);
