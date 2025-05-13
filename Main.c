@@ -4,7 +4,7 @@
 int main () {
 
     // Lista de comandos do jogo
-    COMANDO comandos [] = {sair, ler, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
+    COMANDO comandos [] = {sair, ler, criarJogo, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
                            verifica, ajuda, ajudaRep, resolveJogo, imprimePont, desfazerJogada, apagaHistorico,
                            explicaJogo, mostrarSolucao, NULL};
 
@@ -35,12 +35,12 @@ int main () {
         if (num_args <= 2) strcpy (args [1], "\0");
 
         // Verifica se o número de argumentos é válido (0 ou 1 se o comando não for o 'l', 0, 1 ou 2 se o comando for o 'l')
-        if (num_args > 3 || (num_args > 2 && cmd != 'l')) fprintf (stderr, VERMELHO "\nErro: Comando inválido.\n\n" RESET);
+        if (num_args > 3 || (num_args > 2 && cmd != 'l')) fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
 
         // Verifica se algum dos comandos foi invocado
         else for (int i = 0, flag = 0; flag == 0; i++)
-                if (i > 15) {
-                    fprintf (stderr, VERMELHO "\nErro: Comando inváldio.\n\n" RESET);
+                if (i > 16) {
+                    fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
                     flag = 1;
                 }
                 else flag = comandos [i] (cmd, (num_args > 1) ? args : NULL, I);

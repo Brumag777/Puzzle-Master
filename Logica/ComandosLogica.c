@@ -279,8 +279,12 @@ int logicaVerifica (char *arg, Info I) {
     // Cria o tabuleiro de infrações
     int TabInfracoes [I -> dL][I -> dC];
 
-    // Preenche o tabuleiro de infrações com zeros
-    for (int i = 0; i < I -> dL; i++) for (int j = 0; j < I -> dC; j++) TabInfracoes [i][j] = 0;
+    // Preenche o tabuleiro de infrações
+    for (int i = 0; i < I -> dL; i++) 
+        for (int j = 0; j < I -> dC; j++) {
+            if (eMinuscula (I -> Tabuleiro [i][j])) TabInfracoes [i][j] = 2;
+            else TabInfracoes [i][j] = 0;
+        }
 
     // Preenche o tabuleiro de infrações com uns onde possui infrações
     validade = preencheTabInfracoes (I, TabInfracoes);
@@ -446,6 +450,109 @@ int logicaApagaHistorico (char *arg, Info I) {
     while (I -> nTabuleiro > 1) remJogada (I);
 
     return 0;
+}
+
+
+
+// Função que realiza a lógica do comando 'c' (criarJogo)
+int logicaCriarJogo (char *arg) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg != NULL) return -1;
+
+    // Inicializa um novo Info
+    Info I = inicializaJogo ();
+
+    // Avisa o jogador do que tem de fazer
+    printf ("\nDigite o número de linha e de colunas do jogo desejado.\n\n");
+
+    // Lê o número de linhas e de colunas do tabuleiro
+    if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) {
+        libertaInfo (I);
+        return -2;
+    }
+
+    // Verifica se o número de linhas e de colunas é válido
+    if (I -> dL < 0 || I -> dC < 0 || I -> dL > 26 || I -> dC > 26) {
+        libertaInfo (I);
+        return -3;
+    }
+
+    // Altera o número do tabuleiro
+    I -> nTabuleiro = 1;
+
+    // Inicializa o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Avisa o jogador do que tem de fazer
+    printf ("\nDigite o tabuleiro do jogo desejado.\n\n");
+
+    // Lê o tabuleiro
+    for (int i = 0; i < I -> dL; i++) 
+        if (scanf ("%s", I -> Tabuleiro [i]) != 1) {
+            libertaInfo (I);
+            return -2;
+        }
+
+    // Verifica se o tabuleiro é válido
+    if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) {
+        libertaInfo (I);
+        return -4;
+    }
+
+    // Cria o nome do ficheiro
+    char nomeFicheiro [LINE_SIZE];
+
+    // Procura, índice a índice, um ficheiro que ainda não existe
+    for (int flag = I -> nJogo = 1; flag; I -> nJogo++) {
+
+        // Altera o índice
+        sprintf (nomeFicheiro, "Jogos/J%d/S0", I -> nJogo);
+
+        // Tenta abrir o ficheiro
+        FILE *Jogo = fopen (nomeFicheiro, "r");
+
+        // Não conseguiu abrir o ficheiro, então não existe
+        if (Jogo == NULL) flag = 0;
+
+        // Conseguiu abrir o ficheiro
+        else fclose (Jogo);
+    }
+
+    // Decrementa o número do jogo
+    I -> nJogo--;
+
+    // Atualiza a pontuação
+    I -> pont = 4 * I -> dL * I -> dC;
+
+    // Cria o nome da nova diretoria
+    char nomeDiretoria [LINE_SIZE];
+
+    // Define o nome da nova diretoria
+    sprintf (nomeDiretoria, "Jogos/J%d", I -> nJogo);
+
+    // Cria a nova diretoria para o jogo novo
+    if (mkdir (nomeDiretoria, 0777)) {
+        libertaInfo (I);
+        return -5;
+    }
+
+    // Cria o ficheiro novo
+    FILE *Jogo = fopen (nomeFicheiro, "w");
+
+    // Grava o ficheiro novo
+    guardaInfo (Jogo, I);
+
+    // Fecha o ficheiro
+    fclose (Jogo);
+
+    // Guarda o número do jogo
+    int nJogo = I -> nJogo;
+
+    // Liberta a memória alocada
+    libertaInfo (I);
+
+    return nJogo;
 }
 
 

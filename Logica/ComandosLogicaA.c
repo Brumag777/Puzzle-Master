@@ -208,7 +208,7 @@ int verificaCaminhoOrtogonal (Info I, int flag) {
     if (nLetras == contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) return 1;
 
     // Avisa que não existe um caminho ortogonal entre todas as letras
-    if (I -> eJogo && flag) printf (VERMELHO "Não existe um caminho ortogonal entre todas as letras.\n" RESET);
+    if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " Não existe um caminho ortogonal entre todas as letras.\n");
 
     return 0;
 }
@@ -259,8 +259,11 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]) {
 
     // Percorre o tabuleiro para mudar as letras minúsculas restantes
     for (int i = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
+        for (int j = 0; j < I -> dC; j++) {
             if (eMinuscula (I -> Tabuleiro [i][j])) {
+                
+                // Decrementa a pontuação
+                I -> pont--;
 
                 // Armazena o caractere original
                 char c = I -> Tabuleiro [i][j];
@@ -272,11 +275,14 @@ int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]) {
                 // Testa o caso da casa ser riscada
                 I -> Tabuleiro [i][j] = '#';
                 if (resolve (I, dL, dC, TabuleiroOriginal)) return 1;
+
+                // Retorna ao caractere original
                 I -> Tabuleiro [i][j] = c;
 
                 // É impossível resolver o jogo
                 return 0;
             }
+    }
 
     // Não há minúsculas e o tabuleiro é válido, logo o jogo está resolvido
     return 1;

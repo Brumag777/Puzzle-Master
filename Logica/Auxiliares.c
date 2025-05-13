@@ -167,7 +167,7 @@ int verificaLinhas (Info I, char c, int linha, int coluna, int flag) {
     for (int j = coluna + 1; j < I -> dC; j++)
 
         if (I -> Tabuleiro [linha][j] == c) {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n" RESET, c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -186,7 +186,7 @@ int verificaColunas (Info I, char c, int linha, int coluna, int flag) {
     for (int i = linha + 1; i < I -> dL; i++)
 
         if (I -> Tabuleiro [i][coluna] == c) {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n" RESET, c, coluna + 'a', linha + 1, i + 1);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -204,14 +204,14 @@ int verificaCasaVazia (Info I, int linha, int coluna, int flag) {
     // Verifica a casa à direita
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (I -> Tabuleiro [linha][coluna + 1] == '#') {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
     // Verifica a casa abaixo
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (I -> Tabuleiro [linha + 1][coluna] == '#') {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 
@@ -439,7 +439,10 @@ int testaPossibilidadesCasaAux (Info I, int linha, int coluna) {
             }
 
     // Verifica se o tabuleiro possui pelo menos uma letra
-    if (nLetras == 0) return 0;
+    if (nLetras == 0) {
+        I -> Tabuleiro [linha][coluna] = C;
+        return 0;
+    }
 
     // Verifica se existe um caminho ortogonal entre todas as letras
     if (nLetras != contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) {
@@ -480,7 +483,7 @@ int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [
     for (int j = coluna + 1; j < I -> dC; j++)
         if (I -> Tabuleiro [linha][j] == c) {
             TabInfracoes [linha][coluna] = TabInfracoes [linha][j] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração: Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n" RESET, c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo) printf (VERMELHO "Infraçã:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 
@@ -499,7 +502,7 @@ int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [
     for (int i = linha + 1; i < I -> dL; i++)
         if (I -> Tabuleiro [i][coluna] == c) {
             TabInfracoes [linha][coluna] = TabInfracoes [i][coluna] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração: Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n" RESET, c, coluna + 'a', linha + 1, i + 1);
+            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
             validade = 0;
         }
 
@@ -518,7 +521,7 @@ int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL]
     if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
         if (I -> Tabuleiro [linha][coluna + 1] == '#') {
             TabInfracoes [linha][coluna] = TabInfracoes [linha][coluna + 1] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
+            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
             validade = 0;
         }
 
@@ -526,7 +529,7 @@ int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL]
     if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
         if (I -> Tabuleiro [linha + 1][coluna] == '#') {
             TabInfracoes [linha][coluna] = TabInfracoes [linha + 1][coluna] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração: As casas vazias %c%d e %c%d estão juntas.\n" RESET, coluna + 'a', linha + 1, coluna + 'a', linha + 2);
+            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
             validade = 0;
         }
 

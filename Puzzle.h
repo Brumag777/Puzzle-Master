@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "CUnit/Basic.h"
 
 #define LINE_SIZE 1024
@@ -90,6 +92,9 @@ bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I);
 // Revela a pontuação atual
 bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I);
 
+// Permite ao jogador criar um jogo novo
+bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I);
+
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I);
 
@@ -137,6 +142,9 @@ int logicaResolveJogo (char *arg, Info I, int flag);
 
 // Função que realiza a lógica do comando 'D' (apagaHistorico)
 int logicaApagaHistorico (char *arg, Info I);
+
+// Função que realiza a lógica do comando 'c' (criarJogo)
+int logicaCriarJogo (char *arg);
 
 // Função que realiza a lógica do comando 'p' (imprimePont)
 int logicaImprimePont (char *arg, Info I);
