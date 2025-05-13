@@ -471,36 +471,32 @@ bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
         int n = logicaListarInfo (args [0]);
 
         // Caso de sucesso da função
-        if (n == 0) {
+        if (n == 0)
             // Imprime os comandos do jogo
             printf ("\nOs comandos do jogo são:\n"
-                    "g <ficheiro>: Grava o tabuleiro num ficheiro.\n"
-                    "l <ficheiro>: Lê um tabuleiro de um ficheiro.\n"
-                    "b <coordenada>: Pinta a casa selecinada de branco (caso possível).\n"
-                    "r <coordenada>: Torna a casa selecionada vazia (caso possível).\n"
-                    "v: Verifica se existem infrações na posição atual.\n"
-                    "V: Permite ver o último tabuleiro.\n"
-                    "V <natural>: Permite ver os tabuleiros anteriores.\n"
+                    "g: Grava o jogo atual numa nova save.\n"
+                    "g 'x': Grava o jogo atual na save 'x'. 'x' deve ser um número natural.\n"
+                    "l 'x': Abre o jogo 'x' na save original. 'x' Deve ser um número natural.\n"
+                    "l 'x' 'y': Abre o jogo 'x' na save 'y'. 'x' e 'y' devem ser números naturais.\n"
+                    "b <coordenada>: Pinta a casa selecinada de branco.\n"
+                    "r <coordenada>: Torna a casa selecionada vazia.\n"
+                    "v: Verifica se existem infrações no jogo atual e avisa das mesmas.\n"
+                    "V: Revela o último tabuleiro.\n"
+                    "V 'x': Permite ver os últimos 'x' tabuleiros. 'x' deve ser um número natural.\n"
                     "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
                     "a b: Ajuda pintando de branco as casas à volta de casas riscadas.\n"
                     "a r: Ajuda riscando as casas na mesma linha ou coluna que casas brancas com a mesma letra.\n"
                     "a o: Ajuda pintando de branco as casas que se fossem riscadas não permitiam um caminho ortogonal entre todas as letras.\n"
-                    "A: Ajuda realizando todas as jogadas necessárias na posição até não haver mais nenhuma a realizar.\n"
-                    "R: Resolve o jogo (se for possível).\n"
-                    "X: Mostra a solução do tabuleiro atual (caso exista).\n"
+                    "A: Ajuda realizando todas as jogadas necessárias na posição repetidamente até não haver mais nada a alterar.\n"
+                    "R: Resolve o jogo atual.\n"
+                    "X: Mostra a solução do jogo atual.\n"
                     "d: Desfaz a última jogada.\n"
-                    "d <natural>: Desfaz as últimas jogadas até ao tabuleiro selecinado.\n"
+                    "d 'x': Desfaz as últimas jogadas até ao tabuleiro 'x'. 'x' deve ser um número natural.\n"
                     "D: Apaga o histórico do jogo.\n"
-                    "S: Revela a pontuação atual.\n"
+                    "p: Revela a pontuação atual.\n"
                     "s: Termina o jogo.\n"
                     "e: Explica o objetivo e as regras do jogo.\n"
                     "h: Lista todos os comandos do jogo.\n\n");
-            if (I -> nTabuleiro) {
-                printf ("As coordenadas devem estar compreendidas entre a1 e %c%d \n", I -> dC + 'a' - 1, I -> dL);
-                printf ("Os números naturais devem ser iguais ou inferiores a %d\n\n", I -> nTabuleiro);
-            }
-            else printf ("Leia um ficheiro para usar os comandos.\n\n");
-        }
 
         // Avisa se foi dado um argumento
         else if (n == 1) fprintf (stderr, VERMELHO "\nErro: O comando h não precisa de um argumento.\n\n" RESET);
@@ -527,11 +523,11 @@ bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Explica o jogo
-            printf ("\nO objetivo do jogo é ganhar. Por outras palavras, não perder.\n\n");
+            printf ("\n...\n\n");
         }
 
         // Avisa se foi dado um argumento
-        else if (n == 1) fprintf (stderr, VERMELHO "\nErro: O comando h não precisa de um argumento.\n\n" RESET);
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro: O comando e não precisa de um argumento.\n\n" RESET);
 
         return true;
     }

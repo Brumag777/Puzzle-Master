@@ -88,7 +88,7 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
     }
 
     // Verifica se os argumentos são válidos
-    if (arg1 < 1 || arg2 < 0) return 6;
+    if (arg1 < 1 || arg2 < 1) return 6;
 
     // Declara o nome do ficheiro (Jogos/Jarg1/Sarg2)
     char nomeFicheiro [LINE_SIZE];

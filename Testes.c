@@ -1,8 +1,8 @@
 #include "Puzzle.h"
-#include "TLogica/TLista.c"
-#include "TLogica/TAuxiliares.c"
-#include "TLogica/TComandosLogica.c"
-#include "TLogica/TComandosLogicaA.c"
+#include "FTestes/TLista.c"
+#include "FTestes/TAuxiliares.c"
+#include "FTestes/TComandosLogica.c"
+#include "FTestes/TComandosLogicaA.c"
 
 // Função principal
 int main () {

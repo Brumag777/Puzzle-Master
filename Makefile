@@ -5,7 +5,7 @@ COVERAGE_FLAGS = --coverage
 CFLAGS = $(BASE_FLAGS) $(SANITIZE_FLAGS) $(COVERAGE_FLAGS)
 LDFLAGS = -lcunit
 
-SRC = Principais/MemoryManagement.c Logica/Lista.c Logica/Auxiliares.c Principais/Comandos.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Principais/Tab.c
+SRC = Memory/MemoryManagement.c Memory/Lista.c Logica/Auxiliares.c Interface/Comandos.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Interface/Tab.c
 OBJ = $(SRC:.c=.o)
 TEST_OBJ = Testes.o $(OBJ)
 MAIN_OBJ = Main.o $(OBJ)
@@ -18,10 +18,10 @@ PuzzleMaster: $(MAIN_OBJ)
 Testes: $(TEST_OBJ)
 	$(CC) $(CFLAGS) -DTESTING -o $@ $^ $(LDFLAGS)
 	./Testes
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Lista.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Auxiliares.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogica.c'"
-	gcov -b -c Logica/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogicaA.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Memory/Lista.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Auxiliares.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogica.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogicaA.c'"
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -29,5 +29,6 @@ Testes: $(TEST_OBJ)
 clean:
 	rm -f Jogo Testes *.o *.gcov *.gcda *.gcno \
 		              Logica/*.o Logica/*.gcov Logica/*.gcda Logica/*.gcno \
-	                  Principais/*.o Principais/*.gcov Principais/*.gcda Principais/*.gcno \
+	                  Interface/*.o Interface/*.gcov Interface/*.gcda Interface/*.gcno \
+					  Memory/*.o Memory/*.gcov Memory/*.gcda Memory/*.gcno \
 					  TLogica/*.o Principais/*.gcov TLogica/*.gcda TLogica/*.gcno
