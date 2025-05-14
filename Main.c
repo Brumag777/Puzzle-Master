@@ -35,7 +35,7 @@ int main () {
         if (num_args <= 2) strcpy (args [1], "\0");
 
         // Verifica se o número de argumentos é válido (0 ou 1 se o comando não for o 'l', 0, 1 ou 2 se o comando for o 'l')
-        if (num_args > 3 || (num_args > 2 && cmd != 'E' && cmd != 'l')) fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
+        if (num_args > 3 || (num_args > 2 && cmd != 'E' && cmd != 'l')) fprintf (stderr, VERMELHO "\nErro:" RESET " Número de argumentos excessivo.\n\n");
 
         // Verifica se algum dos comandos foi invocado
         else for (int i = 0, flag = 0; flag == 0; i++)
