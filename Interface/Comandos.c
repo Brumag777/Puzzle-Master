@@ -592,6 +592,7 @@ bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
                     "E 'x' 'y': Elimina a save 'y' do jogo 'x'. 'x' e 'y' devem ser números naturais.\n"
                     "s: Termina o jogo.\n"
                     "e: Explica o objetivo e as regras do jogo.\n"
+                    "j: Indica todos os jogos e as respetivas saves.\n"
                     "h: Lista todos os comandos do jogo.\n\n");
 
         // Avisa se foi dado um argumento
