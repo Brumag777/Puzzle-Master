@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "CUnit/Basic.h"
 
 #define LINE_SIZE 1024
@@ -12,6 +13,7 @@
 #define VERMELHO "\033[38;2;255;0;0m"
 #define VERDE "\033[38;2;0;255;0m"
 #define AMARELO "\033[38;2;255;190;0m"
+#define CINZENTO "\033[38;2;170;170;170m"
 #define RESET "\033[0m"
 
 // Informação acerca de uma jogada
@@ -95,6 +97,9 @@ bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I);
 // Permite ao jogador criar um jogo novo
 bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
+// Permite ao jogador eliminar um jogo
+bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I);
+
 // Lista os comandos do jogo
 bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I);
 
@@ -145,6 +150,9 @@ int logicaApagaHistorico (char *arg, Info I);
 
 // Função que realiza a lógica do comando 'c' (criarJogo)
 int logicaCriarJogo (char *arg);
+
+// Função que realiza a lógica do comando 'E' (eliminarJogo)
+int logicaEliminarJogo (char args [2][LINE_SIZE], Info I);
 
 // Função que realiza a lógica do comando 'p' (imprimePont)
 int logicaImprimePont (char *arg, Info I);

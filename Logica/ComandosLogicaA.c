@@ -54,7 +54,7 @@ int leFicheiro (FILE *Jogo, Info I) {
     libertaTabuleiro (I);
 
     // Limpa o histórico
-    logicaApagaHistorico (NULL, I);
+    while (I -> nTabuleiro > 1) remJogada (I);
 
     // Atualiza o número do tabuleiro
     I -> nTabuleiro = 1;

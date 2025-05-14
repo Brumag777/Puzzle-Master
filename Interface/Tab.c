@@ -30,7 +30,8 @@ void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int fla
 
         // Imprime a linha atual
         for (int j = 0; j < dC; j++)
-            printf ("%c ", Tabuleiro [i][j]);
+            if (eMinuscula (Tabuleiro [i][j])) printf (CINZENTO "%c " RESET, Tabuleiro [i][j]);
+            else printf ("%c ", Tabuleiro [i][j]);
         
         // Avança para a linha seguinte
         putchar ('\n');
@@ -66,7 +67,7 @@ void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][d
 
         // Imprime a linha atual
         for (int j = 0; j < dC; j++) {
-            if (TabInfracoes [i][j] == 2) printf ("%c ", Tabuleiro [i][j]);
+            if (TabInfracoes [i][j] == 2) printf (CINZENTO "%c " RESET, Tabuleiro [i][j]);
             else if (TabInfracoes [i][j] == 1) printf (VERMELHO "%c " RESET, Tabuleiro [i][j]);
             else printf (VERDE "%c " RESET, Tabuleiro [i][j]);
         }

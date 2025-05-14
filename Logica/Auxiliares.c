@@ -483,7 +483,7 @@ int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [
     for (int j = coluna + 1; j < I -> dC; j++)
         if (I -> Tabuleiro [linha][j] == c) {
             TabInfracoes [linha][coluna] = TabInfracoes [linha][j] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infraçã:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
+            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
             validade = 0;
         }
 

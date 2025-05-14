@@ -312,6 +312,7 @@ void teste_logicaDesfazerJogada () {
     I -> dC = 5;
     I -> nTabuleiro = 0;
     I -> pont = 2;
+    I -> eJogo = false;
 
     // Testa o caso em que ainda não foi lido um ficheiro
     CU_ASSERT_EQUAL (logicaDesfazerJogada (NULL, I), 1);

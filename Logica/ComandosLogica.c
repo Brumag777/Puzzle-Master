@@ -79,14 +79,41 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
     if (args [1][0]) {
         arg2 = atoi (args [1]);
 
-        // Verifica se os argumentos são válidos
-        if (arg1 < 1 || arg2 < 0) return 6;
+        // Verifica se o segundo argumento é válido
+        if (arg2 < 0) return 6;
     }
+
+    // Verifica se o primeiro argumento é válido
+    if (arg1 < 1) return 6;
     
     // Se não foi dado um segundo argumento, é interpretado como 0
     else {
         args [1][0] = '0';
         args [1][1] = 0;
+    }
+
+    // Se não é um teste, pergunta ao jogador se pretende gravar o jogo
+    if (I -> eJogo && I -> nTabuleiro) {
+
+        // Input do jogador
+        char input [LINE_SIZE];
+        
+        // Confirma se o jogador pretende gravar o jogo
+        printf ("\nPretende gravar o jogo antes de ler o novo?\n\n");
+        if (scanf ("%s", input) != 1) return 7;
+
+        // Verifica se a resposta do jogador é válida
+        while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
+            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            if (scanf ("%s", input) != 1) return 7;
+        }
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("S", input) == 0 || strcmp ("s", input) == 0) gravar ('g', NULL, I);
+
+        // Limpa o stdin
+        int ch;
+        while ((ch = getchar ()) != '\n' && ch != EOF);
     }
 
     // Declara o nome do ficheiro (Jogos/Jarg1/Sarg2)
@@ -115,6 +142,26 @@ int logicaSair (char *arg, Info I) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;
+
+    // Se não é um teste, pergunta ao jogador se pretende gravar o jogo
+    if (I -> eJogo && I -> nTabuleiro) {
+
+        // Input do jogador
+        char input [LINE_SIZE];
+        
+        // Confirma se o jogador pretende gravar o jogo
+        printf ("\nPretende gravar o jogo antes de sair?\n\n");
+        if (scanf ("%s", input) != 1) return 2;
+
+        // Verifica se a resposta do jogador é válida
+        while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
+            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            if (scanf ("%s", input) != 1) return 2;
+        }
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("S", input) == 0 || strcmp ("s", input) == 0) gravar ('g', NULL, I);
+    }
 
     // Define 'aCorrer' como falso de modo a terminar o ciclo na main
     I -> aCorrer = false;
@@ -226,6 +273,26 @@ int logicaDesfazerJogada (char *nTab, Info I) {
 
         // Verifica se o tabuleiro desejado existe
         if (q > I -> nTabuleiro) return 4;
+    }
+
+    // Se não é um teste, pergunta ao jogador se pretende realizar o comando
+    if (I -> eJogo) {
+
+        // Input do jogador
+        char input [LINE_SIZE];
+        
+        // Confirma se o jogador pretende retornar ao tabuleiro selecionado
+        printf ("\nTem a certeza de que deseja retornar ao tabuleiro %d?\n\n", q);
+        if (scanf ("%s", input) != 1) return 5;
+
+        // Verifica se a resposta do jogador é válida
+        while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
+            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            if (scanf ("%s", input) != 1) return 5;
+        }
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 0;
     }
 
     // Desfaz as últimas jogadas até ao tabuleiro anterior ao desejado
@@ -360,10 +427,10 @@ int logicaAjudaRep (char *arg, Info I) {
     int validade = 1;
 
     // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-    if (!verificaInfracoes (I, 1)) validade = 0;
+    if (!verificaInfracoes (I, 0)) validade = 0;
 
     // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-    if (!verificaCaminhoOrtogonal (I, 1)) validade = 0;
+    if (!verificaCaminhoOrtogonal (I, 0)) validade = 0;
 
     // Avisa que o tabuleiro possui infrações
     if (validade == 0) return 3;
@@ -445,6 +512,30 @@ int logicaApagaHistorico (char *arg, Info I) {
 
     // Verifica se o histórico não está vazio
     if (I -> nTabuleiro < 2) return 2;
+
+    // Se não é um teste, pergunta ao jogador se pretende realizar o comando
+    if (I -> eJogo) {
+
+        // Input do jogador
+        char input [LINE_SIZE];
+        
+        // Confirma se o jogador pretende apagar o histórico
+        printf ("\nTem a certeza de que deseja apagar o histórico?\n\n");
+        if (scanf ("%s", input) != 1) return 3;
+
+        // Verifica se a resposta do jogador é válida
+        while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
+            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            if (scanf ("%s", input) != 1) return 3;
+        }
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 0;
+
+        // Limpa o stdin
+        int ch;
+        while ((ch = getchar ()) != '\n' && ch != EOF);
+    }
 
     // Apaga o histórico
     while (I -> nTabuleiro > 1) remJogada (I);
@@ -553,6 +644,89 @@ int logicaCriarJogo (char *arg) {
     libertaInfo (I);
 
     return nJogo;
+}
+
+
+
+// Função que realiza a lógica do comando 'E' (eliminarJogo)
+int logicaEliminarJogo (char args [2][LINE_SIZE], Info I) {
+
+    // Verifica se foi dado pelo menos um argumento
+    if (args == NULL) return 1;
+
+    // Torna os dois argumentos em inteiros (para verificar se são válidos)
+    int arg1 = atoi (args [0]), arg2 = 0;
+    if (args [1][0]) {
+        arg2 = atoi (args [1]);
+
+        // Verifica se o segundo argumento é válido
+        if (arg2 < 0) return 3;
+    }
+
+    // Verifica se o primeiro argumento é válido
+    if (arg1 < 1) return 3;
+
+    // Se não é um teste, pergunta ao jogador se pretende realizar o comando
+    if (I -> eJogo) {
+
+        // Input do jogador
+        char input [LINE_SIZE];
+        
+        // Confirma se o jogador pretende eliminar o jogo
+        printf ("\nTem a certeza de que deseja eliminar esse(s) jogo(s)?\n\n");
+        if (scanf ("%s", input) != 1) return 3;
+
+        // Verifica se a resposta do jogador é válida
+        while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
+            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            if (scanf ("%s", input) != 1) return 3;
+        }
+
+        // Limpa o stdin
+        int ch;
+        while ((ch = getchar ()) != '\n' && ch != EOF);
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 4;
+    }
+
+    // Caso em que foi dado apenas um argumento, isto é, o jogador pretende eliminar uma diretoria
+    if (args [1][0] == 0) {
+
+        // Cria o nome dos ficheiros
+        char nomeFicheiro [LINE_SIZE];
+
+        // Elimina todos os jogos
+        for (int i = 0; i < 100; i++) {
+
+            // Define o nome do ficheiro
+            sprintf (nomeFicheiro, "Jogos/J%s/S%d", args [0], i);
+
+            // Elimina o jogo
+            remove (nomeFicheiro);
+        }
+
+        // Define o nome da diretoria
+        sprintf (nomeFicheiro, "Jogos/J%s", args [0]);
+
+        // Elimina a diretoria
+        if (rmdir (nomeFicheiro)) return 2;
+    }
+
+    // Caso em que foi dado dois argumentos, isto é, o jogador pretender eliminar um único jogo
+    else {
+
+        // Cria o nome do ficheiro
+        char nomeFicheiro [LINE_SIZE];
+
+        // Define o nome do ficheiro
+        sprintf (nomeFicheiro, "Jogos/J%s/S%s", args [0], args [1]);
+
+        // Elimina o ficheiro
+        if (remove (nomeFicheiro)) return 2;
+    }
+
+    return 0;
 }
 
 

@@ -12,7 +12,7 @@ bool gravar (char cmd, char args [2][LINE_SIZE], Info I) {
         if (n >= 0) printf (VERDE "\nJogo gravado na save %d do jogo %d.\n\n" RESET, n, I -> nJogo);
 
         // Avisa se não há nada a guardar
-        else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não há nenhum tabuleiro para guardar. Leia um ficheiro para iniciar o jogo.\n\n");
+        else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não há nenhum jogo para guardar. Leia um ficheiro para iniciar o jogo.\n\n");
 
         // Avisa se não foi possível abrir o ficheiro
         else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o ficheiro.\n\n");
@@ -38,15 +38,16 @@ bool ler (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Caso de sucesso da função
         if (n == 0) {
+
             // Imprime o tabuleiro atualizado
             imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
             // Avisa que o ficheiro foi fido com sucesso
-            printf (VERDE "Tabuleiro lido com sucesso.\n\n" RESET);
+            printf (VERDE "Jogo lido com sucesso.\n\n" RESET);
         }
 
         // Avisa se não foi dado um argumento
-        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando l precisa de um argumento (nome do ficheiro).\n\n");
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando l precisa de pelo menos um argumento.\n\n");
 
         // Avisa se o ficheiro não foi aberto corretamente
         else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o ficheiro.\n\n");
@@ -55,13 +56,16 @@ bool ler (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o ficheiro.\n\n");
 
         // Avisa se o tabuleiro do ficheiro lido é inválido
-        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O tabuleiro não é válido.\n\n");
+        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O jogo não é válido.\n\n");
 
         // Avisa se as alterações do ficheiro lido são inválidas
         else if (n == 5) fprintf (stderr, VERMELHO "\nErro:" RESET " As alterações são inválidas.\n\n");
 
         // Avisa se o(s) argumento(s) dado(s) são válidos
         else if (n == 6) fprintf (stderr, VERMELHO "\nErro:" RESET " Argumento(s) inválido(s).\n\n");
+
+        // Avisa se não foi possível ler o input do jogador
+        else if (n == 7) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input.\n\n");
 
         return true;
     }
@@ -81,6 +85,9 @@ bool sair (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Avisa se foi dado um argumento
         if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando s não precisa de um argumento.\n\n" RESET);
+
+        // Avisa se não foi possível ler o input do jogador
+        else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input.\n\n");
 
         return true;
     } 
@@ -179,6 +186,11 @@ bool desfazerJogada (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Caso de sucesso da função
         if (n == 0) {
+
+            // Limpa o stdin
+            int ch;
+            while ((ch = getchar ()) != '\n' && ch != EOF);
+
             // Imprime o tabuleiro
             imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
 
@@ -187,7 +199,7 @@ bool desfazerJogada (char cmd, char args [2][LINE_SIZE], Info I) {
         }
 
         // Avisa se não há um tabuleiro anterior
-        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não existem tabuleiros para desfazer.\n\n");
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não existem jogadas para desfazer.\n\n");
 
         // Avisa se o argumento não é um número natural
         else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento deve ser um número natural.\n\n");
@@ -196,7 +208,10 @@ bool desfazerJogada (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Esse é o tabuleiro atual.\n\n");
 
         // Avisa se não existe o tabuleiro desejado
-        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento é maior que o número de tabuleiros (%d).\n\n", I -> nTabuleiro);
+        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento é maior que o número de jogadas (%d).\n\n", I -> nTabuleiro);
+
+        // Avisa se não foi possível ler o input do jogador
+        else if (n == 5) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input.\n\n");
 
         return true;
     }
@@ -227,7 +242,7 @@ bool visualizarHistorico (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não existem tabuleiros para imprimir.\n\n");
 
         // Avisa se não existem tabuleiros suficientes para imprimir
-        else if (n == -3) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento é maior que o número de tabuleiros (%d).\n\n", I -> nTabuleiro);
+        else if (n == -3) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento é maior que o número de jogadas (%d).\n\n", I -> nTabuleiro);
 
         return true;
     }
@@ -289,7 +304,7 @@ bool ajuda (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == 2) printf ("\nNão há nada a alterar.\n\n");
 
         // Avisa se o tabuleiro possui infrações
-        else if (n == 3) printf (VERMELHO "\nO tabuleiro possui infrações.\n\n" RESET);
+        else if (n == 3) printf (VERMELHO "\nO jogo possui infrações.\n\n" RESET);
 
         return true;
     }
@@ -326,7 +341,7 @@ bool ajudaRep (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == 2) printf ("\nNão há nada a alterar.\n\n");
 
         // Avisa se o tabuleiro possui infrações
-        else if (n == 3) printf (VERMELHO "\nO tabuleiro possui infrações.\n\n" RESET);
+        else if (n == 3) printf (VERMELHO "\nO jogo possui infrações.\n\n" RESET);
 
         return true;
     }
@@ -364,7 +379,7 @@ bool resolveJogo (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Avisa se não é possível resolver o jogo
         else if (n == 3) {
-            printf (VERMELHO "\nAviso: Não é possível resolver o jogo atual.\n\n" RESET);
+            printf (VERMELHO "\nAviso:" RESET " Não é possível resolver o jogo atual.\n\n");
             I -> pont = p;
         }
 
@@ -426,6 +441,9 @@ bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Avisa se não há nada do histórico
         else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " O histórico já está vazio.\n\n");
+
+        // Avisa se não foi possível ler o input
+        else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input");
 
         return true;
     }
@@ -490,10 +508,41 @@ bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == -3) fprintf (stderr, VERMELHO "\nErro:" RESET " Os número de linhas e de colunas devem estar entre 1 e 26.\n\n");
 
         // Avisa se o tabuleiro é inválido
-        else if (n == -4) fprintf (stderr, VERMELHO "\nErro:" RESET " O tabuleiro é inválido.\n\n");
+        else if (n == -4) fprintf (stderr, VERMELHO "\nErro:" RESET " O jogo é inválido.\n\n");
 
         // Avisa se não foi possível criar o ficheiro
         else if (n == -5) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível criar o jogo.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
+
+
+
+// Permite ao jogador eliminar um jogo
+bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
+
+    if (cmd == 'E') {
+
+        // Realiza a lógica do comando 'E'
+        int n = logicaEliminarJogo (args, I);
+
+        // Caso de sucesso da função
+        if (n == 0) printf (VERDE "\nJogo(s) eliminado(s) com sucesso.\n\n" RESET);
+
+        // Avisa se não foi dado um argumento
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando E precisa de pelo menos um argumento.\n\n");
+
+        // Avisa se não foi possível remover algum ficheiro (ou a diretoria)
+        else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível remover todos os jogos.\n\n");
+
+        // Avisa se os argumentos são inválidos
+        else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Os argumentos são inválidos.\n\n");
+
+        // Caso em que o jogador escolheu não presseguir com o comando
+        else if (n == 4) putchar ('\n');
 
         return true;
     }
@@ -539,6 +588,8 @@ bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
                     "D: Apaga o histórico do jogo.\n"
                     "p: Revela a pontuação atual.\n"
                     "c: Permite criar um jogo novo.\n"
+                    "E 'x': Elimina todos as saves do jogo 'x'. 'x' deve ser um número natural.\n"
+                    "E 'x' 'y': Elimina a save 'y' do jogo 'x'. 'x' e 'y' devem ser números naturais.\n"
                     "s: Termina o jogo.\n"
                     "e: Explica o objetivo e as regras do jogo.\n"
                     "h: Lista todos os comandos do jogo.\n\n");

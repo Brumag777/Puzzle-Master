@@ -326,7 +326,7 @@ void teste_leLinhasJogadas () {
     libertaTabuleiro (I);
 
     // Limpa o histórico
-    logicaApagaHistorico (NULL, I);
+    while (I -> nTabuleiro > 1) remJogada (I);
 
     // Lê o número de linhas e de colunas
     if (fscanf (Jogo, "%d %d", &I -> dL, &I -> dC) != 2) return;
