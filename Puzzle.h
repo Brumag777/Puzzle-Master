@@ -106,6 +106,9 @@ bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I);
 // Explica o objetivo e as regras do jogo
 bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
+// Revela todos os jogos e saves
+bool indicaJogos (char cmd, char args [2][LINE_SIZE], Info I);
+
 
 
 
@@ -323,10 +326,13 @@ LJogadas inverteHistorico (LJogadas L);
 
 
 
-// Funções para imprimir o tabuleiro - Tab.c
+// Funções para imprimir - Imprime.c
 
 // Imprime um tabuleiro
 void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
 
 // Imprime um tabuleiro destacando as infrações
 void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][dC], int eSolucao);
+
+// Imprime os jogos e as respetivas saves existentes
+void imprimeSavesJogos (int savesJogos [100][100], int nSavesJogos [100]);

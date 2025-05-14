@@ -5,7 +5,7 @@ COVERAGE_FLAGS = --coverage
 CFLAGS = $(BASE_FLAGS) $(SANITIZE_FLAGS) $(COVERAGE_FLAGS)
 LDFLAGS = -lcunit
 
-SRC = Memory/MemoryManagement.c Memory/Lista.c Logica/Auxiliares.c Interface/Comandos.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Interface/Tab.c
+SRC = Memory/MemoryManagement.c Memory/Lista.c Logica/Auxiliares.c Interface/Comandos.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Interface/Imprime.c
 OBJ = $(SRC:.c=.o)
 TEST_OBJ = Testes.o $(OBJ)
 MAIN_OBJ = Main.o $(OBJ)

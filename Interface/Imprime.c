@@ -78,3 +78,39 @@ void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][d
 
     if (eSolucao) putchar ('\n');
 }
+
+
+
+// Imprime os jogos e as respetivas saves existentes
+void imprimeSavesJogos (int savesJogos [100][100], int nSavesJogos [100]) {
+
+    // Avança uma linha
+    putchar ('\n');
+
+    // Percorre os jogos
+    for (int i = 1; i < 100; i++) {
+
+        // Se existir este jogo, imprime as suas saves
+        if (nSavesJogos [i]) {
+            printf("O jogo %d possui a(s) seguinte(s) save(s): ", i);
+
+            // Inteiro que indica se é a primeira save ou não
+            int primeira = 1;
+
+            // Procura as saves do jogo
+            for (int j = 0; j < 100; j++) {
+                if (savesJogos[i][j]) {
+                    if (primeira == 0) printf(", ");
+                    printf("%d", j);
+                    primeira = 0;
+                }
+            }
+
+            // Passa para a linha seguinte
+            putchar ('\n');
+        }
+    }
+
+    // Avança uma linha
+    putchar ('\n');
+}

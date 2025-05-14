@@ -630,3 +630,59 @@ bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I) {
 
     return false;
 }
+
+
+
+// Revela todos os jogos e saves
+bool indicaJogos (char cmd, char args [2][LINE_SIZE], Info I) {
+
+    // Para evitar warnings
+    (void) I;
+
+    if (cmd == 'j') {
+
+        // Realiza a lógica do comando 'j'
+        int n = logicaListarInfo (args [0]);
+
+        // Caso de sucesso da função
+        if (n == 0) {
+
+            // Cria uma matriz que indica os jogos e saves que existem e um array que diz o número de saves de cada jogo
+            int savesJogos [100][100], nSavesJogos [100];
+
+            // Procura todos em todos os jogos que existem as suas saves
+            for (int i = 1; i < 100; i++)
+                for (int j = nSavesJogos [i] = 0; j < 100; j++) {
+
+                    // Cria o nome do ficheiro
+                    char nomeFicheiro [LINE_SIZE];
+
+                    // Preenche o nome do ficheiro
+                    sprintf (nomeFicheiro, "Jogos/J%d/S%d", i, j);
+
+                    // Tenta abrir o ficheiro
+                    FILE *Jogo = fopen (nomeFicheiro, "r");
+
+                    // Verifica se o ficheiro existe
+                    if (Jogo != NULL) {
+                        savesJogos [i][j] = 1;
+                        fclose (Jogo);
+                        nSavesJogos [i]++;
+                    }
+
+                    // A save não existe
+                    else savesJogos [i][j] = 0;
+            }
+
+            // Imprime os números dos jogos e ficheiros existentes
+            imprimeSavesJogos (savesJogos, nSavesJogos);
+        }
+
+        // Avisa se foi dado um argumento
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando j não precisa de um argumento.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
