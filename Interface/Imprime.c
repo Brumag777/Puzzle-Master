@@ -101,7 +101,8 @@ void imprimeSavesJogos (int savesJogos [100][100], int nSavesJogos [100]) {
             for (int j = 0; j < 100; j++) {
                 if (savesJogos[i][j]) {
                     if (primeira == 0) printf(", ");
-                    printf("%d", j);
+                    if (j == 0) printf ("Original (0)");
+                    else printf("%d", j);
                     primeira = 0;
                 }
             }

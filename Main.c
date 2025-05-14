@@ -39,7 +39,7 @@ int main () {
 
         // Verifica se algum dos comandos foi invocado
         else for (int i = 0, flag = 0; flag == 0; i++)
-                if (i > 17) {
+                if (i > 18) {
                     fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
                     flag = 1;
                 }

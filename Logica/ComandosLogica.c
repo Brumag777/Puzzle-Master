@@ -80,17 +80,17 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
         arg2 = atoi (args [1]);
 
         // Verifica se o segundo argumento é válido
-        if (arg2 < 0) return 6;
+        if (arg2 < 1) return 6;
     }
-
-    // Verifica se o primeiro argumento é válido
-    if (arg1 < 1) return 6;
     
     // Se não foi dado um segundo argumento, é interpretado como 0
     else {
         args [1][0] = '0';
         args [1][1] = 0;
     }
+
+    // Verifica se o primeiro argumento é válido
+    if (arg1 < 1) return 6;
 
     // Se não é um teste, pergunta ao jogador se pretende gravar o jogo
     if (I -> eJogo && I -> nTabuleiro) {
