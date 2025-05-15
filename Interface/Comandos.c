@@ -553,7 +553,7 @@ bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
 
 
 // Lista os comandos do jogo
-bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
+bool infoComandos (char cmd, char args [2][LINE_SIZE], Info I) {
 
     // Para evitar warnings
     (void) I;
@@ -561,42 +561,19 @@ bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I) {
     if (cmd == 'h') {
 
         // Realiza a lógica do comando 'h'
-        int n = logicaListarInfo (args [0]);
+        int n = logicaInfoComandos (args [0]);
 
-        // Caso de sucesso da função
-        if (n == 0)
+        // Casos de sucesso da função
+        if (n >= 0) {
+            // Imprime informação sobre o comando desejado
+            if (n) imprimeInfoComando (n);
+
             // Imprime os comandos do jogo
-            printf ("\nOs comandos do jogo são:\n"
-                    "g: Grava o jogo atual numa nova save.\n"
-                    "g 'x': Grava o jogo atual na save 'x'. 'x' deve ser um número natural.\n"
-                    "l 'x': Abre o jogo 'x' na save original. 'x' Deve ser um número natural.\n"
-                    "l 'x' 'y': Abre o jogo 'x' na save 'y'. 'x' e 'y' devem ser números naturais.\n"
-                    "b <coordenada>: Pinta a casa selecinada de branco.\n"
-                    "r <coordenada>: Torna a casa selecionada vazia.\n"
-                    "v: Verifica se existem infrações no jogo atual e avisa das mesmas.\n"
-                    "V: Revela o último tabuleiro.\n"
-                    "V 'x': Permite ver os últimos 'x' tabuleiros. 'x' deve ser um número natural.\n"
-                    "a: Ajuda realizando todas as jogadas necessárias na posição atual.\n"
-                    "a b: Ajuda pintando de branco as casas à volta de casas riscadas.\n"
-                    "a r: Ajuda riscando as casas na mesma linha ou coluna que casas brancas com a mesma letra.\n"
-                    "a o: Ajuda pintando de branco as casas que se fossem riscadas não permitiam um caminho ortogonal entre todas as letras.\n"
-                    "A: Ajuda realizando todas as jogadas necessárias na posição repetidamente até não haver mais nada a alterar.\n"
-                    "R: Resolve o jogo atual.\n"
-                    "X: Mostra a solução do jogo atual.\n"
-                    "d: Desfaz a última jogada.\n"
-                    "d 'x': Desfaz as últimas jogadas até ao tabuleiro 'x'. 'x' deve ser um número natural.\n"
-                    "D: Apaga o histórico do jogo.\n"
-                    "p: Revela a pontuação atual.\n"
-                    "c: Permite criar um jogo novo.\n"
-                    "E 'x': Elimina todos as saves do jogo 'x'. 'x' deve ser um número natural.\n"
-                    "E 'x' 'y': Elimina a save 'y' do jogo 'x'. 'x' e 'y' devem ser números naturais.\n"
-                    "s: Termina o jogo.\n"
-                    "e: Explica o objetivo e as regras do jogo.\n"
-                    "j: Indica todos os jogos e as respetivas saves.\n"
-                    "h: Lista todos os comandos do jogo.\n\n");
+            else imprimeListaComandos ();
+        }
 
         // Avisa se foi dado um argumento
-        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando h não precisa de um argumento.\n\n");
+        else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " Esse comando não existe.\n\n");
 
         return true;
     }

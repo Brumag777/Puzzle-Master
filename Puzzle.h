@@ -100,8 +100,8 @@ bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I);
 // Permite ao jogador eliminar um jogo
 bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Lista os comandos do jogo
-bool listarComandos (char cmd, char args [2][LINE_SIZE], Info I);
+// Imprime informação sobre comandos
+bool infoComandos (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Explica o objetivo e as regras do jogo
 bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I);
@@ -160,8 +160,11 @@ int logicaEliminarJogo (char args [2][LINE_SIZE], Info I);
 // Função que realiza a lógica do comando 'p' (imprimePont)
 int logicaImprimePont (char *arg, Info I);
 
-// Função que realiza a lógica dos comandos 'h' (listarComandos) e 'e' (explicaJogo)
+// Função que realiza a lógica dos comandos 'e' (explicaJogo) e 'j' (indicaJogos)
 int logicaListarInfo (char *arg);
+
+// Função que realiza a lógica do comando 'h' (infoComandos)
+int logicaInfoComandos (char *arg);
 
 
 
@@ -336,3 +339,69 @@ void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][d
 
 // Imprime os jogos e as respetivas saves existentes
 void imprimeSavesJogos (int savesJogos [100][100], int nSavesJogos [100]);
+
+// Imprime a mensagem inicial do jogo
+void imprimeMensagemInicial ();
+
+// Imprime a lista de comandos do jogo
+void imprimeListaComandos ();
+
+// Imprime informação acerca de um comando
+void imprimeInfoComando (char c);
+
+// Explica o comando 's'
+void imprimeInfoCs ();
+
+// Explica o comando 'l'
+void imprimeInfoCl ();
+
+// Explica o comando 'c'
+void imprimeInfoCc ();
+
+// Explica o comando 'E'
+void imprimeInfoCE ();
+
+// Explica o comando 'h'
+void imprimeInfoCh ();
+
+// Explica o comando 'b'
+void imprimeInfoCb ();
+
+// Explica o comando 'r'
+void imprimeInfoCr ();
+
+// Explica o comando 'V'
+void imprimeInfoCV ();
+
+// Explica o comando 'g'
+void imprimeInfoCg ();
+
+// Explica o comando 'v'
+void imprimeInfoCv ();
+
+// Explica o comando 'j'
+void imprimeInfoCj ();
+
+// Explica o comando 'a'
+void imprimeInfoCa ();
+
+// Explica o comando 'A'
+void imprimeInfoCA ();
+
+// Explica o comando 'R'
+void imprimeInfoCR ();
+
+// Explica o comando 'p'
+void imprimeInfoCp ();
+
+// Explica o comando 'd'
+void imprimeInfoCd ();
+
+// Explica o comando 'D'
+void imprimeInfoCD ();
+
+// Explica o comando 'e'
+void imprimeInfoCe ();
+
+// Explica o comando 'X'
+void imprimeInfoCX ();

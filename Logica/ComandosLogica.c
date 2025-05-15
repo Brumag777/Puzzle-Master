@@ -745,11 +745,31 @@ int logicaImprimePont (char *arg, Info I) {
 
 
 
-// Função que realiza a lógica dos comandos 'h' (listarComandos) e 'e' (explicaJogo)
+// Função que realiza a lógica do comando 'e' (explicaJogo)
 int logicaListarInfo (char *arg) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return 1;
 
     return 0;
+}
+
+
+
+// Função que realiza a lógica do comando 'h' (infoComandos)
+int logicaInfoComandos (char *arg) {
+
+    // Verifica se não foi recebido um argumento
+    if (arg == NULL) return 0;
+
+    // Verifica se o argumento é válido
+    if (strlen (arg) > 1) return -1;
+
+    // Procura qual dos comandos o jogador pretende explorar
+    if (arg [0] == 's' || arg [0] == 'l' || arg [0] == 'c' || arg [0] == 'E' || arg [0] == 'h' || arg [0] == 'b' || arg [0] == 'r' || arg [0] == 'V' ||
+        arg [0] == 'g' || arg [0] == 'v' || arg [0] == 'j' || arg [0] == 'a' || arg [0] == 'A' || arg [0] == 'R' || arg [0] == 'p' || arg [0] == 'd' ||
+        arg [0] == 'D' || arg [0] == 'e' || arg [0] == 'X') return arg [0];
+
+    // O argumento não é válido
+    return -1;
 }

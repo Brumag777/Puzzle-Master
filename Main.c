@@ -4,7 +4,7 @@
 int main () {
 
     // Lista de comandos do jogo
-    COMANDO comandos [] = {sair, ler, criarJogo, eliminarJogo, listarComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
+    COMANDO comandos [] = {sair, ler, criarJogo, eliminarJogo, infoComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
                            verifica, indicaJogos, ajuda, ajudaRep, resolveJogo, imprimePont, desfazerJogada, apagaHistorico,
                            explicaJogo, mostrarSolucao, NULL};
 
@@ -12,7 +12,7 @@ int main () {
     Info I = inicializaJogo ();
 
     // Mensagem inicial
-    printf ("Bem vindo ao Puzzle Master. Pressione 'h' para ver a lista de comandos.\n");
+    imprimeMensagemInicial ();
 
     // Corre o jogo
     while (I -> aCorrer) {
