@@ -579,11 +579,19 @@ int logicaCriarJogo (char *arg) {
     printf ("\nDigite o tabuleiro do jogo desejado.\n\n");
 
     // Lê o tabuleiro
-    for (int i = 0; i < I -> dL; i++) 
-        if (scanf ("%s", I -> Tabuleiro [i]) != 1) {
+    for (int i = 0; i < I -> dL; i++) {
+        char linha [LINE_SIZE];
+        if (scanf ("%s", linha) != 1) {
             libertaInfo (I);
             return -2;
         }
+        int tam = strlen (linha);
+        if (tam > I -> dC) {
+            libertaInfo (I);
+            return -4;
+        }
+        strcpy (I -> Tabuleiro [i], linha);
+    }
 
     // Verifica se o tabuleiro é válido
     if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) {
