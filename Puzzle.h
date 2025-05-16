@@ -11,6 +11,7 @@
 #define LINE_SIZE 1024
 
 #define VERMELHO "\033[38;2;255;0;0m"
+#define AZUL "\033[38;2;100;150;255m"
 #define VERDE "\033[38;2;0;255;0m"
 #define AMARELO "\033[38;2;255;190;0m"
 #define CINZENTO "\033[38;2;170;170;170m"

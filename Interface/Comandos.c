@@ -50,16 +50,16 @@ bool ler (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando l precisa de pelo menos um argumento.\n\n");
 
         // Avisa se o ficheiro não foi aberto corretamente
-        else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o ficheiro.\n\n");
+        else if (n == 2) fprintf (stderr, VERMELHO "\nErro:" RESET " Esse jogo (ou save) não existe.\n\n");
 
         // Avisa se houve erros a ler o ficheiro
-        else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o ficheiro.\n\n");
+        else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o jogo.\n\n");
 
         // Avisa se o tabuleiro do ficheiro lido é inválido
-        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O jogo não é válido.\n\n");
+        else if (n == 4) fprintf (stderr, VERMELHO "\nErro:" RESET " O jogo guardado não é válido.\n\n");
 
         // Avisa se as alterações do ficheiro lido são inválidas
-        else if (n == 5) fprintf (stderr, VERMELHO "\nErro:" RESET " As alterações são inválidas.\n\n");
+        else if (n == 5) fprintf (stderr, VERMELHO "\nErro:" RESET " O jogo guardado não é válido.\n\n");
 
         // Avisa se o(s) argumento(s) dado(s) são válidos
         else if (n == 6) fprintf (stderr, VERMELHO "\nErro:" RESET " Argumento(s) inválido(s).\n\n");

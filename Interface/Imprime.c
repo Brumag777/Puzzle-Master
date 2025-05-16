@@ -127,7 +127,7 @@ void imprimeMensagemInicial () {
             "\n                                         ██╔═══╝ ██║   ██║ ███╔╝   ███╔╝  ██║     ██╔══╝      ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗"
             "\n                                         ██║     ╚██████╔╝███████╗███████╗███████╗███████╗    ██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║"
             "\n                                         ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚══════╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝"
-            "\n\n                                                                       Pressione h para saber a lista de comandos.\n"
+            AZUL "\n\n                                                                       Pressione h para saber a lista de comandos.\n" RESET
             "\n________________________________________________________________________________________________________________________________________________________________________________________________________\n\n");
 }
 
@@ -136,26 +136,26 @@ void imprimeMensagemInicial () {
 // Imprime a lista de comandos do jogo
 void imprimeListaComandos () {
     printf ("\nOs comandos do jogo são:\n\n"
-            "g: Grava o jogo atual numa nova save.\n"
-            "l: Abre um jogo previamente guardado numa save.\n"
-            "b: Pinta uma casa de branco.\n"
-            "r: Risca uma casa.\n"
-            "v: Verifica se existem infrações no jogo.\n"
-            "V: Revela o(s) último(s) tabuleiro(s).\n"
-            "a: Ajuda realizando jogadas necessárias.\n"
-            "A: Ajuda realizando jogadas necessárias repetidamente.\n"
-            "R: Resolve o jogo.\n"
-            "X: Mostra a solução do jogo.\n"
-            "d: Desfaz jogadas.\n"
-            "D: Apaga o histórico do jogo.\n"
-            "p: Revela a pontuação do jogo.\n"
-            "c: Permite criar um jogo novo.\n"
-            "E: Permite eliminar jogos previamente guardados.\n"
-            "s: Termina o jogo.\n"
-            "e: Explica o objetivo e as regras do jogo.\n"
-            "j: Indica todos os jogos guardados e as respetivas saves.\n"
-            "h: Indica e explica comandos do jogo.\n\n"
-            "Se pretende saber mais sobre algum comando, use o comando 'h' dando como argumento o comando desejado.\n\n");
+            AZUL "g:" RESET " Grava o jogo atual numa save.\n"
+            AZUL "l:" RESET " Abre um jogo previamente guardado numa save.\n"
+            AZUL "b:" RESET " Pinta uma casa de branco.\n"
+            AZUL "r:" RESET " Risca uma casa.\n"
+            AZUL "v:" RESET " Verifica se existem infrações no jogo.\n"
+            AZUL "V:" RESET " Revela o(s) último(s) tabuleiro(s).\n"
+            AZUL "a:" RESET " Ajuda realizando jogadas necessárias.\n"
+            AZUL "A:" RESET " Ajuda realizando jogadas necessárias repetidamente.\n"
+            AZUL "R:" RESET " Resolve o jogo.\n"
+            AZUL "X:" RESET " Revela a solução do jogo.\n"
+            AZUL "d:" RESET " Desfaz jogadas.\n"
+            AZUL "D:" RESET " Apaga o histórico do jogo.\n"
+            AZUL "p:" RESET " Revela a pontuação do jogo.\n"
+            AZUL "c:" RESET " Permite criar um jogo novo.\n"
+            AZUL "E:" RESET " Permite eliminar jogos previamente guardados ou as respetivas saves.\n"
+            AZUL "s:" RESET " Termina o jogo.\n"
+            AZUL "e:" RESET " Explica o objetivo e as regras do jogo.\n"
+            AZUL "j:" RESET " Indica todos os jogos guardados e as respetivas saves.\n"
+            AZUL "h:" RESET " Indica e explica comandos do jogo.\n\n"
+            "Se pretende saber mais sobre algum comando, use o comando " AZUL "h" RESET " dando como argumento o comando desejado.\n\n");
 }
 
 
@@ -187,184 +187,188 @@ void imprimeInfoComando (char c) {
 
 // Explica o comando 's'
 void imprimeInfoCs () {
-    printf ("\nO comando 's' é utilizado para sair do jogo. Ao ser utilizado, o jogo que está aberto será perdido.\n\n");
+    printf ("\nO comando " AZUL "s" RESET " é utilizado para sair do jogo.\n\n"
+            "Nota:" VERMELHO " O progresso do jogo que está aberto será perdido.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'l'
 void imprimeInfoCl () {
-    printf ("\nO comando 'l' é utilizado para abrir jogos previamente salvos. Pode ser usado de duas formas:\n"
-            "Com apenas um argumento, um número natural, para abrir o jogo escolhido na save original.\n"
-            "Com dois argumentos, ambos números naturais, para abrir o jogo escolhido na save escolhida.\n\n"
+    printf ("\nO comando " AZUL "l" RESET " é utilizado para abrir jogos previamente salvos. Pode ser usado de duas formas:\n\n"
+            AZUL "Com apenas um argumento," RESET " um número natural, para abrir o jogo escolhido na save original.\n"
+            AZUL "Com dois argumentos," RESET " ambos números naturais, para abrir o jogo escolhido na save escolhida.\n\n"
             "Exemplos:\n\n"
-            "'l 3' abre o jogo 3 na save original, caso exista.\n"
-            "'l 2 5' abre o jogo 2 na save 5, caso exista.\n\n");
+            AZUL "l 3" RESET " abre o jogo 3 na save original.\n"
+            AZUL "l 2 5" RESET " abre o jogo 2 na save 5.\n\n");
 }
 
 
 
 // Explica o comando 'c'
 void imprimeInfoCc () {
-    printf ("\nO comando 'c' permite ao jogador criar um jogo à sua escolha.\n"
-            "Por exemplo, se for usado o comando e, de seguida, o jogador escrever:\n\n"
-            "3 3\n"
-            "abc\n"
-            "def\n"
-            "ghi\n\n"
-            "É criado um jogo novo com o tabuleiro dado.\n\n");
+    printf ("\nO comando " AZUL "c" RESET " permite ao jogador criar um jogo à sua escolha.\n"
+            "Por exemplo, se o jogador pretende criar um tabuleiro personalizado 3x5, pode fazê-lo com o seguinte input:\n\n"
+            AZUL "3 5\n\n"
+            "abcde\n"
+            "fghij\n"
+            "klmno\n\n" RESET);
 }
 
 
 
 // Explica o comando 'E'
 void imprimeInfoCE () {
-    printf ("\nO comando 'E' permite ao jogador eliminar jogos ou saves de jogos.\n\n"
+    printf ("\nO comando " AZUL "E" RESET " permite ao jogador eliminar jogos ou saves de jogos. Pode ser usado de duas formas:\n\n"
+            AZUL "Com um argumento," RESET " um número natural, para eliminar por completo um jogo.\n"
+            AZUL "Com dois argumentos," RESET " ambos números naturais, para eliminar uma save particular de um jogo.\n\n"
             "Exemplos:\n\n"
-            "'E 5' elimina o jogo 5 (elimina todas as saves, incluindo a original).\n"
-            "'E 1 2' elimina a save 2 do jogo 1.\n\n");
+            AZUL "E 5" RESET " elimina o jogo 5 (elimina todas as saves, incluindo a original).\n"
+            AZUL "E 1 2" RESET " elimina a save 2 do jogo 1.\n\n"
+            "Nota:" VERMELHO " Eliminar jogos ou as respetivas saves é um processo irreversível.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'h'
 void imprimeInfoCh () {
-    printf ("\nO comando 'h' tem duas funções:\n"
-            "Se for usado sem argumento, lista todos os comandos do jogo, dando uma breve explicação de cada um.\n"
-            "Se for usado com um argumento, o nome de outro comando, explica detalhadamente a função desse comando.\n\n");
+    printf ("\nO comando " AZUL "h" RESET " tem duas funções:\n\n"
+            AZUL "Sem argumento," RESET " lista todos os comandos do jogo, dando uma breve explicação de cada um.\n"
+            AZUL "Com um argumento," RESET " o nome de outro comando, explica detalhadamente a função desse comando.\n\n");
 }
 
 
 
 // Explica o comando 'b'
 void imprimeInfoCb () {
-    printf ("\nO comando 'b' pinta uma casa de branco. Casas brancas ou riscadas não podem ser pintadas.\n"
-            "Este comando decrementa a pontuação.\n\n");
+    printf ("\nO comando " AZUL "b" RESET " pinta uma casa de branco. Casas brancas ou riscadas não podem ser pintadas.\n\n"
+            "Nota:" VERMELHO " Este comando decrementa a pontuação.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'r'
 void imprimeInfoCr () {
-    printf ("\nO comando 'r' risca uma casa. Casas brancas ou riscadas não podem ser riscadas.\n"
-            "Este comando decrementa a pontuação.\n\n");
+    printf ("\nO comando " AZUL "r" RESET " risca uma casa. Casas brancas ou riscadas não podem ser riscadas.\n\n"
+            "Nota:" VERMELHO " Este comando decrementa a pontuação.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'V'
 void imprimeInfoCV () {
-    printf ("\nO comando 'V' permite ao jogador ver os últimos tabuleiros do jogo. Pode ser utilizado de duas formas:\n"
-            "Sem argumento, de modo a revelar apenas o último tabuleiro do jogo.\n"
-            "Com um argumento, um número natural, de modo a revelar os últimos tabuleiros do jogo até ao dado como argumento.\n\n"
+    printf ("\nO comando " AZUL "V" RESET " permite ao jogador ver os últimos tabuleiros do jogo. Pode ser utilizado de duas formas:\n\n"
+            AZUL "Sem argumento," RESET " de modo a revelar apenas o último tabuleiro do jogo.\n"
+            AZUL "Com um argumento," RESET " um número natural, de modo a revelar os últimos tabuleiros do jogo até ao dado como argumento.\n\n"
             "Exemplos:\n\n"
-            "'V' revela o último tabuleiro.\n"
-            "'V 3' revela os últimos três tabuleiros.\n\n");
+            AZUL "V" RESET " revela o último tabuleiro.\n"
+            AZUL "V 3" RESET " revela os últimos três tabuleiros.\n\n");
 }
 
 
 
 // Explica o comando 'g'
 void imprimeInfoCg () {
-    printf ("\nO comando 'g' é utilizado para guardar jogos numa save. Pode ser utilizado de duas formas:\n"
-            "Sem argumento, guardando automaticamente o jogo numa nova save.\n"
-            "Com um argumento, um número natural, que indica a save em que o jogador pretende guardar o jogo.\n\n"
+    printf ("\nO comando " AZUL "g" RESET " é utilizado para guardar jogos numa save. Pode ser utilizado de duas formas:\n\n"
+            AZUL "Sem argumento," RESET " guarda automaticamente o jogo numa nova save.\n"
+            AZUL "Com um argumento," RESET " um número natural, que indica a save em que o jogador pretende guardar o jogo.\n\n"
             "Exemplos:\n\n"
-            "'g' guarda o jogo numa save nova.\n"
-            "'g 4' guarda o jogo na save 4.\n\n"
-            "Nota: Se já existir a save dada como argumento, esta será substituída. Caso contrário será gerada uma nova save.\n\n");
+            AZUL "g" RESET " guarda o jogo numa save nova.\n"
+            AZUL "g 4" RESET " guarda o jogo na save 4.\n\n"
+            "Nota:" VERMELHO " Se já existir a save dada como argumento, esta será substituída.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'v'
 void imprimeInfoCv () {
-    printf ("\nO comando 'v' avisa o jogador se existirem infrações no estado atual do jogo, destacando-as no tabuleiro.\n\n");
+    printf ("\nO comando " AZUL "v" RESET " avisa o jogador se existirem infrações no estado atual do jogo, destacando-as no tabuleiro.\n\n");
 }
 
 
 
 // Explica o comando 'j'
 void imprimeInfoCj () {
-    printf ("\nO comando 'j' revela todos os jogos e as respetivas saves que estão guardados.\n\n");
+    printf ("\nO comando " AZUL "j" RESET " revela todos os jogos que estão guardados, assim como as respetivas saves.\n\n");
 }
 
 
 
 // Explica o comando 'a'
 void imprimeInfoCa () {
-    printf ("\nO comando 'a' ajuda realizando, uma única vez, jogadas que são necesárias no estado atual do jogo, isto é:\n\n"
-            "1. Pinta casas à volta de casas riscadas.\n"
-            "2. Risca casas cuja letra (como minúscula) é repetida (como maiúscula) na mesma linha ou coluna.\n"
-            "3. Pinta casas que, se fossem riscas, não permitiram um caminho ortogonal entre todas as letras.\n\n"
+    printf ("\nO comando " AZUL "a" RESET " ajuda realizando, uma única vez, jogadas que são necesárias no estado atual do jogo, isto é:\n\n"
+            AZUL "1." RESET " Pinta casas à volta de casas riscadas.\n"
+            AZUL "2." RESET " Risca casas cuja letra (como minúscula) é repetida (como maiúscula) na mesma linha ou coluna.\n"
+            AZUL "3." RESET " Pinta casas que, se fossem riscadas, não permitiram um caminho ortogonal entre todas as letras.\n\n"
             "Este comando pode ser usado de quatro formas diferentes:\n\n"
-            "'a' realiza os processos 1, 2 e 3.\n"
-            "'a b' realiza apenas o processo 1.\n"
-            "'a r' realiza apenas o processo 2.\n"
-            "'a o' realiza apenas o processo 3.\n\n"
-            "Cada alteração que este comando faz decrementa a pontuação.\n\n");
+            AZUL "a" RESET " realiza os processos 1, 2 e 3.\n"
+            AZUL "a b" RESET " realiza apenas o processo 1.\n"
+            AZUL "a r" RESET " realiza apenas o processo 2.\n"
+            AZUL "a o" RESET " realiza apenas o processo 3.\n\n"
+            "Nota:" VERMELHO " Cada alteração que este comando realiza decrementa a pontuação.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'A'
 void imprimeInfoCA () {
-    printf ("\nO comando 'A' ajuda realizando, repetidamente (até não haver nada alterar), jogadas que são necesárias no estado atual do jogo, isto é:\n\n"
-            "1. Pinta casas à volta de casas riscadas.\n"
-            "2. Risca casas cuja letra (minúscula) é repetida (como maiúscula) na mesma linha ou coluna.\n"
-            "3. Pinta casas que, se fossem riscas, não permitiram um caminho ortogonal entre todas as letras.\n\n"
-            "Cada alteração que este comando faz decrementa a pontuação.\n\n");
+    printf ("\nO comando " AZUL "A" RESET " ajuda realizando, repetidamente (até não haver nada alterar), jogadas que são necesárias no estado atual do jogo, isto é:\n\n"
+            AZUL "1." RESET " Pinta casas à volta de casas riscadas.\n"
+            AZUL "2." RESET " Risca casas cuja letra (minúscula) é repetida (como maiúscula) na mesma linha ou coluna.\n"
+            AZUL "3." RESET " Pinta casas que, se fossem riscadas, não permitiram um caminho ortogonal entre todas as letras.\n\n"
+            "Nota:" VERMELHO " Cada alteração que este comando realiza decrementa a pontuação.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'R'
 void imprimeInfoCR () {
-    printf ("\nO comando 'R' resolve o jogo.\n"
-            "Se este comando for utilizado, a pontuação do jogador será 0.\n\n");
+    printf ("\nO comando " AZUL "R" RESET " resolve o jogo.\n\n"
+            "Nota: " VERMELHO "Se este comando for utilizado, a pontuação do jogador será 0.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'p'
 void imprimeInfoCp () {
-    printf ("\nO comando 'p' revela a pontuação atual do jogo. Esta irá surgir como:\n\n"
-            "Verde se for alta, isto é, acima de dois terços da pontuação máxima.\n"
-            "Amarela se for média, isto é, entre um e dois terços da pontuação máxima.\n"
-            "Vermelha se for baixa, isto é, abaixo de um terço da pontuação máxima.\n\n");
+    printf ("\nO comando " AZUL "p" RESET " revela a pontuação atual do jogo. Esta irá surgir como:\n\n"
+            VERDE "Verde" RESET " se for alta, isto é, acima de dois terços da pontuação máxima.\n"
+            AMARELO "Amarela" RESET " se for média, isto é, entre um e dois terços da pontuação máxima.\n"
+            VERMELHO "Vermelha" RESET " se for baixa, isto é, abaixo de um terço da pontuação máxima.\n\n");
 }
 
 
 
 // Explica o comando 'd'
 void imprimeInfoCd () {
-    printf ("\nO comando 'd' permite ao jogador desfazer jogadas. Pode ser usado de duas formas:\n"
-            "Sem argumento, de modo a desfazer uma única jogada.\n"
-            "Com um argumento, um número natural, que indica o tabuleiro para o qual o jogador pretende retornar.\n\n."
-            "Cada jogada desfeita decrementa a pontuação.\n"
+    printf ("\nO comando " AZUL "d" RESET " permite ao jogador desfazer jogadas. Pode ser usado de duas formas:\n\n"
+            AZUL "Sem argumento," RESET " de modo a desfazer uma única jogada.\n"
+            AZUL "Com um argumento," RESET " um número natural, que indica o tabuleiro para o qual o jogador pretende retornar.\n\n"
             "Exemplos:\n\n"
-            "'d' desfaz a última jogada.\n"
-            "'d 3' retorna ao tabuleiro três.\n\n");
+            AZUL "d" RESET " desfaz a última jogada.\n"
+            AZUL "d 3" RESET " retorna ao tabuleiro três.\n\n"
+            "Nota: " VERMELHO "Cada jogada desfeita decrementa a pontuação.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'D'
 void imprimeInfoCD () {
-    printf ("\nO comando 'D' apaga todo o histórico guardado no jogo atual.\n\n");
+    printf ("\nO comando " AZUL "D" RESET " apaga todo o histórico guardado no jogo atual.\n\n"
+            "Nota:" VERMELHO " Apagar o histórico é um processo irreversível.\n\n" RESET);
 }
 
 
 
 // Explica o comando 'e'
 void imprimeInfoCe () {
-    printf ("\nO comando 'e' explica detalhadamente o objetivo e as regras do jogo e ensina como jogar.\n\n");
+    printf ("\nO comando " AZUL "e" RESET " explica detalhadamente o objetivo e as regras do jogo e ensina como jogar.\n\n");
 }
 
 
 
 // Explica o comando 'X'
 void imprimeInfoCX () {
-    printf ("\nO comando 'X' revela uma solução do jogo (jogos podem ou não ter solução e esta pode ou não ser única).\n"
-            "Se este comando for utilizado, a pontuação do jogador será 0.\n\n");
+    printf ("\nO comando " AZUL "X" RESET " revela uma solução do jogo (jogos podem ou não ter solução e esta pode ou não ser única).\n\n"
+            "Nota: " VERMELHO "Se este comando for utilizado, a pontuação do jogador será 0.\n\n" RESET);
 }
