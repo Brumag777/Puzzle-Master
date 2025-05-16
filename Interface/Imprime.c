@@ -369,6 +369,76 @@ void imprimeInfoCe () {
 
 // Explica o comando 'X'
 void imprimeInfoCX () {
-    printf ("\nO comando " AZUL "X" RESET " revela uma solução do jogo (jogos podem ou não ter solução e esta pode ou não ser única).\n\n"
+    printf ("\nO comando " AZUL "X" RESET " revela uma solução do jogo.\n\n"
             "Nota: " VERMELHO "Se este comando for utilizado, a pontuação do jogador será 0.\n\n" RESET);
+}
+
+
+
+// Explica o jogo
+void imprimeExplicacaoJogo () {
+    printf ("\n"
+            AZUL "Puzzle Master" RESET " é um quebra-cabeças no qual o objetivo é terminar um tabuleiro com o máximo de pontuação possível.\n"
+            "Um tabuleiro é considerado terminado quando todas as casas estão pintadas de branco ou riscadas e não existe nenhuma infração.\n\n"
+            "Nota:" AZUL " Casas brancas são casas com letra maiúscula e casas riscadas são casas com #.\n\n" RESET
+            "Um tabuleiro não possui infrações se respeitar as seguintes condições:\n\n"
+            AZUL "1." RESET " Não existem casas brancas iguais na mesma linha ou coluna.\n"
+            AZUL "2." RESET " Não existem casas riscadas juntas.\n"
+            AZUL "3." RESET " Existe um caminho ortogonal entre todas as letras.\n\n"
+            "Consideremos o tabuleiro seguinte:\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d c e\n"
+            "c d e e b\n"
+            "a c c b b\n\n" RESET
+            "Se olharmos para o canto inferior direito do tabuleiro, temos três " AZUL "B" RESET " colados. Como dois B não podem estar na mesma linha ou coluna, sabemos que o canto teria que ser um dos seguintes casos:\n\n" AZUL
+            "e c a d c    e c a d c\n"
+            "d c d e c    d c d e c\n"
+            "b d d c e    b d d c e\n"
+            "c d e e " VERMELHO "#" AZUL "    c d e e B\n"
+            "a c c " VERMELHO "#" AZUL " B    a c c B #\n\n" RESET
+            "No primeiro caso, o " AZUL "B" RESET " do canto inferior direito está bloqueado, pelo que a condição " AZUL "3" RESET " não é mantida. Sendo assim, apenas o segundo tabuleiro é válido.\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d c e\n"
+            "c d e e B\n"
+            "a c c B #\n\n" RESET
+            "Na quarta coluna temos as letras " AZUL "e c e." RESET " Se riscarmos a letra " AZUL "c" RESET " que está no meio teríamos:\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d # e\n"
+            "c d e e B\n"
+            "a c c B #\n\n" RESET
+            "Pela condição " AZUL "2" RESET " temos:\n\n" AZUL
+            "e c a d c\n"
+            "d c d " VERMELHO "E " AZUL "c\n"
+            "b d D # E\n"
+            "c d e " VERMELHO "E " AZUL "B\n"
+            "a c c B #\n\n" RESET
+            "Agora temos que a condição " AZUL "1" RESET " não é respeitada, uma vez que existem dois " AZUL "E" RESET " na mesma coluna, pelo que a casa tinha de ter pintada de branco:\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d C e\n"
+            "c d e e B\n"
+            "a c c B #\n\n" RESET
+            "Na segunda coluna, temos três " AZUL "c," RESET " estando dois deles juntos. Se pintarmos o " AZUL "c" RESET " isolado:\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d C e\n"
+            "c d e e B\n"
+            "a C c B #\n\n" RESET
+            "Pela condição " AZUL "1" RESET ":\n\n" AZUL
+            "e" VERMELHO " #" AZUL " a d c\n"
+            "d" VERMELHO " #" AZUL " d e c\n"
+            "b d d C e\n"
+            "c d e e B\n"
+            "a C c B #\n\n" RESET
+            "Neste caso, a condição " AZUL "2" RESET " não é mantida. Logo o " AZUL "c" RESET " tem de ser riscado:\n\n" AZUL
+            "e c a d c\n"
+            "d c d e c\n"
+            "b d d C e\n"
+            "c d e e B\n"
+            "a # c B #\n\n" RESET
+            "Tendo em atenção estas três condições, é possível progredir até a um tabuleiro finalizado.\n\n"
+            "Nota: " AZUL "Jogos podem ou não ter solução e esta pode ou não ser única.\n\n" RESET);
 }

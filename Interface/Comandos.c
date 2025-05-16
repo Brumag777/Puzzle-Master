@@ -597,7 +597,7 @@ bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I) {
         // Caso de sucesso da função
         if (n == 0) {
             // Explica o jogo
-            printf ("\n...\n\n");
+            imprimeExplicacaoJogo ();
         }
 
         // Avisa se foi dado um argumento

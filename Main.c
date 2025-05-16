@@ -3,7 +3,7 @@
 // Função principal
 int main () {
 
-    // Lista de comandos do jogo
+    // Array com os comandos do jogo
     COMANDO comandos [] = {sair, ler, criarJogo, eliminarJogo, infoComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
                            verifica, indicaJogos, ajuda, ajudaRep, resolveJogo, imprimePont, desfazerJogada, apagaHistorico,
                            explicaJogo, mostrarSolucao, NULL};
@@ -11,7 +11,7 @@ int main () {
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
 
-    // Mensagem inicial
+    // Imprime a mensagem inicial
     imprimeMensagemInicial ();
 
     // Corre o jogo
@@ -34,7 +34,7 @@ int main () {
         // Define o segundo argumento como uma string vazia caso não exista
         if (num_args <= 2) strcpy (args [1], "\0");
 
-        // Verifica se o número de argumentos é válido (0 ou 1 se o comando não for o 'l', 0, 1 ou 2 se o comando for o 'l')
+        // Verifica se o número de argumentos é válido (0 ou 1 se o comando não for o 'l', 0, 1 ou 2 se o comando for o 'l' ou o 'E')
         if (num_args > 3 || (num_args > 2 && cmd != 'E' && cmd != 'l')) fprintf (stderr, VERMELHO "\nErro:" RESET " Número de argumentos excessivo.\n\n");
 
         // Verifica se algum dos comandos foi invocado
