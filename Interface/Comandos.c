@@ -465,9 +465,9 @@ bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I) {
         int n = logicaImprimePont (args [0], I);
 
         // Caso de sucesso da função
-        if (n == 1) printf ("\nA pontuação atual é " VERDE "%d" RESET ".\n\n", I -> pont);
-        else if (n == 2) printf ("\nA pontuação atual é " AMARELO "%d" RESET ".\n\n", I -> pont);
-        else if (n == 3) printf ("\nA pontuação atual é " VERMELHO "%d" RESET ".\n\n", I -> pont);
+        if (n == 1) printf ("\nA pontuação atual é " VERDE "%d / %d" RESET ".\n\n", I -> pont, 3 * I -> dL * I -> dC);
+        else if (n == 2) printf ("\nA pontuação atual é " AMARELO "%d / %d" RESET ".\n\n", I -> pont, 3 * I -> dL * I -> dC);
+        else if (n == 3) printf ("\nA pontuação atual é " VERMELHO "%d / %d" RESET ".\n\n", I -> pont, 3 * I -> dL * I -> dC);
 
         // Avisa se foi dado um argumento
         else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando p não precisa de um argumento.\n\n");

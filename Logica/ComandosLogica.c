@@ -555,7 +555,7 @@ int logicaCriarJogo (char *arg) {
     Info I = inicializaJogo ();
 
     // Avisa o jogador do que tem de fazer
-    printf ("\nDigite o número de linha e de colunas do jogo desejado.\n\n");
+    printf ("\nDigite o número de linhas e de colunas do jogo desejado.\n\n");
 
     // Lê o número de linhas e de colunas do tabuleiro
     if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) {
