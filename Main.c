@@ -6,7 +6,7 @@ int main () {
     // Array com os comandos do jogo
     COMANDO comandos [] = {sair, ler, criarJogo, eliminarJogo, infoComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
                            verifica, indicaJogos, ajuda, ajudaRep, resolveJogo, imprimePont, desfazerJogada, apagaHistorico,
-                           explicaJogo, mostrarSolucao, NULL};
+                           explicaJogo, limpaTerminal, mostrarSolucao, NULL};
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
@@ -39,7 +39,7 @@ int main () {
 
         // Verifica se algum dos comandos foi invocado
         else for (int i = 0, flag = 0; flag == 0; i++)
-                if (i > 18) {
+                if (i > 19) {
                     fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
                     flag = 1;
                 }

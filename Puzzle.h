@@ -110,6 +110,9 @@ bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I);
 // Revela todos os jogos e as respetivas saves
 bool indicaJogos (char cmd, char args [2][LINE_SIZE], Info I);
 
+// Limpa a terminal
+bool limpaTerminal (char cmd, char args [2][LINE_SIZE], Info I);
+
 
 
 

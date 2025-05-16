@@ -667,3 +667,28 @@ bool indicaJogos (char cmd, char args [2][LINE_SIZE], Info I) {
 
     return false;
 }
+
+
+
+// Limpa a terminal
+bool limpaTerminal (char cmd, char args [2][LINE_SIZE], Info I) {
+
+    // Para evitar warnings
+    (void) I;
+
+    if (cmd == 'C') {
+
+        // Realiza a lógica do comando 'C'
+        int n = logicaListarInfo (args [0]);
+
+        // Caso de sucesso da função
+        if (n == 0) assert (system ("clear") == 0);
+
+        // Avisa se foi dado um argumento
+        else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando C não precisa de um argumento.\n\n");
+
+        return true;
+    }
+
+    return false;
+}
