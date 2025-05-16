@@ -113,7 +113,7 @@ bool pintarCasa (char cmd, char args [2][LINE_SIZE], Info I) {
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
-            if (testeJogo (I)) printf (VERDE "Parabéns! Conseguiste resolver o puzzle com uma pontuação de %d.\n\n" RESET, I -> pont);
+            if (testeJogo (I)) imprimeMensagemFim (I);
         }
 
         // Avisa se não foi dado um argumento
@@ -153,7 +153,7 @@ bool riscarCasa (char cmd, char args [2][LINE_SIZE], Info I) {
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
-            if (testeJogo (I)) printf (VERDE "Parabéns! Conseguiste resolver o puzzle com uma pontuação de %d.\n\n" RESET, I -> pont);
+            if (testeJogo (I)) imprimeMensagemFim (I);
         }
 
         // Avisa se não foi dado um argumento
@@ -294,7 +294,7 @@ bool ajuda (char cmd, char args [2][LINE_SIZE], Info I) {
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
-            if (testeJogo (I)) printf (VERDE "Parabéns! Conseguiste resolver o puzzle com uma pontuação de %d.\n\n" RESET, I -> pont);
+            if (testeJogo (I)) imprimeMensagemFim (I);
         }
 
         // Avisa se foi dado um argumento
@@ -331,7 +331,7 @@ bool ajudaRep (char cmd, char args [2][LINE_SIZE], Info I) {
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
-            if (testeJogo (I)) printf (VERDE "Parabéns! Conseguiste resolver o puzzle com uma pontuação de %d.\n\n" RESET, I -> pont);
+            if (testeJogo (I)) imprimeMensagemFim (I);
         }
 
         // Avisa se foi dado um argumento
@@ -434,7 +434,7 @@ bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I) {
         int n = logicaApagaHistorico (args [0], I);
 
         // Caso de sucesso da função
-        if (n == 0) printf (VERDE "\nO histórico foi apagado com sucesso.\n\n");
+        if (n == 0) printf (VERDE "\nO histórico foi apagado com sucesso.\n\n" RESET);
 
         // Avisa se foi dado um argumento
         else if (n == 1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando D não precisa de um argumento.\n\n");
@@ -444,6 +444,9 @@ bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Avisa se não foi possível ler o input
         else if (n == 3) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input");
+
+        // O jogador não terminou o comando
+        else if (n == 4) putchar ('\n');
 
         return true;
     }

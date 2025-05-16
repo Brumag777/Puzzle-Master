@@ -409,3 +409,6 @@ void imprimeInfoCX ();
 
 // Explica o jogo
 void imprimeExplicacaoJogo ();
+
+// Imprime uma mensagem que indica que o tabuleiro está finalizado
+void imprimeMensagemFim (Info I);

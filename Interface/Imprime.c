@@ -442,3 +442,19 @@ void imprimeExplicacaoJogo () {
             "Tendo em atenção estas três condições, é possível progredir até a um tabuleiro finalizado.\n\n"
             "Nota: " AZUL "Jogos podem ou não ter solução e esta pode ou não ser única.\n\n" RESET);
 }
+
+
+
+// Imprime uma mensagem que indica que o tabuleiro está finalizado
+void imprimeMensagemFim (Info I) {
+
+    // Calcula o valor da pontuação
+    int vPont = valorPont (I -> dL, I -> dC, I -> pont);
+
+    // Imprime a mensagem
+    printf (VERDE "Parabéns! ");
+    if (vPont == 1) printf (VERDE);
+    else if (vPont == 2) printf (AMARELO);
+    else printf (VERMELHO);
+    printf ("Conseguiste resolver o puzzle com uma pontuação de %d.\n\n" RESET, I -> pont);
+}

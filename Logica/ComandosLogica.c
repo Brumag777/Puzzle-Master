@@ -99,12 +99,12 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
         char input [LINE_SIZE];
         
         // Confirma se o jogador pretende gravar o jogo
-        printf ("\nPretende gravar o jogo antes de ler o novo?\n\n");
+        printf (AMARELO "\nPretende gravar o jogo antes de ler o novo?\n\n" RESET);
         if (scanf ("%s", input) != 1) return 7;
 
         // Verifica se a resposta do jogador é válida
         while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
-            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            printf (VERMELHO "\nResposta inválida." RESET " Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
             if (scanf ("%s", input) != 1) return 7;
         }
 
@@ -150,12 +150,12 @@ int logicaSair (char *arg, Info I) {
         char input [LINE_SIZE];
         
         // Confirma se o jogador pretende gravar o jogo
-        printf ("\nPretende gravar o jogo antes de sair?\n\n");
+        printf (AMARELO "\nPretende gravar o jogo antes de sair?\n\n" RESET);
         if (scanf ("%s", input) != 1) return 2;
 
         // Verifica se a resposta do jogador é válida
         while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
-            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            printf (VERMELHO "\nResposta inválida." RESET " Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
             if (scanf ("%s", input) != 1) return 2;
         }
 
@@ -282,12 +282,12 @@ int logicaDesfazerJogada (char *nTab, Info I) {
         char input [LINE_SIZE];
         
         // Confirma se o jogador pretende retornar ao tabuleiro selecionado
-        printf ("\nTem a certeza de que deseja retornar ao tabuleiro %d?\n\n", q);
+        printf (AMARELO "\nTem a certeza de que deseja retornar ao tabuleiro %d?\n\n" RESET, q);
         if (scanf ("%s", input) != 1) return 5;
 
         // Verifica se a resposta do jogador é válida
         while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
-            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            printf (VERMELHO "\nResposta inválida." RESET " Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
             if (scanf ("%s", input) != 1) return 5;
         }
 
@@ -520,21 +520,21 @@ int logicaApagaHistorico (char *arg, Info I) {
         char input [LINE_SIZE];
         
         // Confirma se o jogador pretende apagar o histórico
-        printf ("\nTem a certeza de que deseja apagar o histórico?\n\n");
+        printf (AMARELO "\nTem a certeza de que deseja apagar o histórico?\n\n" RESET);
         if (scanf ("%s", input) != 1) return 3;
 
         // Verifica se a resposta do jogador é válida
         while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
-            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            printf (VERMELHO "\nResposta inválida." RESET " Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
             if (scanf ("%s", input) != 1) return 3;
         }
-
-        // Verifica qual foi a resposta do jogador
-        if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 0;
 
         // Limpa o stdin
         int ch;
         while ((ch = getchar ()) != '\n' && ch != EOF);
+
+        // Verifica qual foi a resposta do jogador
+        if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 4;
     }
 
     // Apaga o histórico
@@ -673,12 +673,12 @@ int logicaEliminarJogo (char args [2][LINE_SIZE], Info I) {
         char input [LINE_SIZE];
         
         // Confirma se o jogador pretende eliminar o jogo
-        printf ("\nTem a certeza de que deseja eliminar esse(s) jogo(s)?\n\n");
+        printf (AMARELO "\nTem a certeza de que deseja eliminar esse(s) jogo(s)?\n\n" RESET);
         if (scanf ("%s", input) != 1) return 3;
 
         // Verifica se a resposta do jogador é válida
         while (strcmp ("S", input) && strcmp ("s", input) && strcmp ("N", input) && strcmp ("n", input)) {
-            printf ("\nResposta inválida. Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
+            printf (VERMELHO "\nResposta inválida." RESET " Deve responder " VERDE "S" RESET " (sim) ou " VERMELHO "N" RESET " (não).\n\n");
             if (scanf ("%s", input) != 1) return 3;
         }
 
