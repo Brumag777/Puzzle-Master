@@ -154,6 +154,7 @@ void imprimeListaComandos () {
             AZUL "s:" RESET " Termina o jogo.\n"
             AZUL "e:" RESET " Explica o objetivo e as regras do jogo.\n"
             AZUL "j:" RESET " Indica todos os jogos guardados e as respetivas saves.\n"
+            AZUL "C:" RESET " Limpa a terminal.\n"
             AZUL "h:" RESET " Indica e explica comandos do jogo.\n\n"
             "Se pretende saber mais sobre algum comando, use o comando " AZUL "h" RESET " dando como argumento o comando desejado.\n\n");
 }
@@ -180,6 +181,7 @@ void imprimeInfoComando (char c) {
     else if (c == 'd') imprimeInfoCd ();
     else if (c == 'D') imprimeInfoCD ();
     else if (c == 'e') imprimeInfoCe ();
+    else if (c == 'C') imprimeInfoCC ();
     else               imprimeInfoCX ();
 }
 
@@ -363,6 +365,13 @@ void imprimeInfoCD () {
 // Explica o comando 'e'
 void imprimeInfoCe () {
     printf ("\nO comando " AZUL "e" RESET " explica detalhadamente o objetivo e as regras do jogo e ensina como jogar.\n\n");
+}
+
+
+
+// Explica o comando 'C'
+void imprimeInfoCC () {
+    printf ("\nO comando " AZUL "C" RESET " limpa toda a terminal.\n\n");
 }
 
 

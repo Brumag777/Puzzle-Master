@@ -407,6 +407,9 @@ void imprimeInfoCD ();
 // Explica o comando 'e'
 void imprimeInfoCe ();
 
+// Explica o comando 'C'
+void imprimeInfoCC ();
+
 // Explica o comando 'X'
 void imprimeInfoCX ();
 
