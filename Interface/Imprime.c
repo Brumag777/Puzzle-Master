@@ -5,8 +5,8 @@ void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int fla
 
     // Imprime o número do tabuleiro (ou 'S' caso seja a solução do jogo)
     if (nTabuleiro) { 
-        if      (nTabuleiro < 9)  printf ("\n%d   ", nTabuleiro);
-        else if (nTabuleiro < 99) printf ("\n%d  ", nTabuleiro);
+        if      (nTabuleiro < 10)  printf ("\n%d   ", nTabuleiro);
+        else if (nTabuleiro < 100) printf ("\n%d  ", nTabuleiro);
         else                      printf ("\n%d ", nTabuleiro);
     }
     else printf ("\nA solução do jogo atual é a seguinte:\n\nS   ");
@@ -400,7 +400,7 @@ void imprimeExplicacaoJogo () {
             "b d d c e\n"
             "c d e e b\n"
             "a c c b b\n\n" RESET
-            "Se olharmos para o canto inferior direito do tabuleiro, temos três " AZUL "B" RESET " colados. Como dois B não podem estar na mesma linha ou coluna, sabemos que o canto teria que ser um dos seguintes casos:\n\n" AZUL
+            "Se olharmos para o canto inferior direito do tabuleiro, temos três " AZUL "b" RESET " colados. Como dois " AZUL "B" RESET " não podem estar na mesma linha ou coluna, sabemos que o canto teria que ser um dos seguintes casos:\n\n" AZUL
             "e c a d c    e c a d c\n"
             "d c d e c    d c d e c\n"
             "b d d c e    b d d c e\n"

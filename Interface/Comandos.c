@@ -15,10 +15,13 @@ bool gravar (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não há nenhum jogo para guardar. Leia um ficheiro para iniciar o jogo.\n\n");
 
         // Avisa se não foi possível abrir o ficheiro
-        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o ficheiro.\n\n");
+        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o jogo.\n\n");
 
         // Avisa se o argumento dado não é um natural
         else if (n == -3) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento deve ser um número natural.\n\n");
+
+        // Avisa se o argumento dado é superior a 99
+        else if (n == -4) fprintf (stderr, VERMELHO "\nErro:" RESET " O índice máximo das saves é 99.\n\n");
 
         return true;
     }
@@ -66,6 +69,9 @@ bool ler (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Avisa se não foi possível ler o input do jogador
         else if (n == 7) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível ler o input.\n\n");
+
+        // Avisa se algum dos argumentos é superior a 99
+        else if (n == 8) fprintf (stderr, VERMELHO "Erro:\n" RESET " O índice máximo dos jogos e das saves é 99.\n\n");
 
         return true;
     }
@@ -473,7 +479,7 @@ bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " O comando p não precisa de um argumento.\n\n");
 
         // Avisa se ainda não foi lido um ficheiro
-        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Ainda não foi lido nenhum ficheiro.\n\n");
+        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Ainda não foi lido nenhum jogo.\n\n");
 
         return true;
     }
@@ -516,6 +522,9 @@ bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
         // Avisa se não foi possível criar o ficheiro
         else if (n == -5) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível criar o jogo.\n\n");
 
+        // Avisa se o limite de jogos já foi atingido
+        else if (n == -6) fprintf (stderr, VERMELHO "\nErro:" RESET "O limite de jogos (99) já foi atingido.\n\n");
+
         return true;
     }
 
@@ -546,6 +555,12 @@ bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
 
         // Caso em que o jogador escolheu não presseguir com o comando
         else if (n == 4) putchar ('\n');
+
+        // Avisa se o jogador está a tentar eliminar uma save original
+        else if (n == 5) fprintf (stderr, VERMELHO "\nErro:" RESET " Saves originais não podem ser eliminadas (sem eliminar o respetivo jogo).\n\n");
+
+        // Avisa se o jogador está a tentar eliminar um dos quatro jogos principais
+        else if (n == 6) fprintf (stderr, VERMELHO "\nErro:" RESET " Os jogos principais (jogos 1 a 4) não podem ser eliminados.\n\n");
 
         return true;
     }

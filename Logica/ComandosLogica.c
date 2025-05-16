@@ -23,6 +23,9 @@ int logicaGravar (char *arg, Info I) {
 
         // Verifica se o argumento é válido (número natural)
         if (nSave < 1) return -3;
+
+        // Verifica se o argumento é excessivo
+        if (nSave > 99) return -4;
         
         // Define o ficheiro escolhido
         sprintf (nomeFicheiro, "Jogos/J%d/S%d", I -> nJogo, nSave);
@@ -81,6 +84,9 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
 
         // Verifica se o segundo argumento é válido
         if (arg2 < 1) return 6;
+
+        // Verifica se o segundo argumento é excessivo
+        if (arg2 > 99) return 8;
     }
     
     // Se não foi dado um segundo argumento, é interpretado como 0
@@ -91,6 +97,9 @@ int logicaLer (char args [2][LINE_SIZE], Info I) {
 
     // Verifica se o primeiro argumento é válido
     if (arg1 < 1) return 6;
+
+    // Verifica se o primeiro argumento é excessivo
+    if (arg1 > 99) return 8;
 
     // Se não é um teste, pergunta ao jogador se pretende gravar o jogo
     if (I -> eJogo && I -> nTabuleiro) {
@@ -627,6 +636,12 @@ int logicaCriarJogo (char *arg) {
     // Cria o nome da nova diretoria
     char nomeDiretoria [LINE_SIZE];
 
+    // Verifica se o número do jogo é superior a 99
+    if (I -> nJogo > 99) {
+        libertaInfo (I);
+        return -6;
+    }
+
     // Define o nome da nova diretoria
     sprintf (nomeDiretoria, "Jogos/J%d", I -> nJogo);
 
@@ -664,15 +679,23 @@ int logicaEliminarJogo (char args [2][LINE_SIZE], Info I) {
 
     // Torna os dois argumentos em inteiros (para verificar se são válidos)
     int arg1 = atoi (args [0]), arg2 = 0;
+
+    // Verifica se o primeiro argumento é válido
+    if (arg1 < 1) return 3;
+
+    // Verifica o segundo argumento
     if (args [1][0]) {
         arg2 = atoi (args [1]);
 
         // Verifica se o segundo argumento é válido
         if (arg2 < 0) return 3;
+
+        // Verifica se o jogador está a tentar eliminar a save original
+        if (arg2 == 0) return 5;
     }
 
-    // Verifica se o primeiro argumento é válido
-    if (arg1 < 1) return 3;
+    // Verifica se o jogador está a tentar eliminar um dos quatro jogos principais
+    else if (arg1 < 5) return 6;
 
     // Se não é um teste, pergunta ao jogador se pretende realizar o comando
     if (I -> eJogo) {
