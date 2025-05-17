@@ -29,9 +29,12 @@ void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int fla
         else printf ("%d | ", i + 1);
 
         // Imprime a linha atual
-        for (int j = 0; j < dC; j++)
-            if (eMinuscula (Tabuleiro [i][j])) printf (CINZENTO "%c " RESET, Tabuleiro [i][j]);
-            else printf ("%c ", Tabuleiro [i][j]);
+        for (int j = 0; j < dC; j++) {
+            if (eMinuscula (Tabuleiro [i][j])) printf (CINZENTO);
+            else if (Tabuleiro [i][j] == '#') printf (MAGENTA);
+            else printf (AZUL);
+            printf ("%c " RESET, Tabuleiro [i][j]);
+        }
         
         // Avança para a linha seguinte
         putchar ('\n');
