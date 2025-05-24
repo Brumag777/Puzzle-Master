@@ -130,7 +130,7 @@ void imprimeMensagemInicial () {
             "\n                                         ██╔═══╝ ██║   ██║ ███╔╝   ███╔╝  ██║     ██╔══╝      ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗"
             "\n                                         ██║     ╚██████╔╝███████╗███████╗███████╗███████╗    ██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║"
             "\n                                         ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚══════╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝"
-            AZUL "\n\n                                                                       Pressione h para saber a lista de comandos.\n" RESET
+            AZUL "\n\n                                                                       Pressione h para saber a lista de comandos!\n" RESET
             "\n________________________________________________________________________________________________________________________________________________________________________________________________________\n\n");
 }
 
@@ -138,28 +138,30 @@ void imprimeMensagemInicial () {
 
 // Imprime a lista de comandos do jogo
 void imprimeListaComandos () {
-    printf ("\nOs comandos do jogo são:\n\n"
-            AZUL "g:" RESET " Grava o jogo atual numa save.\n"
-            AZUL "l:" RESET " Abre um jogo previamente guardado numa save.\n"
+    printf (MAGENTA "\nComandos Para Jogar\n\n"
             AZUL "b:" RESET " Pinta uma casa de branco.\n"
             AZUL "r:" RESET " Risca uma casa.\n"
-            AZUL "v:" RESET " Verifica se existem infrações no jogo.\n"
-            AZUL "V:" RESET " Revela o(s) último(s) tabuleiro(s).\n"
             AZUL "a:" RESET " Ajuda realizando jogadas necessárias.\n"
             AZUL "A:" RESET " Ajuda realizando jogadas necessárias repetidamente.\n"
             AZUL "R:" RESET " Resolve o jogo.\n"
-            AZUL "X:" RESET " Revela a solução do jogo.\n"
+            AZUL "X:" RESET " Revela uma solução do jogo.\n"
             AZUL "d:" RESET " Desfaz jogadas.\n"
-            AZUL "D:" RESET " Apaga o histórico do jogo.\n"
-            AZUL "p:" RESET " Revela a pontuação do jogo.\n"
+            AZUL "v:" RESET " Verifica se existem infrações no jogo.\n"
+            AZUL "V:" RESET " Revela o(s) último(s) tabuleiro(s).\n"
+            MAGENTA "\nComandos Para Gerenciar Os Jogos\n\n"
+            AZUL "g:" RESET " Grava o jogo atual numa save.\n"
+            AZUL "l:" RESET " Abre um jogo previamente guardado numa save.\n"
             AZUL "c:" RESET " Permite criar um jogo novo.\n"
             AZUL "E:" RESET " Permite eliminar jogos previamente guardados ou as respetivas saves.\n"
+            AZUL "j:" RESET " Indica todos os jogos guardados e as respetivas saves.\n"
+            MAGENTA "\nComandos Diversos\n\n"
+            AZUL "D:" RESET " Apaga o histórico do jogo.\n"
+            AZUL "p:" RESET " Revela a pontuação do jogo.\n"
             AZUL "s:" RESET " Termina o jogo.\n"
             AZUL "e:" RESET " Explica o objetivo e as regras do jogo.\n"
-            AZUL "j:" RESET " Indica todos os jogos guardados e as respetivas saves.\n"
             AZUL "C:" RESET " Limpa a terminal.\n"
-            AZUL "h:" RESET " Indica e explica comandos do jogo.\n\n"
-            "Se pretende saber mais sobre algum comando, use o comando " AZUL "h" RESET " dando como argumento o comando desejado.\n\n");
+            AZUL "h:" RESET " Indica e explica comandos do jogo.\n"
+            MAGENTA "\nNota: " RESET "Se pretende saber mais sobre algum comando, use o comando " AZUL "h" RESET " dando como argumento o comando desejado.\n\n");
 }
 
 
@@ -407,50 +409,50 @@ void imprimeExplicacaoJogo () {
             "e c a d c    e c a d c\n"
             "d c d e c    d c d e c\n"
             "b d d c e    b d d c e\n"
-            "c d e e " VERMELHO "#" AZUL "    c d e e B\n"
-            "a c c " VERMELHO "#" AZUL " B    a c c B #\n\n" RESET
+            "c d e e " VERMELHO "#" AZUL "    c d e e " MAGENTA "B" AZUL "\n"
+            "a c c " VERMELHO "#" MAGENTA " B" AZUL "    a c c " MAGENTA "B #\n\n" RESET
             "No primeiro caso, o " AZUL "B" RESET " do canto inferior direito está bloqueado, pelo que a condição " AZUL "3" RESET " não é mantida. Sendo assim, apenas o segundo tabuleiro é válido.\n\n" AZUL
             "e c a d c\n"
             "d c d e c\n"
             "b d d c e\n"
-            "c d e e B\n"
-            "a c c B #\n\n" RESET
+            "c d e e " MAGENTA "B\n" AZUL
+            "a c c " MAGENTA "B #\n\n" RESET
             "Na quarta coluna temos as letras " AZUL "e c e." RESET " Se riscarmos a letra " AZUL "c" RESET " que está no meio teríamos:\n\n" AZUL
             "e c a d c\n"
             "d c d e c\n"
-            "b d d # e\n"
-            "c d e e B\n"
-            "a c c B #\n\n" RESET
+            "b d d " MAGENTA "#" AZUL " e\n"
+            "c d e e "MAGENTA "B\n" AZUL
+            "a c c " MAGENTA "B #\n\n" RESET
             "Pela condição " AZUL "2" RESET " temos:\n\n" AZUL
             "e c a d c\n"
             "d c d " VERMELHO "E " AZUL "c\n"
-            "b d D # E\n"
-            "c d e " VERMELHO "E " AZUL "B\n"
-            "a c c B #\n\n" RESET
+            "b d " MAGENTA "D # E\n" AZUL
+            "c d e " VERMELHO "E " MAGENTA "B\n" AZUL
+            "a c c " MAGENTA "B #\n\n" RESET
             "Agora temos que a condição " AZUL "1" RESET " não é respeitada, uma vez que existem dois " AZUL "E" RESET " na mesma coluna, pelo que a casa tinha de ter pintada de branco:\n\n" AZUL
             "e c a d c\n"
             "d c d e c\n"
-            "b d d C e\n"
-            "c d e e B\n"
-            "a c c B #\n\n" RESET
+            "b d d " MAGENTA "C" AZUL " e\n"
+            "c d e e " MAGENTA "B\n" AZUL
+            "a c c " MAGENTA "B #\n\n" RESET
             "Na segunda coluna, temos três " AZUL "c," RESET " estando dois deles juntos. Se pintarmos o " AZUL "c" RESET " isolado:\n\n" AZUL
             "e c a d c\n"
             "d c d e c\n"
-            "b d d C e\n"
-            "c d e e B\n"
-            "a C c B #\n\n" RESET
+            "b d d " MAGENTA "C" AZUL " e\n"
+            "c d e e " MAGENTA "B\n" AZUL
+            "a " MAGENTA "C" AZUL " c " MAGENTA "B #\n\n" RESET
             "Pela condição " AZUL "1" RESET ":\n\n" AZUL
             "e" VERMELHO " #" AZUL " a d c\n"
             "d" VERMELHO " #" AZUL " d e c\n"
-            "b d d C e\n"
-            "c d e e B\n"
-            "a C c B #\n\n" RESET
+            "b d d " MAGENTA "C" AZUL " e\n"
+            "c d e e " MAGENTA "B\n" AZUL
+            "a " MAGENTA "C" AZUL " c " MAGENTA "B #\n\n" RESET
             "Neste caso, a condição " AZUL "2" RESET " não é mantida. Logo o " AZUL "c" RESET " tem de ser riscado:\n\n" AZUL
             "e c a d c\n"
             "d c d e c\n"
-            "b d d C e\n"
-            "c d e e B\n"
-            "a # c B #\n\n" RESET
+            "b d d " MAGENTA "C" AZUL " e\n"
+            "c d e e " MAGENTA "B\n" AZUL
+            "a " MAGENTA "#" AZUL " c " MAGENTA "B #\n\n" RESET
             "Tendo em atenção estas três condições, é possível progredir até a um tabuleiro finalizado.\n\n"
             "Nota: " AZUL "Jogos podem ou não ter solução e esta pode ou não ser única.\n\n" RESET);
 }

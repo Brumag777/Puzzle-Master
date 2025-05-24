@@ -15,7 +15,7 @@ bool gravar (char cmd, char args [2][LINE_SIZE], Info I) {
         else if (n == -1) fprintf (stderr, VERMELHO "\nErro:" RESET " Não há nenhum jogo para guardar. Leia um ficheiro para iniciar o jogo.\n\n");
 
         // Avisa se não foi possível abrir o ficheiro
-        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível abrir o jogo.\n\n");
+        else if (n == -2) fprintf (stderr, VERMELHO "\nErro:" RESET " Não foi possível gravar o jogo.\n\n");
 
         // Avisa se o argumento dado não é um natural
         else if (n == -3) fprintf (stderr, VERMELHO "\nErro:" RESET " O argumento deve ser um número natural.\n\n");
