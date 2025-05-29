@@ -25,6 +25,9 @@ int main () {
     CU_add_test (suite, "logicaApagaHistorico", teste_logicaApagaHistorico);
     CU_add_test (suite, "logicaImprimePont", teste_logicaImprimePont);
     CU_add_test (suite, "logicaListarInfo", teste_logicaListarInfo);
+    CU_add_test (suite, "logicaInfoComandos", teste_logicaInfoComandos);
+    CU_add_test (suite, "logicaEliminarJogo", teste_logicaEliminarJogo);
+    CU_add_test (suite, "logicaCriarJogo", teste_logicaCriarJogo);
 
     CU_add_test (suite, "guardaInfo", teste_guardaInfo);
     CU_add_test (suite, "guardaJogadas", teste_guardaJogadas);

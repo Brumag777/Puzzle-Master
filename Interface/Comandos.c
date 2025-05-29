@@ -23,6 +23,9 @@ bool gravar (char cmd, char args [2][LINE_SIZE], Info I) {
         // Avisa se o argumento dado é superior a 99
         else if (n == -4) fprintf (stderr, VERMELHO "\nErro:" RESET " O índice máximo das saves é 99.\n\n");
 
+        // Avisa se já existem 100 saves desse jogo
+        else if (n == -5) fprintf (stderr, VERMELHO "\nErro:" RESET " O limite de saves desse jogo já foi alcançado.\n\n");
+
         return true;
     }
 
@@ -492,13 +495,10 @@ bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I) {
 // Permite ao jogador criar um jogo novo
 bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I) {
 
-    // Para evitar warnings
-    (void) I;
-
     if (cmd == 'c') {
 
         // Realiza a lógica do comando 'c'
-        int n = logicaCriarJogo (args [0]);
+        int n = logicaCriarJogo (args [0], I);
 
         // Limpa o stdin
         int ch;

@@ -454,7 +454,7 @@ void imprimeExplicacaoJogo () {
             "c d e e " MAGENTA "B\n" AZUL
             "a " MAGENTA "#" AZUL " c " MAGENTA "B #\n\n" RESET
             "Tendo em atenção estas três condições, é possível progredir até a um tabuleiro finalizado.\n\n"
-            "Nota: " AZUL "Jogos podem ou não ter solução e esta pode ou não ser única.\n\n" RESET);
+            MAGENTA "Nota: " AZUL "Jogos podem ou não ter solução e esta pode ou não ser única.\n\n" RESET);
 }
 
 

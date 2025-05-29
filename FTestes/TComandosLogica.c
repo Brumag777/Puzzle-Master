@@ -688,9 +688,123 @@ void teste_logicaImprimePont () {
 // Testa a função 'logicaListarInfo'
 void teste_logicaListarInfo () {
 
-    // Testa o caso em que é dado um argumento
+    // Testa o caso em que é dado um argumento inválido
     CU_ASSERT_EQUAL (logicaListarInfo ("ARGUMENTO"), 1);
 
     // Testa a função
     CU_ASSERT_EQUAL (logicaListarInfo (NULL), 0);
+}
+
+
+
+// Testa a função 'logicaInfoComandos'
+void teste_logicaInfoComandos () {
+    CU_ASSERT_EQUAL (logicaInfoComandos (NULL), 0);
+    CU_ASSERT_EQUAL (logicaInfoComandos ("ARGUMENTODEMASIADOGRANDE"), -1);
+    CU_ASSERT_EQUAL (logicaInfoComandos ("k"), -1);
+    CU_ASSERT_EQUAL (logicaInfoComandos ("A"), 'A');
+}
+
+
+
+// Testa a função 'logicaCriarJogo'
+void teste_logicaCriarJogo () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> pont = 2;
+    I -> eJogo = false;
+
+    // Inicializa o tabuleiro
+    inicializaTabuleiro (I);
+
+    // Define o tabuleiro
+    strcpy (I -> Tabuleiro [0], "ecadc");
+    strcpy (I -> Tabuleiro [1], "dcdec");
+    strcpy (I -> Tabuleiro [2], "dfdce");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaCriarJogo ("ARGUMENTO", I), -1);
+    CU_ASSERT_EQUAL (logicaCriarJogo (NULL, I) > 0, 1);
+
+    // Altera o tabuleiro
+    I -> Tabuleiro [0][0] = '?';
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaCriarJogo (NULL, I), -4);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
+}
+
+
+
+// Testa a função 'logicaEliminarJogo'
+void teste_logicaEliminarJogo () {
+
+    // Inicializa a informação sobre o jogo
+    Info I = inicializaJogo ();
+    I -> dL = 3;
+    I -> dC = 5;
+    I -> nTabuleiro = 1;
+    I -> pont = 2;
+    I -> eJogo = false;
+
+    // Cria os ficheiros a remover
+    if (mkdir ("Jogos/JogoARemover", 0777)) {
+        libertaInfo (I);
+        return;
+    }
+    FILE *Jogo = fopen ("Jogos/JogoARemover/S0", "w");
+    fclose (Jogo);
+    Jogo = fopen ("Jogos/JogoARemover/S1", "w");
+    fclose (Jogo);
+    Jogo = fopen ("Jogos/JogoARemover/S2", "w");
+    fclose (Jogo);
+
+    // Forma os argumentos
+    char args [2][LINE_SIZE] = {"0", ""};
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (NULL, I), 1);
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 3);
+
+    // Altera os argumentos
+    strcpy (args [0], "1");
+    strcpy (args [1], "-1");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 3);
+
+    // Altera os argumentos
+    strcpy (args [1], "0");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 5);
+
+    // Altera os argumentos
+    strcpy (args [1], "");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 6);
+
+    // Altera os argumentos
+    strcpy (args [0], "5");
+    strcpy (args [1], "2");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 0);
+
+    // Altera os argumentos
+    strcpy (args [0], "5");
+    strcpy (args [1], "");
+
+    // Testa a função
+    CU_ASSERT_EQUAL (logicaEliminarJogo (args, I), 0);
+
+    // Liberta a memória alocada para a informação do jogo
+    libertaInfo (I);
 }

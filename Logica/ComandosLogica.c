@@ -54,6 +54,9 @@ int logicaGravar (char *arg, Info I) {
         nSave--;
     }
 
+    // Verifica se o número da save é válido
+    if (nSave > 99) return -5;
+
     // Abre o ficheiro a preencher
     FILE *Jogo = fopen (nomeFicheiro, "w");
 
@@ -555,7 +558,7 @@ int logicaApagaHistorico (char *arg, Info I) {
 
 
 // Função que realiza a lógica do comando 'c' (criarJogo)
-int logicaCriarJogo (char *arg) {
+int logicaCriarJogo (char *arg, Info IO) {
 
     // Verifica se não foi recebido um argumento
     if (arg != NULL) return -1;
@@ -563,43 +566,56 @@ int logicaCriarJogo (char *arg) {
     // Inicializa um novo Info
     Info I = inicializaJogo ();
 
-    // Avisa o jogador do que tem de fazer
-    printf ("\nDigite o número de linhas e de colunas do jogo desejado.\n\n");
-
-    // Lê o número de linhas e de colunas do tabuleiro
-    if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) {
-        libertaInfo (I);
-        return -2;
-    }
-
-    // Verifica se o número de linhas e de colunas é válido
-    if (I -> dL < 0 || I -> dC < 0 || I -> dL > 26 || I -> dC > 26) {
-        libertaInfo (I);
-        return -3;
-    }
-
-    // Altera o número do tabuleiro
+    // Inicializa o número do tabuleiro
     I -> nTabuleiro = 1;
 
-    // Inicializa o tabuleiro
-    inicializaTabuleiro (I);
+    // Caso de teste
+    if (!IO -> eJogo) {
+        I -> dL = IO -> dL;
+        I -> dC = IO -> dC;
+        inicializaTabuleiro (I);
+        strcpy (I -> Tabuleiro [0], IO -> Tabuleiro [0]);
+        strcpy (I -> Tabuleiro [1], IO -> Tabuleiro [1]);
+        strcpy (I -> Tabuleiro [2], IO -> Tabuleiro [2]);
+    }
 
-    // Avisa o jogador do que tem de fazer
-    printf ("\nDigite o tabuleiro do jogo desejado.\n\n");
+    // Caso de jogo
+    else {
+        // Avisa o jogador do que tem de fazer
+        printf ("\nDigite o número de linhas e de colunas do jogo desejado.\n\n");
 
-    // Lê o tabuleiro
-    for (int i = 0; i < I -> dL; i++) {
-        char linha [LINE_SIZE];
-        if (scanf ("%s", linha) != 1) {
+        // Lê o número de linhas e de colunas do tabuleiro
+        if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) {
             libertaInfo (I);
             return -2;
         }
-        int tam = strlen (linha);
-        if (tam > I -> dC) {
+
+        // Verifica se o número de linhas e de colunas é válido
+        if (I -> dL < 0 || I -> dC < 0 || I -> dL > 26 || I -> dC > 26) {
             libertaInfo (I);
-            return -4;
+            return -3;
         }
-        strcpy (I -> Tabuleiro [i], linha);
+
+        // Inicializa o tabuleiro
+        inicializaTabuleiro (I);
+
+        // Avisa o jogador do que tem de fazer
+        printf ("\nDigite o tabuleiro do jogo desejado.\n\n");
+
+        // Lê o tabuleiro
+        for (int i = 0; i < I -> dL; i++) {
+            char linha [LINE_SIZE];
+            if (scanf ("%s", linha) != 1) {
+                libertaInfo (I);
+                return -2;
+            }
+            int tam = strlen (linha);
+            if (tam > I -> dC) {
+                libertaInfo (I);
+                return -4;
+            }
+            strcpy (I -> Tabuleiro [i], linha);
+        }
     }
 
     // Verifica se o tabuleiro é válido
@@ -607,6 +623,9 @@ int logicaCriarJogo (char *arg) {
         libertaInfo (I);
         return -4;
     }
+
+    // Atualiza a pontuação
+    I -> pont = 4 * I -> dL * I -> dC;
 
     // Cria o nome do ficheiro
     char nomeFicheiro [LINE_SIZE];
@@ -630,9 +649,6 @@ int logicaCriarJogo (char *arg) {
     // Decrementa o número do jogo
     I -> nJogo--;
 
-    // Atualiza a pontuação
-    I -> pont = 4 * I -> dL * I -> dC;
-
     // Cria o nome da nova diretoria
     char nomeDiretoria [LINE_SIZE];
 
@@ -646,10 +662,13 @@ int logicaCriarJogo (char *arg) {
     sprintf (nomeDiretoria, "Jogos/J%d", I -> nJogo);
 
     // Cria a nova diretoria para o jogo novo
-    if (mkdir (nomeDiretoria, 0777)) {
+    if (IO -> eJogo && mkdir (nomeDiretoria, 0777)) {
         libertaInfo (I);
         return -5;
     }
+
+    // Caso de teste
+    if (!IO -> eJogo) strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestar");
 
     // Cria o ficheiro novo
     FILE *Jogo = fopen (nomeFicheiro, "w");
@@ -720,6 +739,9 @@ int logicaEliminarJogo (char args [2][LINE_SIZE], Info I) {
         // Verifica qual foi a resposta do jogador
         if (strcmp ("N", input) == 0 || strcmp ("n", input) == 0) return 4;
     }
+
+    // Altera o argumento
+    if (!I -> eJogo) strcpy (args [0], "ogoARemover");
 
     // Caso em que foi dado apenas um argumento, isto é, o jogador pretende eliminar uma diretoria
     if (args [1][0] == 0) {

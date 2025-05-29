@@ -157,7 +157,7 @@ int logicaResolveJogo (char *arg, Info I, int flag);
 int logicaApagaHistorico (char *arg, Info I);
 
 // Função que realiza a lógica do comando 'c' (criarJogo)
-int logicaCriarJogo (char *arg);
+int logicaCriarJogo (char *arg, Info I);
 
 // Função que realiza a lógica do comando 'E' (eliminarJogo)
 int logicaEliminarJogo (char args [2][LINE_SIZE], Info I);
