@@ -4,9 +4,9 @@
 int main () {
 
     // Array com os comandos do jogo
-    COMANDO comandos [] = {sair, ler, criarJogo, eliminarJogo, infoComandos, pintarCasa, riscarCasa, visualizarHistorico, gravar, 
-                           verifica, indicaJogos, ajuda, ajudaRep, resolveJogo, imprimePont, desfazerJogada, apagaHistorico,
-                           explicaJogo, limpaTerminal, mostrarSolucao, NULL};
+    COMANDO comandos [] = {pintarCasa, riscarCasa, ajuda, ajudaRep, resolveJogo, mostrarSolucao, desfazerJogada, verifica, visualizarHistorico,
+                           gravar, ler, criarJogo, eliminarJogo, indicaJogos,
+                           apagaHistorico, imprimePont, sair, explicaJogo, limpaTerminal, infoComandos, NULL};
 
     // Inicializa a informação sobre o jogo
     Info I = inicializaJogo ();
@@ -42,8 +42,7 @@ int main () {
                 if (i > 19) {
                     fprintf (stderr, VERMELHO "\nErro:" RESET " Comando inválido.\n\n");
                     flag = 1;
-                }
-                else flag = comandos [i] (cmd, (num_args > 1) ? args : NULL, I);
+                } else flag = comandos [i] (cmd, (num_args > 1) ? args : NULL, I);
     }
 
     // Liberta a memória alocada para a informação do jogo

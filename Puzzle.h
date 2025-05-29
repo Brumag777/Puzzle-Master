@@ -18,7 +18,7 @@
 #define CINZENTO "\033[38;2;170;170;170m"
 #define RESET "\033[0m"
 
-// Informação acerca de uma jogada
+// Informação acerca de uma alteração
 typedef struct jogada {
     int L;          // Linha da alteração
     char C;         // Coluna da alteração
