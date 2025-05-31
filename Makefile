@@ -5,7 +5,8 @@ COVERAGE_FLAGS = --coverage
 CFLAGS = $(BASE_FLAGS) $(SANITIZE_FLAGS) $(COVERAGE_FLAGS)
 LDFLAGS = -lcunit
 
-SRC = Memory/MemoryManagement.c Memory/Lista.c Logica/Auxiliares.c Interface/Comandos.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Interface/Imprime.c
+SRC = Memory/MemoryManagement.c Memory/Lista.c Logica/Auxiliares.c Interface/Comandos.c Logica/ComandosRestricoes.c \
+	  Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Interface/Interface.c \ Interface/JogosSaves.c
 OBJ = $(SRC:.c=.o)
 TEST_OBJ = Testes.o $(OBJ)
 MAIN_OBJ = Main.o $(OBJ)
@@ -18,10 +19,12 @@ PuzzleMaster: $(MAIN_OBJ)
 Testes: $(TEST_OBJ)
 	$(CC) $(CFLAGS) -DTESTING -o $@ $^ $(LDFLAGS)
 	./Testes
-	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Memory/Lista.c'"
-	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/Auxiliares.c'"
-	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogica.c'"
-	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c | grep -A 3 "File 'Logica/ComandosLogicaA.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Memory/Lista.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Logica/Auxiliares.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Logica/ComandosLogica.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Logica/ComandosLogicaA.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Logica/ComandosLogicaAA.c'"
+	gcov -b -c Memory/Lista.c Logica/Auxiliares.c Logica/ComandosLogica.c Logica/ComandosLogicaA.c Logica/ComandosLogicaAA.c Logica/ComandosRestricoes.c | grep -A 3 "File 'Logica/ComandosRestricoes.c'"
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -30,5 +33,4 @@ clean:
 	rm -f Jogo Testes *.o *.gcov *.gcda *.gcno \
 		              Logica/*.o Logica/*.gcov Logica/*.gcda Logica/*.gcno \
 	                  Interface/*.o Interface/*.gcov Interface/*.gcda Interface/*.gcno \
-					  Memory/*.o Memory/*.gcov Memory/*.gcda Memory/*.gcno \
-					  TLogica/*.o Principais/*.gcov TLogica/*.gcda TLogica/*.gcno
+					  Memory/*.o Memory/*.gcov Memory/*.gcda Memory/*.gcno

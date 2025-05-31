@@ -1,97 +1,8 @@
 #include "../Puzzle.h"
 
-// Imprime os últimos 'nTabs' tabuleiros
-int visualizaUltimosTabuleiros (Info I, int nTabs, int flag) {
-
-    if (I -> eJogo && flag) {
-        if (nTabs == 1) printf ("\nO último tabuleiro é:\n");
-        else printf ("\nOs últimos %d tabuleiros são:\n", nTabs);
-    }
-
-    int n;
-
-    if (nTabs == 1) {
-        if (I -> eJogo) imprimeTabuleiro (I -> dL, I -> dL, I -> Tabuleiro, I -> nTabuleiro, 0);
-        return 1;
-    }
-
-    else {
-        // Armazena a lista original
-        LJogadas Atual = I -> HJogadas;
-
-        // Aloca memória para a reserva
-        Jogada *Reserva = malloc (Atual -> nAlts * (sizeof (JOGADA)));
-
-        // Armazena os caracteres originais do tabuleiro
-        for (int i = 0; i < Atual -> nAlts; i++) {
-            int linha = Atual -> Jogadas [i] -> L;
-            char coluna = Atual -> Jogadas [i] -> C;
-            formaJogada (&Reserva [i], linha, coluna, I -> Tabuleiro [linha - 1][coluna - 'a']);
-        }
-
-        // Aplica as alterações de uma jogada
-        realizaAlteracoesJogada (I -> Tabuleiro, Atual -> Jogadas, Atual -> nAlts);
-
-        // Avança na lista de jogadas
-        I -> HJogadas = I -> HJogadas -> JAnt;
-        I -> nTabuleiro--;
-
-        // Visualiza os tabuleiros anteriores
-        n = 1 + visualizaUltimosTabuleiros (I, nTabs - 1, 0);
-
-        // Retorna ao original
-        realizaAlteracoesJogada (I -> Tabuleiro, Reserva, Atual -> nAlts);
-        I -> nTabuleiro++;
-        I -> HJogadas = Atual;
-
-        // Visualiza o tabuleiro atual
-        if (I -> eJogo) imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
-
-        // Liberta a memória alocada para a reserva
-        libertaJogadas (Reserva, Atual -> nAlts);
-    }
-
-    return n;
-}
-
-
-
-// Realiza a um tabuleiro as alterações de uma jogada
-void realizaAlteracoesJogada (char **Tabuleiro, Jogada *Jogadas, int nAlts) {
-    for (int i = 0; i < nAlts; i++)
-        Tabuleiro [Jogadas [i] -> L - 1][Jogadas [i] -> C - 'a'] = Jogadas [i] -> cAnterior;
-}
-
-
-
-// Forma uma jogada
-void formaJogada (Jogada *JNova, int linha, char coluna, char c) {
-    (*JNova) = malloc (sizeof (JOGADA));
-
-    (*JNova) -> L = linha;
-    (*JNova) -> C = coluna;
-    (*JNova) -> cAnterior = c;
-}
-
-
-
-// Verifica se um caractere é uma letra maiúscula
-int eMaiuscula (char c) {
-    return c >= 'A' && c <= 'Z';
-}
-
-
-
-// Verifica se um caractere é uma letra minúscula
-int eMinuscula (char c) {
-    return c >= 'a' && c <= 'z';
-}
-
-
-
-// Verifica se uma coordenada é válida (isto é, está dentro do tabuleiro)
-int coordenadaValida (int l, char c, int linhas, int colunas) {
-    return (!(c < 'a' || c > 'a' + colunas - 1 || l <= 0 || l > linhas));
+// Forma o nome de um ficheiro
+void formaNomeFicheiro (char *nomeFicheiro, char *arg1, char *arg2) {
+    sprintf (nomeFicheiro, "Jogos/J%s/S%s", arg1, arg2);
 }
 
 
@@ -108,7 +19,7 @@ int tabuleiroValido (int dL, int dC, char **Tabuleiro) {
         // Verifica se todas as casas do tabuleiro possuem caracteres válidos
         for (int j = 0; j < dC; j++) {
             char c = Tabuleiro [i][j];
-            if (!(eMinuscula (c) || eMaiuscula (c) || c == '#')) return 0;
+            if (!eMinuscula (c) && !eMaiuscula (c) && c != '#') return 0;
         }
 
         // Verifica se a linha possui o número correto de colunas
@@ -129,19 +40,19 @@ int jogadasValidas (Info I) {
     LJogadas LJ = I -> HJogadas;
 
     // Percore a lista
-    while (LJ != NULL) {
-        
+    while (LJ) {
+
         // Percorre o array de jogadas
         for (int i = 0; i < LJ -> nAlts; i++) {
 
             // Armazena a linha da alteração
-            int linha = LJ -> Jogadas [i] -> L;
+            int linha = LJ -> Jogada [i] -> L;
 
             // Armazena a coluna da alteração
-            char coluna = LJ -> Jogadas [i] -> C;
+            char coluna = LJ -> Jogada [i] -> C;
 
             // Armazena o caractere anterior
-            char cAnt = LJ -> Jogadas [i] -> cAnterior;
+            char cAnt = LJ -> Jogada [i] -> cAnt;
 
             // Verifica as restrições
             if (!coordenadaValida (linha, coluna, I -> dL, I -> dC) || !eMinuscula (cAnt)) return 0;
@@ -157,65 +68,62 @@ int jogadasValidas (Info I) {
 
 
 
-// Verifica se as linhas não possuem casas brancas repetidas
-int verificaLinhas (Info I, char c, int linha, int coluna, int flag) {
-
-    // Inteiro representante da validade da linha
-    int validade = 1;
-    
-    // Percorre o resto da linha para procurar infrações
-    for (int j = coluna + 1; j < I -> dC; j++)
-
-        if (I -> Tabuleiro [linha][j] == c) {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
-            validade = 0;
-        }
-
-    return validade;
+// Verifica se um caractere é uma letra maiúscula
+int eMaiuscula (char c) {
+    return c >= 'A' && c <= 'Z';
 }
 
 
 
-// Verifica se as colunas não possuem casas brancas repetidas
-int verificaColunas (Info I, char c, int linha, int coluna, int flag) {
-
-    // Inteiro representante da validade da coluna
-    int validade = 1;
-    
-    // Percorre o resto da coluna para procurar infrações
-    for (int i = linha + 1; i < I -> dL; i++)
-
-        if (I -> Tabuleiro [i][coluna] == c) {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
-            validade = 0;
-        }
-
-    return validade;
+// Verifica se um caractere é uma letra minúscula
+int eMinuscula (char c) {
+    return c >= 'a' && c <= 'z';
 }
 
 
 
-// Verifica se as casas adjacentes às casas vazias não são vazias
-int verificaCasaVazia (Info I, int linha, int coluna, int flag) {
+// Verifica se uma coordenada é válida (isto é, está dentro do tabuleiro)
+int coordenadaValida (int l, char c, int linhas, int colunas) {
+    return (c >= 'a' && c <= 'a' + colunas - 1 && l >= 1 && l <= linhas);
+}
 
-    // Inteiro representante da validade da casa
-    int validade = 1;
 
-    // Verifica a casa à direita
-    if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
-        if (I -> Tabuleiro [linha][coluna + 1] == '#') {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
-            validade = 0;
-        }
 
-    // Verifica a casa abaixo
-    if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
-        if (I -> Tabuleiro [linha + 1][coluna] == '#') {
-            if (I -> eJogo && flag) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
-            validade = 0;
-        }
+// Forma uma jogada
+void formaJogada (Alt *JNova, int linha, char coluna, char c) {
+    (*JNova) = malloc (sizeof (ALT));
 
-    return validade;
+    (*JNova) -> L = linha;
+    (*JNova) -> C = coluna;
+    (*JNova) -> cAnt = c;
+}
+
+
+
+// Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
+int valorPont (int dL, int dC, int pont) {
+
+    // Calcula a percentagem de pontuação máxima
+    float pontMaxima = 3 * dL * dC;
+    float pontAtual = pont;
+    float percentagemPont = pontAtual / pontMaxima;
+
+    // A pontuação é alta
+    if (percentagemPont > 0.667) return 1;
+
+    // A pontuação é média
+    if (percentagemPont > 0.334) return 2;
+
+    // A pontuação é baixa
+    return 3;
+}
+
+
+
+// Realiza a um tabuleiro as alterações de uma jogada
+void realizaAlteracoesJogada (char **Tabuleiro, Alt *Jogadas, int nAlts) {
+    for (int i = 0; i < nAlts; i++)
+        Tabuleiro [Jogadas [i] -> L - 1][Jogadas [i] -> C - 'a'] = Jogadas [i] -> cAnt;
 }
 
 
@@ -231,6 +139,69 @@ int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas]
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l - 1, c) +
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c + 1) +
                contaLetrasLigadas (linhas, colunas, Tabuleiro, l, c - 1);
+}
+
+
+
+// Percorre a linha para riscar casas que deviam ser vazias
+int percorreLinha (Info I, char c, int linha) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Altera o 'c' para minúscula
+    c += 'a' - 'A';
+
+    for (int j = 0; j < I -> dC; j++)
+        if (I -> Tabuleiro [linha][j] == c) {
+            I -> Tabuleiro [linha][j] = '#';
+            I -> pont--;
+            flag = 1;
+        }
+
+    return flag;
+}
+
+
+
+// Percorre a coluna para riscar casas que deviam ser vazias
+int percorreColuna (Info I, char c, int coluna) {
+
+    // Indicador de alterações
+    int flag = 0;
+
+    // Altera o 'c' para minúscula
+    c += 'a' - 'A';
+
+    for (int i = 0; i < I -> dL; i++)
+        if (I -> Tabuleiro [i][coluna] == c) {
+            I -> Tabuleiro [i][coluna] = '#';
+            I -> pont--;
+            flag = 1;
+        }
+
+    return flag;
+}
+
+
+
+// Cria e adiciona uma jogada ao histórico comparando dois tabuleiros
+void adicionaJogada (Info I, int dL, int dC, char TabuleiroAnterior [dL][dC + 2], int nAlts) {
+
+    // Aloca memória para o novo array de alterações
+    Alt *JNova = malloc (nAlts * (sizeof (ALT)));
+
+    // Número de alterações já adicionadas ao array
+    int nAA;
+
+    // Percorre os tabuleiros para encontrar as alterações
+    for (int i = nAA = 0; i < I -> dL; i++)
+        for (int j = 0; j < I -> dC; j++)
+            if (TabuleiroAnterior [i][j] != I -> Tabuleiro [i][j])
+                formaJogada (&JNova [nAA++], i + 1, j + 'a', TabuleiroAnterior [i][j]);
+
+    // Adiciona ao histórico de jogadas
+    addJogada (I, JNova, nAA);
 }
 
 
@@ -255,318 +226,5 @@ int testeJogo (Info I) {
     // Se não existem infrações, o jogador ganhou
     if (validade) return 1;
 
-    if (I -> eJogo) putchar ('\n');
-
     return 0;
-}
-
-
-
-// Cria e adiciona uma jogada ao histórico comparando dois tabuleiros
-void adicionaJogada (Info I, int dL, int dC, char TabuleiroAnterior [dL][dC + 2], int nAlts) {
-
-    // Aloca memória para o novo array de alterações
-    Jogada *JNova = malloc (nAlts * (sizeof (JOGADA)));
-
-    // Número de alterações já adicionadas ao array
-    int nAA;
-
-    // Percorre os tabuleiros para encontrar as alterações
-    for (int i = nAA = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
-            if (TabuleiroAnterior [i][j] != I -> Tabuleiro [i][j])
-                formaJogada (&JNova [nAA++], i + 1, j + 'a', TabuleiroAnterior [i][j]);
-
-    // Adiciona ao histórico de jogadas
-    addJogada (I, JNova, nAA);
-}
-
-
-
-// Risca as casas que deviam ser vazias
-int riscaCasasAux (Info I, int linha, int coluna) {
-
-    // Indicador de alterações
-    int flag = 0;
-
-    // Percorre a linha
-    if (percorreLinha (I, I -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
-
-    // Percorre a coluna
-    if (percorreColuna (I, I -> Tabuleiro [linha][coluna], linha, coluna)) flag = 1;
-
-    return flag;
-}
-
-
-
-// Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
-int riscaCasas (Info I) {
-
-    // Indica se houve alterações
-    int flag = 0;
-
-    for (int i = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
-            if (eMaiuscula (I -> Tabuleiro [i][j]))
-                if (riscaCasasAux (I, i, j)) flag = 1;
-
-    return flag;
-}
-
-
-
-// Percorre a linha para riscar casas que deviam ser vazias
-int percorreLinha (Info I, char c, int linha, int coluna) {
-
-    // Indicador de alterações
-    int flag = 0;
-
-    // Altera o 'c' para minúscula
-    c += 'a' - 'A';
-
-    for (int j = 0; j < I -> dC; j++)
-        if (I -> Tabuleiro [linha][j] == c && j != coluna) {
-            I -> Tabuleiro [linha][j] = '#';
-            I -> pont--;
-            flag = 1;
-        }
-
-    return flag;
-}
-
-
-
-// Percorre a coluna para riscar casas que deviam ser vazias
-int percorreColuna (Info I, char c, int linha, int coluna) {
-
-    // Indicador de alterações
-    int flag = 0;
-
-    // Altera o 'c' para minúscula
-    c += 'a' - 'A';
-
-    for (int i = 0; i < I -> dL; i++)
-        if (I -> Tabuleiro [i][coluna] == c && i != linha) {
-            I -> Tabuleiro [i][coluna] = '#';
-            I -> pont--;
-            flag = 1;
-        }
-
-    return flag;
-}
-
-
-
-// Pinta as casas à volta das casas vazias de branco
-int pintaCasasAux (Info I, int linha, int coluna) {
-
-    // Indicador de alterações
-    int flag = 0;
-
-    // Verifica a casa acima
-    if (coordenadaValida (linha, coluna + 'a', I -> dL, I -> dC))
-        if (eMinuscula (I -> Tabuleiro [linha - 1][coluna])) {
-            I -> Tabuleiro [linha - 1][coluna] += 'A' - 'a';
-            I -> pont--;
-            flag = 1;
-        }
-
-    // Verifica a casa abaixo
-    if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
-        if (eMinuscula (I -> Tabuleiro [linha + 1][coluna])) {
-            I -> Tabuleiro [linha + 1][coluna] += 'A' - 'a';
-            I -> pont--;
-            flag = 1;
-        }
-
-    // Verifica a casa à esquerda
-    if (coordenadaValida (linha + 1, coluna + 'a' - 1, I -> dL, I -> dC))
-        if (eMinuscula (I -> Tabuleiro [linha][coluna - 1])) {
-            I -> Tabuleiro [linha][coluna - 1] += 'A' - 'a';
-            I -> pont--;
-            flag = 1;
-        }
-
-    // Verifica a casa à direita
-    if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
-        if (eMinuscula (I -> Tabuleiro [linha][coluna + 1])) {
-            I -> Tabuleiro [linha][coluna + 1] += 'A' - 'a';
-            I -> pont--;
-            flag = 1;
-        }
-
-    return flag;
-}
-
-
-
-// Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-int pintaCasas (Info I) {
-
-    // Indica se houve alterações
-    int flag = 0;
-
-    for (int i = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
-            if (I -> Tabuleiro [i][j] == '#') 
-                if (pintaCasasAux (I, i, j)) flag = 1;
-
-    return flag;
-}
-
-
-
-// Testa as possibilidades de uma casa minúscula
-int testaPossibilidadesCasaAux (Info I, int linha, int coluna) {
-
-    // Risca a casa de modo a realizar o teste
-    char C = I -> Tabuleiro [linha][coluna];
-    I -> Tabuleiro [linha][coluna] = '#';
-
-    // Cria um tabuleiro auxiliar para verificar os caminhos ortogonais
-    int aux [I -> dL][I -> dC], nLetras, l, c;
-
-    // No tabuleiro auxiliar, '0' representa as casas vazias e '1' representa as letras (as casas restantes)
-    for (int i = nLetras = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
-            if (I -> Tabuleiro [i][j] == '#') aux [i][j] = 0;
-            else {
-                l = i;
-                c = j;
-                aux [i][j] = 1;
-                nLetras++;
-            }
-
-    // Verifica se o tabuleiro possui pelo menos uma letra
-    if (nLetras == 0) {
-        I -> Tabuleiro [linha][coluna] = C;
-        return 0;
-    }
-
-    // Verifica se existe um caminho ortogonal entre todas as letras
-    if (nLetras != contaLetrasLigadas (I -> dL, I -> dC, aux, l, c)) {
-        I -> Tabuleiro [linha][coluna] = C + 'A' - 'a';
-        I -> pont--;
-        return 1;
-    }
-    else I -> Tabuleiro [linha][coluna] = C;
-
-    return 0;
-}
-
-
-
-// Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
-int testaPossibilidadesCasa (Info I) {
-
-    // Indica se houve alterações
-    int flag = 0;
-
-    for (int i = 0; i < I -> dL; i++)
-        for (int j = 0; j < I -> dC; j++)
-            if (eMinuscula (I -> Tabuleiro [i][j])) 
-                if (testaPossibilidadesCasaAux (I, i, j)) flag = 1;
-
-    return flag;
-}
-
-
-
-// Procura infrações numa linha do tabuleiro
-int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
-
-    // Inteiro representante da validade do tabuleiro
-    int validade = 1;
-    
-    // Percorre o resto da linha para procurar infrações
-    for (int j = coluna + 1; j < I -> dC; j++)
-        if (I -> Tabuleiro [linha][j] == c) {
-            TabInfracoes [linha][coluna] = TabInfracoes [linha][j] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na linha %d (colunas '%c' e '%c').\n", c, linha + 1, coluna + 'a', j + 'a');
-            validade = 0;
-        }
-
-    return validade;
-}
-
-
-
-// Procura infrações numa coluna do tabuleiro
-int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
-
-    // Inteiro representante da validade do tabuleiro
-    int validade = 1;
-    
-    // Percorre o resto da coluna para procurar infrações
-    for (int i = linha + 1; i < I -> dL; i++)
-        if (I -> Tabuleiro [i][coluna] == c) {
-            TabInfracoes [linha][coluna] = TabInfracoes [i][coluna] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " Letra '%c' repetida na coluna '%c' (linhas %d e %d).\n", c, coluna + 'a', linha + 1, i + 1);
-            validade = 0;
-        }
-
-    return validade;
-}
-
-
-
-// Procura casas vazias adjacentes a outras
-int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]) {
-
-    // Inteiro representante da validade do tabuleiro
-    int validade = 1;
-
-    // Verifica a casa à direita
-    if (coordenadaValida (linha + 1, coluna + 'a' + 1, I -> dL, I -> dC))
-        if (I -> Tabuleiro [linha][coluna + 1] == '#') {
-            TabInfracoes [linha][coluna] = TabInfracoes [linha][coluna + 1] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a' + 1, linha + 1);
-            validade = 0;
-        }
-
-    // Verifica a casa abaixo
-    if (coordenadaValida (linha + 2, coluna + 'a', I -> dL, I -> dC))
-        if (I -> Tabuleiro [linha + 1][coluna] == '#') {
-            TabInfracoes [linha][coluna] = TabInfracoes [linha + 1][coluna] = 1;
-            if (I -> eJogo) printf (VERMELHO "Infração:" RESET " As casas vazias %c%d e %c%d estão juntas.\n", coluna + 'a', linha + 1, coluna + 'a', linha + 2);
-            validade = 0;
-        }
-
-    return validade;
-}
-
-
-
-// Forma o nome de um ficheiro
-void formaNomeFicheiro (char *nomeFicheiro, char nums [2][LINE_SIZE], bool eJogo) {
-
-    // Se é um teste, define o nome como o nome dos ficheiros de teste
-    if (!eJogo) {
-        strcpy (nomeFicheiro, "Jogos/Testes/JogoParaTestar");
-        return;
-    }
-
-    // Forma o nome
-    sprintf (nomeFicheiro, "Jogos/J%s/S%s", nums [0], nums [1]);
-}
-
-
-
-// Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
-int valorPont (int dL, int dC, int pont) {
-
-    // Calcula a percentagem de pontuação máxima
-    float pontMaxima = 3 * dL * dC;
-    float pontAtual = pont;
-    float percentagemPont = pontAtual / pontMaxima;
-
-    // A pontuação é alta
-    if (percentagemPont > 0.667) return 1;
-
-    // A pontuação é média
-    if (percentagemPont > 0.334) return 2;
-
-    // A pontuação é baixa
-    return 3;
 }

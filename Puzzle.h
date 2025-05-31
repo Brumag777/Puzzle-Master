@@ -9,7 +9,6 @@
 #include "CUnit/Basic.h"
 
 #define LINE_SIZE 1024
-
 #define MAGENTA "\033[38;2;255;0;255m"
 #define VERMELHO "\033[38;2;255;0;0m"
 #define AZUL "\033[38;2;50;50;255m"
@@ -18,35 +17,32 @@
 #define CINZENTO "\033[38;2;170;170;170m"
 #define RESET "\033[0m"
 
-// Informação acerca de uma alteração
-typedef struct jogada {
-    int L;          // Linha da alteração
-    char C;         // Coluna da alteração
-    char cAnterior; // Caractere anterior à alteração
-} JOGADA, *Jogada;
+// Alteração no tabuleiro
+typedef struct alt {
+    int L;
+    char C;
+    char cAnt;
+} ALT, *Alt;
 
-// Informação acerca de todas as jogadas
+// Lista de jogadas
 typedef struct lJogadas {
-    Jogada *Jogadas;       // Array de alterações de uma jogada
-    int nAlts;             // Número de alterações da jogada (tamanho do array)
-    struct lJogadas *JAnt; // O resto da lista
+    Alt *Jogada;
+    int nAlts;
+    struct lJogadas *JAnt;
 } LJOGADAS, *LJogadas;
 
-// Informação sobre os tabuleiros
+// Informação do jogo
 typedef struct info {
-    bool aCorrer;      // Indica se o jogo está ou não a correr
-    int nTabuleiro;    // O número do tabuleiro atual
-    int pont;          // A pontuação atual
-    int dL;            // O número de linhas do tabuleiro
-    int dC;            // O número de colunas do tabuleiro
-    char **Tabuleiro;  // O tabuleiro do jogo
-    LJogadas HJogadas; // A lista de jogadas do jogo
-    bool eJogo;        // Indica se é o jogo ou é um teste
-    int nJogo;         // Indica o número do jogo que está aberto
+    bool aCorrer;
+    int nTabuleiro, nJogo;
+    int pont;
+    int dL, dC;
+    char **Tabuleiro;
+    LJogadas HJogadas;
 } INFO, *Info;
 
 // Função dos comandos do jogo
-typedef bool (*COMANDO) (char cmd, char args [2][LINE_SIZE], Info I);
+typedef bool (*Comando) (char, char *, char *, Info);
 
 
 
@@ -54,65 +50,113 @@ typedef bool (*COMANDO) (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Funções relativas à interface dos comandos - Comandos.c
 
-// Grava o jogo numa save
-bool gravar (char cmd, char args [2][LINE_SIZE], Info I);
+// Termina o jogo
+bool sair (char, char *, char *, Info);
+
+// Grava uma save de um jogo
+bool gravar (char, char *, char *, Info);
 
 // Lê uma save de um jogo
-bool ler (char cmd, char args [2][LINE_SIZE], Info I);
+bool ler (char, char *, char *, Info);
 
-// Termina o jogo
-bool sair (char cmd, char args [2][LINE_SIZE], Info I);
+// Imprime a pontuação do jogador
+bool imprimePont (char, char *, char *, Info);
 
-// Pinta uma casa de branco
-bool pintarCasa (char cmd, char args [2][LINE_SIZE], Info I);
+// Explica o jogo
+bool explica (char, char *, char *, Info);
+
+// Explica os comandos do jogo
+bool infoComandos (char, char *, char *, Info);
+
+// Cria um jogo novo
+bool criarJogo (char, char *, char *, Info);
+
+// Elimina uma save ou um jogo
+bool eliminarJogo (char, char *, char *, Info);
+
+// Indica todos os jogos e as respetivas saves que estão guardados
+bool indicaJogos (char, char *, char *, Info);
+
+// Pinta uma casa
+bool pintarCasa (char, char *, char *, Info);
 
 // Risca uma casa
-bool riscarCasa (char cmd, char args [2][LINE_SIZE], Info I);
+bool riscarCasa (char, char *, char *, Info);
 
-// Desfaz a(s) última(s) jogada(s)
-bool desfazerJogada (char cmd, char args [2][LINE_SIZE], Info I);
-
-// Imprime o(s) último(s) tabuleiro(s) armazenado(s) no histórico
-bool visualizarHistorico (char cmd, char args [2][LINE_SIZE], Info I);
+// Imprime o(s) último(s) tabuleiro(s)
+bool visualizarHistorico (char, char *, char *, Info);
 
 // Verifica se existem infrações no tabuleiro
-bool verifica (char cmd, char args [2][LINE_SIZE], Info I);
+bool verifica (char, char *, char *, Info);
 
-// Ajuda o jogador realizando jogadas 'obrigatórias' na posição
-bool ajuda (char cmd, char args [2][LINE_SIZE], Info I);
+// Ajuda realizando jogadas necessárias na posição
+bool ajuda (char, char *, char *, Info);
 
-// Ajuda o jogador realizando jogadas 'obrigatórias' repetidamente até não haver nada a alterar
-bool ajudaRep (char cmd, char args [2][LINE_SIZE], Info I);
+// Ajuda realizando jogadas necessárias na posição repetidamente
+bool ajudaRep (char, char *, char *, Info);
+
+// Desfaz a(s) última(s) jogada(s)
+bool desfazerJogadas (char, char *, char *, Info);
 
 // Resolve o jogo
-bool resolveJogo (char cmd, char args [2][LINE_SIZE], Info I);
+bool resolveJogo (char, char *, char *, Info);
 
-// Revela a solução do jogo
-bool mostrarSolucao (char cmd, char args [2][LINE_SIZE], Info I);
+// Mostra a solução do jogo
+bool mostrarSolucao (char, char *, char *, Info);
 
-// Apaga o histoŕico de jogadas
-bool apagaHistorico (char cmd, char args [2][LINE_SIZE], Info I);
+// Dá uma dica ao jogador
+bool dica (char, char *, char *, Info);
 
-// Revela a pontuação atual
-bool imprimePont (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Permite ao jogador criar um jogo novo
-bool criarJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Permite ao jogador eliminar um jogo ou uma save de um jogo
-bool eliminarJogo (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Imprime informação sobre comandos
-bool infoComandos (char cmd, char args [2][LINE_SIZE], Info I);
 
-// Explica o objetivo e as regras do jogo
-bool explicaJogo (char cmd, char args [2][LINE_SIZE], Info I);
+// Funções relativas às restrições dos comandos - ComandosRestricoes.c
 
-// Revela todos os jogos e as respetivas saves
-bool indicaJogos (char cmd, char args [2][LINE_SIZE], Info I);
+// Verifica as restrições do comando 's'
+int restricoesSair (char *);
 
-// Limpa a terminal
-bool limpaTerminal (char cmd, char args [2][LINE_SIZE], Info I);
+// Verifica as restrições do comando 'g'
+int restricoesGravar (char *, Info);
+
+// Verifica as restrições do comando 'l'
+int restricoesLer (char *, char *);
+
+// Verifica as restrições do comando 'p'
+int restricoesImprimePont (char *, Info);
+
+// Verifica as restrições do comando 'e'
+int restricoesExplica (char *);
+
+// Verifica as restrições do comando 'c'
+int restricoesCriarJogo (char *);
+
+// Verifica as restrições do comando 'E'
+int restricoesEliminarJogo (char *, char *);
+
+// Verifica as restrições do comando 'j'
+int restricoesIndicaJogos (char *);
+
+// Verifica as restrições dos comandos 'b', 'r' e 'D'
+int restricoesMudarCasa (char *, Info);
+
+// Verifica as restrições do comando 'V'
+int restricoesVisualizarHistorico (char *arg1, Info I);
+
+// Verifica as restrições do comando 'v'
+int restricoesVerifica (char *, Info);
+
+// Verifica as restrições do comando 'a'
+int restricoesAjuda (char *, Info);
+
+// Verifica as restrições do comando 'A'
+int restricoesAjudaRep (char *, Info);
+
+// Verifica as restrições do comando 'd'
+int restricoesDesfazerJogadas (char *, Info);
+
+// Verifica as restrições dos comandos 'R' e 'X'
+int restricoesSolucaoJogo (char *, Info);
 
 
 
@@ -120,56 +164,41 @@ bool limpaTerminal (char cmd, char args [2][LINE_SIZE], Info I);
 
 // Funções relativas à lógica dos comandos - ComandosLogica.c
 
-// Função que realiza a lógica do comando 'g' (gravar)
-int logicaGravar (char *nomeFicheiro, Info I);
+// Realiza a lógica do comando 's'
+void logicaSair (Info);
 
-// Função que realiza a lógica do comando 'l' (ler)
-int logicaLer (char args [2][LINE_SIZE], Info I);
+// Realiza a lógica do comando 'g'
+int logicaGravar (char *, Info);
 
-// Função que realiza a lógica do comando 's' (sair)
-int logicaSair (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'b' (pintarCasa)
-int logicaPintarCasa (char *coordenada, Info I);
-
-// Função que realiza a lógica do comando 'r' (riscarCasa)
-int logicaRiscarCasa (char *coordenada, Info I);
-
-// Função que realiza a lógica do comando 'd' (desfazerJogada)
-int logicaDesfazerJogada (char *nTab, Info I);
-
-// Função que realiza a lógica do comando 'V' (visualizarHistorico)
-int logicaVisualizarHistorico (char *nTab, Info I);
-
-// Função que realiza a lógica do comando 'v' (verifica)
-int logicaVerifica (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'a' (ajuda)
-int logicaAjuda (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'A' (ajudaRep)
-int logicaAjudaRep (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'R'
-int logicaResolveJogo (char *arg, Info I, int flag);
-
-// Função que realiza a lógica do comando 'D' (apagaHistorico)
-int logicaApagaHistorico (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'c' (criarJogo)
-int logicaCriarJogo (char *arg, Info I);
-
-// Função que realiza a lógica do comando 'E' (eliminarJogo)
-int logicaEliminarJogo (char args [2][LINE_SIZE], Info I);
-
-// Função que realiza a lógica do comando 'p' (imprimePont)
-int logicaImprimePont (char *arg, Info I);
-
-// Função que realiza a lógica dos comandos 'e' (explicaJogo) e 'j' (indicaJogos)
-int logicaListarInfo (char *arg);
+// Realiza a lógica do comando 'l'
+int logicaLer (char *, char *, Info);
 
 // Função que realiza a lógica do comando 'h' (infoComandos)
-int logicaInfoComandos (char *arg);
+int logicaInfoComandos (char *);
+
+// Função que realiza a lógica do comando 'b' (pintarCasa)
+void logicaPintarCasa (char *, Info);
+
+// Função que realiza a lógica do comando 'r' (riscarCasa)
+void logicaRiscarCasa (char *, Info);
+
+// Função que realiza a lógica do comando 'v' (verifica)
+int logicaVerifica (Info);
+
+// Função que realiza a lógica do comando 'a' (ajuda)
+int logicaAjuda (char *, Info);
+
+// Função que realiza a lógica do comando 'A' (ajudaRep)
+int logicaAjudaRep (Info);
+
+// Função que realiza a lógica do comando 'd' (desfazerJogadas)
+void logicaDesfazerJogadas (char *, Info);
+
+// Função que realiza a lógica dos comando 'R' e 'X' (resolveJogo e mostrarSolucao)
+int logicaSolucaoJogo (Info, int);
+
+// Função que realiza a lógica do comando 'D' (dica)
+int logicaDica (char *, Info);
 
 
 
@@ -177,119 +206,122 @@ int logicaInfoComandos (char *arg);
 
 // Funções auxiliares à lógica dos comandos - ComandosLogicaA.c
 
-// Guarda o tabuleiro numa save
-void guardaInfo (FILE *Jogo, Info I);
+// Guarda a informação do jogo numa save
+void guardaInfo (FILE *, Info);
 
-// Guarda o histórico de jogadas numa save
-void guardaJogadas (FILE *Jogo, Info I);
-
-// Lê a informação de uma save de um jogo
-int leFicheiro (FILE *Jogo, Info I);
-
-// Lê a informação de uma linha de jogadas de uma save de um jogo
-int leLinhaJogadas (FILE *Jogo, Info I);
+// Lê a informação de uma save
+int leSave (FILE *, Info);
 
 // Procura infrações em relação à existência de casas riscadas juntas e de casa brancas na mesma linha ou coluna
-int verificaInfracoes (Info I, int flag);
+int verificaInfracoes (Info, int);
 
 // Procura infrações em relação à existência de um caminho ortogonal entre todas as letras
-int verificaCaminhoOrtogonal (Info I, int flag);
-
-// Realiza alterações necessárias na posição atual
-int ajudaUmaVez (Info I, int versaoComando);
-
-// Resolve o jogo
-int resolve (Info I, int dL, int dC, char TabuleiroOriginal [dL][dC + 2]);
+int verificaCaminhoOrtogonal (Info, int);
 
 // Procura infrações no tabuleiro para preencher o tabuleiro de infrações
-int preencheTabInfracoes (Info I, int TabInfracoes [I -> dL][I -> dC]);
+int preencheTabInfracoes (Info I, int [I -> dL][I -> dC]);
+
+// Realiza alterações necessárias na posição atual
+int ajudaUmaVez (Info, int);
+
+// Resolve o jogo (se possível)
+int resolve (Info, int dL, int dC, char [dL][dC + 2]);
 
 
 
 
 
-// Funções auxiliares (gerais) - Auxiliares.c
+// Funções auxiliares às auxiliares à lógica dos comandos ComandosLogicaAA.c
 
-// Imprime os últimos 'nTabs' tabuleiros
-int visualizaUltimosTabuleiros (Info I, int nTabs, int flag);
+// Guarda o histórico de jogadas numa save
+void guardaJogadas (FILE *, Info);
 
-// Forma uma jogada
-void formaJogada (Jogada *JNova, int linha, char coluna, char c);
-
-// Realiza num tabuleiro as alterações de uma jogada
-void realizaAlteracoesJogada (char **Tabuleiro, Jogada *Jogadas, int nAlts);
-
-// Verifica se um caractere é uma letra maiúscula
-int eMaiuscula (char c);
-
-// Verifica se um caractere é uma letra minúscula
-int eMinuscula (char c);
-
-// Verifica se uma coordenada é válida (isto é, está dentro do tabuleiro)
-int coordenadaValida (int l, char c, int linhas, int colunas);
-
-// Verifica se um tabuleiro é válido
-int tabuleiroValido (int dL, int dC, char **Tabuleiro);
-
-// Verifica se as jogadas são válidas
-int jogadasValidas (Info I);
-
-// Verifica se as linhas não possuem casas brancas repetidas
-int verificaLinhas (Info I, char c, int linha, int coluna, int flag);
-
-// Verifica se as colunas não possuem casas brancas repetidas
-int verificaColunas (Info I, char c, int linha, int coluna, int flag);
-
-// Verifica se as casas adjacentes às casas vazias não são vazias
-int verificaCasaVazia (Info I, int linha, int coluna, int flag);
-
-// Calcula quantas letras estão ligadas à letra da posição dada
-int contaLetrasLigadas (int linhas, int colunas, int Tabuleiro [linhas][colunas], int l, int c);
-
-// Testa se o jogador já ganhou o jogo
-int testeJogo (Info I);
-
-// Cria e adiciona uma jogada ao histórico comparando dois tabuleiros
-void adicionaJogada (Info I, int dL, int dC, char TabuleiroAnterior [dL][dC + 2], int nAlts);
-
-// Risca as casas que deviam ser vazias
-int riscaCasasAux (Info I, int linha, int coluna);
-
-// Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
-int riscaCasas (Info I);
-
-// Percorre a linha para riscar casas que deviam ser vazias
-int percorreLinha (Info I, char c, int linha, int coluna);
-
-// Percorre a coluna para riscar casas que deviam ser vazias
-int percorreColuna (Info I, char c, int linha, int coluna);
-
-// Pinta as casas à volta das casas vazias de branco
-int pintaCasasAux (Info I, int linha, int coluna);
-
-// Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
-int pintaCasas (Info I);
-
-// Testa as possibilidades de uma casa minúscula
-int testaPossibilidadesCasaAux (Info I, int linha, int coluna);
-
-// Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
-int testaPossibilidadesCasa (Info I);
+// Lê uma jogada de uma save
+int leJogada (FILE *, Info);
 
 // Procura infrações numa linha do tabuleiro
-int procuraInfracoesL (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+int procuraInfracoesL (Info I, char, int, int, int [I -> dL][I -> dC]);
 
 // Procura infrações numa coluna do tabuleiro
-int procuraInfracoesC (Info I, char c, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+int procuraInfracoesC (Info I, char, int, int, int [I -> dL][I -> dC]);
 
 // Procura casas vazias adjacentes a outras
-int procuraInfracoesV (Info I, int linha, int coluna, int TabInfracoes [I -> dL][I -> dC]);
+int procuraInfracoesV (Info I, int, int, int [I -> dL][I -> dC]);
+
+// Verifica se as linhas não possuem casas brancas repetidas
+int verificaLinhas (Info, char, int, int, int);
+
+// Verifica se as colunas não possuem casas brancas repetidas
+int verificaColunas (Info, char, int, int, int);
+
+// Verifica se as casas adjacentes às casas vazias não são vazias
+int verificaCasaVazia (Info, int, int, int);
+
+// Risca as casas que deviam ser vazias
+int riscaCasasAux (Info, int, int);
+
+// Percorre o tabuleiro para riscar casas que não podem ser brancas pela existência de casas brancas iguais na mesma linha ou coluna
+int riscaCasas (Info);
+
+// Pinta as casas à volta das casas vazias de branco
+int pintaCasasAux (Info, int, int);
+
+// Percorre o tabuleiro para pintar casas à volta das casas vazias de branco
+int pintaCasas (Info);
+
+// Testa as possibilidades de uma casa minúscula
+int testaPossibilidadesCasaAux (Info, int, int);
+
+// Percorre o tabuleiro para pintar de branco as casas que não podem ser vazias por bloquear letras
+int testaPossibilidadesCasa (Info);
+
+
+
+
+
+// Funções auxiliares - Auxiliares.c
 
 // Forma o nome de um ficheiro
-void formaNomeFicheiro (char *nomeFicheiro, char nums [2][LINE_SIZE], bool eJogo);
+void formaNomeFicheiro (char *, char *, char *);
+
+// Verifica se um tabuleiro é válido
+int tabuleiroValido (int, int, char **);
+
+// Verifica se as jogadas são válidas
+int jogadasValidas (Info);
+
+// Verifica se um caractere é uma letra maiúscula
+int eMaiuscula (char);
+
+// Verifica se um caractere é uma letra minúscula
+int eMinuscula (char);
+
+// Verifica se uma coordenada é válida (isto é, está dentro do tabuleiro)
+int coordenadaValida (int, char, int, int);
+
+// Forma uma jogada
+void formaJogada (Alt *, int, char, char);
 
 // Calcula o valor de uma pontuação (1 é alto, 2 é médio, 3 é baixo)
-int valorPont (int dL, int dC, int pont);
+int valorPont (int, int, int);
+
+// Realiza a um tabuleiro as alterações de uma jogada
+void realizaAlteracoesJogada (char **, Alt *, int);
+
+// Calcula quantas letras estão ligadas à letra da posição dada
+int contaLetrasLigadas (int linhas, int colunas, int [linhas][colunas], int, int);
+
+// Percorre a linha para riscar casas que deviam ser vazias
+int percorreLinha (Info, char, int);
+
+// Percorre a coluna para riscar casas que deviam ser vazias
+int percorreColuna (Info, char, int);
+
+// Cria e adiciona uma jogada ao histórico comparando dois tabuleiros
+void adicionaJogada (Info I, int dL, int dC, char [dL][dC + 2], int);
+
+// Testa se o jogador já ganhou o jogo
+int testeJogo (Info);
 
 
 
@@ -297,62 +329,71 @@ int valorPont (int dL, int dC, int pont);
 
 // Funções relativas à gestão de memória - MemoryManagement.c
 
-// Inicializa a informação sobre o jogo
-Info inicializaJogo ();
-
-// Aloca memória para o tabuleiro do jogo
-int inicializaTabuleiro (Info I);
+// Inicializa a informação do jogo
+Info inicializaInfo ();
 
 // Liberta a memória alocada para a informação do jogo
-void libertaInfo (Info I);
+void libertaInfo (Info);
 
 // Liberta a memória alocada para o tabuleiro do jogo
-void libertaTabuleiro (Info I);
+void libertaTabuleiro (Info);
 
-// Liberta a lista de jogadas do jogo
-void libertaLJogadas (Info I);
+// Liberta a memória alocada para a lista de jogadas do jogo
+void libertaLJogadas (Info);
 
-// Liberta a memória alocada para um array de jogadas
-void libertaJogadas (Jogada *J, int nJogadas);
+// Liberta a memória alocada para uma jogada
+void libertaJogada (Alt *, int);
+
+// Aloca memória para o tabuleiro
+void inicializaTabuleiro (Info);
 
 
 
 
 
-// Funções relativas às listas - Lista.c
+// Funções relativas às listas - Listas.c
 
 // Adiciona uma jogada ao histórico
-int addJogada (Info I, Jogada *JogadasNovas, int nAlteracoes);
+void addJogada (Info, Alt *, int);
 
 // Remove uma jogada do histórico
-void remJogada (Info I);
+void remJogada (Info);
 
 // Inverte o histórico de jogadas
-LJogadas inverteHistorico (LJogadas L);
+LJogadas inverteHistorico (LJogadas);
 
 
 
 
 
-// Funções para imprimir - Imprime.c
+// Funções de interface - Interface.c
 
 // Imprime um tabuleiro
-void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int flag);
+void imprimeTabuleiro (int, int, char **, int, int);
+
+// Imprime os últimos 'nTabs' tabuleiros
+void visualizaUltimosTabuleiros (Info, int, int);
 
 // Imprime um tabuleiro destacando as infrações
-void destacaInfracoes (int dL, int dC, char **Tabuleiro, int TabInfracoes [dL][dC], int eSolucao);
+void imprimeTabDestacado (int dL, int dC, char **, int [dL][dC], int, bool);
 
-// Imprime os jogos e as respetivas saves existentes
-void imprimeSavesJogos (int savesJogos [100][100], int nSavesJogos [100]);
-
-// Imprime a mensagem inicial do jogo
+// Imprime a mensagem inicial
 void imprimeMensagemInicial ();
+
+// Sugere ao jogador que grave o jogo
+int pretendeGravar (Info);
+
+// Confirma se o jogador pretende proceder
+int pretendeProceder ();
+
+// Explica o jogo
+void imprimeExplicacaoJogo ();
 
 // Imprime a lista de comandos do jogo
 void imprimeListaComandos ();
 
 // Imprime informação acerca de um comando
-void imprimeInfoComando (char c);
+void imprimeInfoComando (char);
 
 // Explica o comando 's'
 void imprimeInfoCs ();
@@ -402,20 +443,50 @@ void imprimeInfoCp ();
 // Explica o comando 'd'
 void imprimeInfoCd ();
 
-// Explica o comando 'D'
-void imprimeInfoCD ();
-
 // Explica o comando 'e'
 void imprimeInfoCe ();
 
-// Explica o comando 'C'
-void imprimeInfoCC ();
+// Explica o comando 'D'
+void imprimeInfoCD ();
 
 // Explica o comando 'X'
 void imprimeInfoCX ();
 
-// Explica o jogo
-void imprimeExplicacaoJogo ();
-
 // Imprime uma mensagem que indica que o tabuleiro está finalizado
 void imprimeMensagemFim (Info I);
+
+// Avisa de uma infração numa linha
+void avisaInfracaoLinha (Info, char, int, char, char, int);
+
+// Avisa de uma infração numa coluna
+void avisaInfracaoColuna (Info, char, char, int, int, int);
+
+// Avisa de uma infração de casas vazias juntas
+void avisaInfracaoCVazias (Info, char, int, char, int, int);
+
+// Avisa que não existe um caminho ortogonal entre todas as letras
+void avisaInfracaoCOrtogonal (Info, int);
+
+
+
+
+
+// Funções para criar ou eliminar jogos e saves - JogosSaves.c
+
+// Cria um jogo
+int criaJogo ();
+
+// Pede ao jogador a informação de um jogo novo
+int infoJogoNovo (Info);
+
+// Procura o índice mais baixo que ainda não possui jogo
+int procuraJogoMaisBaixo (char *);
+
+// Elimina um jogo ou uma save
+int eliminaJS (char *, char *);
+
+// Imprime todos os jogos e as respetivas saves
+void imprimeJogos ();
+
+// Imprime os jogos e as respetivas saves existentes
+void imprimeSavesJogos (int [100][100], int [100]);

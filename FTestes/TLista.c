@@ -2,13 +2,13 @@
 void teste_addJogada () {
 
     // Inicializa a informação sobre o jogo
-    Info I = inicializaJogo ();
+    Info I = inicializaInfo ();
     I -> nTabuleiro = 1;
 
     // Aloca memória para os arrays de alterações
-    Jogada *J1 = malloc (sizeof (JOGADA));
-    Jogada *J2 = malloc (sizeof (JOGADA));
-    Jogada *J3 = malloc (4 * (sizeof (JOGADA)));
+    Alt *J1 = malloc (sizeof (ALT));
+    Alt *J2 = malloc (sizeof (ALT));
+    Alt *J3 = malloc (4 * (sizeof (ALT)));
 
     // Inicializa J1
     formaJogada (&J1 [0], 1, 'a', 'e');
@@ -23,33 +23,33 @@ void teste_addJogada () {
     formaJogada (&J3 [3], 3, 'd', 'c');
 
     // Realiza a função
-    CU_ASSERT_EQUAL (addJogada (I, J1, 1), 0);
-    CU_ASSERT_EQUAL (addJogada (I, J2, 1), 0);
-    CU_ASSERT_EQUAL (addJogada (I, J3, 4), 0);
+    addJogada (I, J1, 1);
+    addJogada (I, J2, 1);
+    addJogada (I, J3, 4);
 
     // Testa o resultado da função
     CU_ASSERT_EQUAL (I -> nTabuleiro, 4);
     CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> nAlts, 1);
     CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> nAlts, 1);
     CU_ASSERT_EQUAL (I -> HJogadas -> nAlts, 4);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> L, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> C, 'a');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> cAnterior, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> cAnterior, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> L, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> cAnterior, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [1] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [1] -> C, 'c');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [1] -> cAnterior, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [2] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [2] -> C, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [2] -> cAnterior, 'c');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [3] -> L, 3);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [3] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [3] -> cAnterior, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> L, 1);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> C, 'a');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> cAnt, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> cAnt, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> L, 1);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> cAnt, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [1] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [1] -> C, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [1] -> cAnt, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [2] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [2] -> C, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [2] -> cAnt, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [3] -> L, 3);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [3] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [3] -> cAnt, 'c');
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -61,13 +61,13 @@ void teste_addJogada () {
 void teste_remJogada () {
 
     // Inicializa a informação sobre o jogo
-    Info I = inicializaJogo ();
+    Info I = inicializaInfo ();
     I -> nTabuleiro = 1;
 
     // Aloca memória para os arrays de alterações
-    Jogada *J1 = malloc (sizeof (JOGADA));
-    Jogada *J2 = malloc (sizeof (JOGADA));
-    Jogada *J3 = malloc (4 * (sizeof (JOGADA)));
+    Alt *J1 = malloc (sizeof (ALT));
+    Alt *J2 = malloc (sizeof (ALT));
+    Alt *J3 = malloc (4 * (sizeof (ALT)));
 
     // Inicializa J1
     formaJogada (&J1 [0], 1, 'a', 'e');
@@ -93,9 +93,9 @@ void teste_remJogada () {
     // Testa o resultado da função
     CU_ASSERT_EQUAL (I -> nTabuleiro, 2);
     CU_ASSERT_EQUAL (I -> HJogadas -> nAlts, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> L, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> C, 'a');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> cAnterior, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> L, 1);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> C, 'a');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> cAnt, 'e');
     
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
@@ -103,17 +103,17 @@ void teste_remJogada () {
 
 
 
-// Testa a função 'inverteHistorico'
+// Testa a função inverteHistorico
 void teste_inverteHistorico () {
-
+    
     // Inicializa a informação sobre o jogo
-    Info I = inicializaJogo ();
+    Info I = inicializaInfo ();
     I -> nTabuleiro = 1;
 
     // Aloca memória para os arrays de alterações
-    Jogada *J1 = malloc (sizeof (JOGADA));
-    Jogada *J2 = malloc (sizeof (JOGADA));
-    Jogada *J3 = malloc (4 * (sizeof (JOGADA)));
+    Alt *J1 = malloc (sizeof (ALT));
+    Alt *J2 = malloc (sizeof (ALT));
+    Alt *J3 = malloc (4 * (sizeof (ALT)));
 
     // Inicializa J1
     formaJogada (&J1 [0], 1, 'a', 'e');
@@ -140,25 +140,34 @@ void teste_inverteHistorico () {
     CU_ASSERT_EQUAL (I -> HJogadas -> nAlts, 1);
     CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> nAlts, 1);
     CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> nAlts, 4);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> L, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> C, 'a');
-    CU_ASSERT_EQUAL (I -> HJogadas -> Jogadas [0] -> cAnterior, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogadas [0] -> cAnterior, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> L, 1);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [0] -> cAnterior, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt ->Jogadas [1] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [1] -> C, 'c');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [1] -> cAnterior, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [2] -> L, 2);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [2] -> C, 'e');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [2] -> cAnterior, 'c');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [3] -> L, 3);
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [3] -> C, 'd');
-    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogadas [3] -> cAnterior, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> L, 1);
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> C, 'a');
+    CU_ASSERT_EQUAL (I -> HJogadas -> Jogada [0] -> cAnt, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> Jogada [0] -> cAnt, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> L, 1);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [0] -> cAnt, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [1] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [1] -> C, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [1] -> cAnt, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [2] -> L, 2);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [2] -> C, 'e');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [2] -> cAnt, 'c');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [3] -> L, 3);
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [3] -> C, 'd');
+    CU_ASSERT_EQUAL (I -> HJogadas -> JAnt -> JAnt -> Jogada [3] -> cAnt, 'c');
 
     // Liberta a memória alocada para a informação do jogo
     libertaInfo (I);
+}
+
+
+
+// Função principal
+void testesLista (CU_pSuite suite) {
+    CU_add_test (suite, "addJogada", teste_addJogada);
+    CU_add_test (suite, "remJogada", teste_remJogada);
+    CU_add_test (suite, "inverteHistorico", teste_inverteHistorico);
 }
