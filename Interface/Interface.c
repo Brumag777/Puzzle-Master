@@ -8,8 +8,7 @@ void imprimeTabuleiro (int dL, int dC, char **Tabuleiro, int nTabuleiro, int fla
         if      (nTabuleiro < 10)  printf ("\n%d   ", nTabuleiro);
         else if (nTabuleiro < 100) printf ("\n%d  ", nTabuleiro);
         else                      printf ("\n%d ", nTabuleiro);
-    }
-    else printf ("\nA solução do jogo atual é a seguinte:\n\nS   ");
+    } else printf ("\nA solução do jogo atual é a seguinte:\n\nS   ");
 
     // Imprime o índice das colunas
     if (dL > 9) putchar (' ');
