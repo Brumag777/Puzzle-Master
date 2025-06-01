@@ -78,16 +78,10 @@ int infoJogoNovo (Info I) {
     printf ("\nDigite o número de linhas e de colunas do jogo desejado.\n\n");
 
     // Lê o número de linhas e de colunas do tabuleiro
-    if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) {
-        libertaInfo (I);
-        return -1;
-    }
+    if (scanf ("%d %d", &I -> dL, &I -> dC) != 2) return -1;
 
     // Verifica se o número de linhas e de colunas é válido
-    if (I -> dL < 0 || I -> dC < 0 || I -> dL > 26 || I -> dC > 26) {
-        libertaInfo (I);
-        return -2;
-    }
+    if (I -> dL < 0 || I -> dC < 0 || I -> dL > 26 || I -> dC > 26) return -2;
 
     // Inicializa o tabuleiro
     inicializaTabuleiro (I);
@@ -98,23 +92,14 @@ int infoJogoNovo (Info I) {
     // Lê o tabuleiro
     for (int i = 0; i < I -> dL; i++) {
         char linha [LINE_SIZE];
-        if (scanf ("%s", linha) != 1) {
-            libertaInfo (I);
-            return -1;
-        }
+        if (scanf ("%s", linha) != 1) return -1;
         int tam = strlen (linha);
-        if (tam > I -> dC) {
-            libertaInfo (I);
-            return -3;
-        }
+        if (tam > I -> dC) return -3;
         strcpy (I -> Tabuleiro [i], linha);
     }
 
     // Verifica se o tabuleiro é válido
-    if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) {
-        libertaInfo (I);
-        return -3;
-    }
+    if (!tabuleiroValido (I -> dL, I -> dC, I -> Tabuleiro)) return -3;
 
     return 0;
 }

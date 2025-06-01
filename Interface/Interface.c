@@ -227,7 +227,7 @@ void imprimeExplicacaoJogo () {
     printf ("\n"
             AZUL "Puzzle Master" RESET " é um quebra-cabeças no qual o objetivo é terminar um tabuleiro com o máximo de pontuação possível.\n"
             "Um tabuleiro é considerado terminado quando todas as casas estão pintadas de branco ou riscadas e não existe nenhuma infração.\n\n"
-            "Nota:" AZUL " Casas brancas são casas com letra maiúscula e casas riscadas são casas com #.\n\n" RESET
+            MAGENTA "Nota:" AZUL " Casas brancas são casas com letra maiúscula e casas riscadas são casas com #.\n\n" RESET
             "Um tabuleiro não possui infrações se respeitar as seguintes condições:\n\n"
             AZUL "1." RESET " Não existem casas brancas iguais na mesma linha ou coluna.\n"
             AZUL "2." RESET " Não existem casas riscadas juntas.\n"

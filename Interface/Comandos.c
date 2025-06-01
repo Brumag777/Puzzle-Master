@@ -220,6 +220,8 @@ bool criarJogo (char cmd, char *arg1, char *arg2, Info I) {
 
     // O comando foi invocado corretamente
     else {
+
+        // Cria o jogo
         n = criaJogo ();
 
         // Limpa o stdin
@@ -333,7 +335,7 @@ bool pintarCasa (char cmd, char *arg1, char *arg2, Info I) {
     int n = restricoesMudarCasa (arg1, I);
 
     // Não foi dado um argumento
-    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "b" RESET "precisa de um argumento.\n\n");
+    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "b" RESET " precisa de um argumento.\n\n");
 
     // Ainda não foi lido um jogo
     else if (n == 2) fprintf (stderr, VERMELHO "\nErro: " RESET "Ainda não foi aberto um jogo. Leia uma save para iniciar o jogo.\n\n");
@@ -355,11 +357,11 @@ bool pintarCasa (char cmd, char *arg1, char *arg2, Info I) {
         logicaPintarCasa (arg1, I);
 
         // Imprime o tabuleiro resultante
-        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
+        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
         // Se o jogo estiver terminado, indica se o jogador ganhou
+        putchar ('\n');
         if (testeJogo (I)) imprimeMensagemFim (I);
-        else putchar ('\n');
     }
 
     return true;
@@ -402,11 +404,11 @@ bool riscarCasa (char cmd, char *arg1, char *arg2, Info I) {
         logicaRiscarCasa (arg1, I);
 
         // Imprime o tabuleiro resultante
-        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
+        imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
         // Se o jogo estiver terminado, indica se o jogador ganhou
+        putchar ('\n');
         if (testeJogo (I)) imprimeMensagemFim (I);
-        else putchar ('\n');
     }
 
     return true;
@@ -467,7 +469,7 @@ bool verifica (char cmd, char *arg1, char *arg2, Info I) {
     int n = restricoesVerifica (arg1, I);
 
     // Foi dado um argumento
-    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "v" RESET "não precisa de um argumento.\n\n");
+    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "v" RESET " não precisa de um argumento.\n\n");
 
     // Ainda não foi lido um jogo
     else if (n == 2) fprintf (stderr, VERMELHO "\nErro: " RESET "Ainda não foi aberto um jogo. Leia uma save para iniciar o jogo.\n\n");
@@ -526,14 +528,14 @@ bool ajuda (char cmd, char *arg1, char *arg2, Info I) {
         // Caso de sucesso da execução do comando
         else {
             // Imprime o tabuleiro resultante
-            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
             // Garante que a pontuação não é negativa
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
+            putchar ('\n');
             if (testeJogo (I)) imprimeMensagemFim (I);
-            else putchar ('\n');
         }
     }
 
@@ -575,14 +577,14 @@ bool ajudaRep (char cmd, char *arg1, char *arg2, Info I) {
         // Caso de sucesso da execução do comando
         else {
             // Imprime o tabuleiro resultante
-            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 1);
+            imprimeTabuleiro (I -> dL, I -> dC, I -> Tabuleiro, I -> nTabuleiro, 0);
 
             // Garante que a pontuação não é negativa
             if (I -> pont < 0) I -> pont = 0;
 
             // Se o jogo estiver terminado, indica se o jogador ganhou
+            putchar ('\n');
             if (testeJogo (I)) imprimeMensagemFim (I);
-            else putchar ('\n');
         }
     }
 
@@ -701,7 +703,7 @@ bool mostrarSolucao (char cmd, char *arg1, char *arg2, Info I) {
     int n = restricoesSolucaoJogo (arg1, I);
 
     // Foi dado um argumento
-    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "R" RESET " não precisa de um argumento.\n\n");
+    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "X" RESET " não precisa de um argumento.\n\n");
 
     // Ainda não foi lido um jogo
     else if (n == 2) fprintf (stderr, VERMELHO "\nErro: " RESET "Ainda não foi aberto um jogo. Leia uma save para iniciar o jogo.\n\n");
@@ -743,7 +745,7 @@ bool dica (char cmd, char *arg1, char *arg2, Info I) {
     int n = restricoesMudarCasa (arg1, I);
 
     // Não foi dado um argumento
-    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "b" RESET "precisa de um argumento.\n\n");
+    if (n == 1) fprintf (stderr, VERMELHO "\nErro: " RESET "O comando " AZUL "D" RESET " precisa de um argumento.\n\n");
 
     // Ainda não foi lido um jogo
     else if (n == 2) fprintf (stderr, VERMELHO "\nErro: " RESET "Ainda não foi aberto um jogo. Leia uma save para iniciar o jogo.\n\n");
