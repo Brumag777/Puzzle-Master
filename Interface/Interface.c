@@ -521,7 +521,7 @@ void imprimeInfoCe () {
 
 // Explica o comando 'D'
 void imprimeInfoCD () {
-    printf ("\nO comando " AZUL "E" RESET " resolve uma casa do tabuleiro, isto é, pinta ou risca a casa conforme o correto para resolver o jogo.\n\n"
+    printf ("\nO comando " AZUL "D" RESET " resolve uma casa do tabuleiro, isto é, pinta ou risca a casa conforme o correto para resolver o jogo.\n\n"
             "Nota: " VERMELHO "Este comando diminui a pontuação substancialmente.\n\n" RESET);
 }
 
