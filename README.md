@@ -18,7 +18,8 @@ Consiste num **quebra-cabeças lógico**, onde o jogador deve resolver um puzzle
 Para correr o jogo, utiliza o seguinte comando na terminal (dentro da pasta do executável):
 
 ```bash
-./PuzzleMaster```
+./PuzzleMaster
+```
 
 🇬🇧 **English**
 
