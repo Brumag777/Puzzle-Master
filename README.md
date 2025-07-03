@@ -21,7 +21,7 @@ Para correr o jogo, utiliza o seguinte comando na terminal (dentro da pasta do e
 ./PuzzleMaster
 ```
 
-#US **English**
+# US **English**
 
 ## 🧠 Puzzle Master
 
