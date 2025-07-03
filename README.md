@@ -1,4 +1,4 @@
-# 🇵🇹 **Português**
+# PT **Português**
 
 ## 🧠 Puzzle Master
 
