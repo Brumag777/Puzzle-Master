@@ -31,7 +31,7 @@ Para correr o jogo, utiliza o seguinte comando na terminal (dentro da pasta do e
 
 ## 🧩 Description
 
-This project was developed as part of the course **Laboratórios de Informática II** (Computer Labs II), academic year **2024/2025**.  
+This project was developed as part of the course **Laboratórios de Informática II**, academic year **2024/2025**.  
 It consists of a **logic puzzle** where the player must solve the puzzle by following a specific set of **constraints**.
 
 ---
