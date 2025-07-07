@@ -42,3 +42,9 @@ To run the game, use the following command in the terminal (inside the executabl
 
 ```bash
 ./PuzzleMaster
+```
+
+# Imagens / Images
+
+![image](https://github.com/user-attachments/assets/51539c78-f6fa-4aed-93fe-0f75686db61c)
+![image](https://github.com/user-attachments/assets/aabc030a-a2d0-451f-884d-f3a59d68e050)
