@@ -46,5 +46,5 @@ To run the game, use the following command in the terminal (inside the executabl
 
 # Imagens / Images
 
-![image](https://github.com/user-attachments/assets/9b1999d6-3c2c-4613-a121-92776c2dff18)
-![image](https://github.com/user-attachments/assets/94fdd1f4-88ef-451e-a6e3-0ba565efd75f)
+![image](https://github.com/user-attachments/assets/d251a0d6-9318-48d3-b2ff-6a2bc376d2fa)
+![image](https://github.com/user-attachments/assets/32e57d41-0648-4102-9097-1991f2ad4d56)
