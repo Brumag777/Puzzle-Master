@@ -15,7 +15,7 @@ Consiste num **quebra-cabeças lógico**, onde o jogador deve resolver um puzzle
 
 ### ▶️ Como jogar
 
-Para correr o jogo, utiliza o seguinte comando na terminal (dentro da pasta do executável):
+Para correr o jogo, utiliza o seguinte comando no terminal (dentro da pasta do executável):
 
 ```bash
 ./PuzzleMaster
